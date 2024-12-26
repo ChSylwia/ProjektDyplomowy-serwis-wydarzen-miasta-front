@@ -1,0 +1,9 @@
+.wapper-for-carousel {
+  position: relative;
+  padding: 50px 0;
+  display: block;
+}
+.card-movie {
+  display: flex;
+  align-items: stretch;
+}

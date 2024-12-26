@@ -1,11 +1,10 @@
-import { RouteObject } from 'react-router-dom'
 import HomePage from '@/pages/HomePage/HomePage'
 import ProfilePage from '@/pages/ProfilePage/ProfilePage'
 import Root from '@/pages/Root'
-import AboutPage from '@/pages/AboutPage/AboutPage'
+import SelectPage from './pages/SelectPage/SelectPage'
 import { RouteName } from './constants/RouteName'
 
-export const routes: RouteObject[] = [
+export const routes = [
   {
     path: RouteName.HOME,
     element: <Root />,
@@ -19,8 +18,8 @@ export const routes: RouteObject[] = [
         element: <ProfilePage />
       },
       {
-        path: RouteName.ABOUT,
-        element: <AboutPage />
+        path: RouteName.SELECT,
+        element: <SelectPage />
       }
     ]
   }
