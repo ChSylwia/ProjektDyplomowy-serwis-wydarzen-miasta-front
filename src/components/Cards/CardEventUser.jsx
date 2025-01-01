@@ -1,14 +1,14 @@
-function CardEventUser({ item }) {
+function CardEventUser({ movie }) {
   return (
-    <div key={item.id} className='card bg-base-100 shadow-xl'>
+    <div className='card card-side bg-base-100 shadow-xl'>
       <figure>
-        <img src={item.image} alt={item.title} />
+        <img src={movie.image} alt={movie.title} />
       </figure>
       <div className='card-body'>
-        <h2 className='card-title'>{item.title}</h2>
-        <p>{item.content}</p>
+        <h2 className='card-title'>{movie.title}</h2>
+        <p>{movie.description}</p>
         <div className='card-actions justify-end'>
-          <button className='btn btn-primary'>Go for more</button>
+          <button className='btn btn-primary'>Show more</button>
         </div>
       </div>
     </div>

@@ -7,3 +7,9 @@
   display: flex;
   align-items: stretch;
 }
+
+.btn.active {
+  background-color: #3f6a28;
+  color: white;
+  border-color: #233a2a;
+}

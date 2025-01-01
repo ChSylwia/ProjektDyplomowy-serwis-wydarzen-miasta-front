@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom'
+import { RouteName } from '../../constants/RouteName'
+
 import CardCinema from '../../components/Cards/CardCinema'
 import CardEvents from '../../components/Cards/CardEvents'
 import CardEventUser from '../../components/Cards/CardEventUser'
@@ -189,6 +192,7 @@ const eventUsers = [
   }
 ]
 const HomePage = () => {
+  const navigate = useNavigate()
   const cardsEvent = items.map((item) => (
     <CarouselItem key={item.id} className='basis-1/3 cards-event'>
       <CardEvents item={item} />
@@ -205,38 +209,68 @@ const HomePage = () => {
       <CardEventUser movie={movie} />
     </CarouselItem>
   ))
-
+  const handleClickToSelectPage = (type) => {
+    navigate(`${RouteName.SELECT}/${type}`)
+  }
   return (
     <>
       <div></div>
       <h2>Odkryj atrakcje miasta</h2>
       <p>Wstep</p>
-      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto '>
+      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
         <p> Lista wydarzeń kup bilet znajdź atrakcje dla siebie</p>
         <Carousel>
-          <CarouselContent className='p-3'>{cardsEvent}</CarouselContent>
+          <CarouselContent className='p-3 items-center'>{cardsEvent}</CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-      </div>
-      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto '>
-        <p>Lista reperuaru z kina przejdź się na film</p>
-        <Carousel>
-          <CarouselContent className='p-3'>{cardsMovie}</CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+        <div className='flex justify-center p-3'>
+          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage('big-event')}>
+            Zobacz więcej
+          </button>
+        </div>
       </div>
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
+        <p>Lista reperuaru z kina przejdź się na film</p>
+        <Carousel>
+          <CarouselContent className='p-3 items-center'>{cardsMovie}</CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+        <div className='flex justify-center p-3'>
+          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage('movie')}>
+            Zobacz więcej
+          </button>
+        </div>
+      </div>
+      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
         <p>Lista wydarzeń od użytkowników odkryj atrakcje swojego miasta</p>
         <Carousel>
-          <CarouselContent className='p-3'>
+          <CarouselContent className='p-3 items-center'>{cardsEventUser}</CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+        <div className='flex justify-center p-3'>
+          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage('local-event')}>
+            Zobacz więcej
+          </button>
+        </div>
+      </div>
+      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
+        <p>Lista wydarzeń od użytkowników odkryj atrakcje swojego miasta</p>
+        <Carousel>
+          <CarouselContent className='p-3 items-center'>
             {cardsMovie}
             {cardsEvent}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+        <div className='flex justify-center p-3'>
+          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage(null)}>
+            Zobacz więcej
+          </button>
+        </div>
       </div>
     </>
   )

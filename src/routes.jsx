@@ -20,6 +20,10 @@ export const routes = [
       {
         path: RouteName.SELECT,
         element: <SelectPage />
+      },
+      {
+        path: `${RouteName.SELECT}/:type`,
+        element: <SelectPage />
       }
     ]
   }
