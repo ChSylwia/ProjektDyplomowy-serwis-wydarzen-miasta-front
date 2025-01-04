@@ -2,7 +2,9 @@ import HomePage from '@/pages/HomePage/HomePage'
 import ProfilePage from '@/pages/ProfilePage/ProfilePage'
 import Root from '@/pages/Root'
 import SelectPage from './pages/SelectPage/SelectPage'
+import LoginPage from './pages/ProfilePage/LoginPage'
 import { RouteName } from './constants/RouteName'
+import RegisterPage from './pages/ProfilePage/RegisterPage'
 
 export const routes = [
   {
@@ -24,6 +26,14 @@ export const routes = [
       {
         path: `${RouteName.SELECT}/:type`,
         element: <SelectPage />
+      },
+      {
+        path: RouteName.LOGIN,
+        element: <LoginPage />
+      },
+      {
+        path: RouteName.REGISTER,
+        element: <RegisterPage />
       }
     ]
   }
