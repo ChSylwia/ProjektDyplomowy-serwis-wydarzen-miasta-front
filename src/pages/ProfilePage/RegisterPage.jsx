@@ -37,187 +37,218 @@ const RegisterPage = () => {
     termsAccepted: Yup.boolean().oneOf([true], 'Musisz zaakceptować regulamin')
   })
 
+  const handleSubmit = (values) => {
+    // Prepare the request headers
+    const myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
+
+    // Prepare the request body with the form values
+    const raw = JSON.stringify({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      username: values.login, // Using login field for username
+      city: values.city,
+      postalCode: values.postalCode,
+      userType: values.userType,
+      termsAccepted: values.termsAccepted,
+      password: values.password
+    })
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    }
+
+    fetch('http://127.0.0.1:8000/api/v1/user/create', requestOptions)
+      .then((response) => {
+        console.log('Raw response:', response)
+        if (response.ok) {
+          return response.json()
+        } else {
+          return response.text()
+        }
+      })
+      .then((result) => {
+        if (result.error) {
+          // Handle error response
+          console.error('Registration failed:', result.description)
+        } else {
+          // Handle successful registration
+          console.log('Registration successful:', result)
+        }
+      })
+      .catch((error) => {
+        // Handle network or server error
+        console.error('Error during registration:', error)
+      })
+  }
+
   return (
     <div className='min-h-screen flex items-center justify-center '>
       <div className='w-full max-w-2xl bg-white shadow-md rounded-lg p-6 md:p-8'>
-        <h2 className='text-3xl font-bold text-center mb-8 text-gray-800'>Zarejestruj się</h2>
+        <h2 className='text-3xl font-bold text-center mb-8 text-gray-800'>Zarejestruj</h2>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
-            <Form>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                <div className='form-control'>
-                  <label htmlFor='login' className='label'>
-                    <span className='label-text'>Login</span>
-                  </label>
-                  <Field
-                    type='text'
-                    id='login'
-                    name='login'
-                    className='input input-bordered w-full'
-                    placeholder='Wpisz login'
-                  />
-                  <ErrorMessage
-                    name='login'
-                    component='div'
-                    className='text-red-500 text-sm mt-1'
-                  />
-                </div>
-                <div className='form-control'>
-                  <label htmlFor='firstName' className='label'>
-                    <span className='label-text'>Imię</span>
-                  </label>
-                  <Field
-                    type='text'
-                    id='firstName'
-                    name='firstName'
-                    className='input input-bordered w-full'
-                    placeholder='Wpisz imię'
-                  />
-                  <ErrorMessage
-                    name='firstName'
-                    component='div'
-                    className='text-red-500 text-sm mt-1'
-                  />
-                </div>
-                <div className='form-control'>
-                  <label htmlFor='lastName' className='label'>
-                    <span className='label-text'>Nazwisko</span>
-                  </label>
-                  <Field
-                    type='text'
-                    id='lastName'
-                    name='lastName'
-                    className='input input-bordered w-full'
-                    placeholder='Wpisz nazwisko'
-                  />
-                  <ErrorMessage
-                    name='lastName'
-                    component='div'
-                    className='text-red-500 text-sm mt-1'
-                  />
-                </div>
-                <div className='form-control'>
-                  <label htmlFor='email' className='label'>
-                    <span className='label-text'>Email</span>
-                  </label>
-                  <Field
-                    type='email'
-                    id='email'
-                    name='email'
-                    className='input input-bordered w-full'
-                    placeholder='Wpisz email'
-                  />
-                  <ErrorMessage
-                    name='email'
-                    component='div'
-                    className='text-red-500 text-sm mt-1'
-                  />
-                </div>
-                <div className='form-control'>
-                  <label htmlFor='city' className='label'>
-                    <span className='label-text'>Miasto</span>
-                  </label>
-                  <Field
-                    type='text'
-                    id='city'
-                    name='city'
-                    className='input input-bordered w-full'
-                    placeholder='Wpisz miasto'
-                  />
-                  <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
-                </div>
-                <div className='form-control'>
-                  <label htmlFor='postalCode' className='label'>
-                    <span className='label-text'>Kod pocztowy</span>
-                  </label>
-                  <Field
-                    type='text'
-                    id='postalCode'
-                    name='postalCode'
-                    className='input input-bordered w-full'
-                    placeholder='00-000'
-                  />
-                  <ErrorMessage
-                    name='postalCode'
-                    component='div'
-                    className='text-red-500 text-sm mt-1'
-                  />
-                </div>
-              </div>
-              <div className='form-control mt-4'>
-                <label htmlFor='password' className='label'>
-                  <span className='label-text'>Hasło</span>
+          <Form>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <div className='form-control'>
+                <label htmlFor='login' className='label'>
+                  <span className='label-text'>Login</span>
                 </label>
                 <Field
-                  type='password'
-                  id='password'
-                  name='password'
+                  type='text'
+                  id='login'
+                  name='login'
                   className='input input-bordered w-full'
-                  placeholder='Wpisz hasło'
+                  placeholder='Wpisz login'
                 />
-                <ErrorMessage
-                  name='password'
-                  component='div'
-                  className='text-red-500 text-sm mt-1'
-                />
+                <ErrorMessage name='login' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              <div className='form-control mt-4'>
-                <label htmlFor='confirmPassword' className='label'>
-                  <span className='label-text'>Potwierdź hasło</span>
+              <div className='form-control'>
+                <label htmlFor='firstName' className='label'>
+                  <span className='label-text'>Imię</span>
                 </label>
                 <Field
-                  type='password'
-                  id='confirmPassword'
-                  name='confirmPassword'
+                  type='text'
+                  id='firstName'
+                  name='firstName'
                   className='input input-bordered w-full'
-                  placeholder='Potwierdź hasło'
+                  placeholder='Wpisz imię'
                 />
                 <ErrorMessage
-                  name='confirmPassword'
+                  name='firstName'
                   component='div'
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              <div className='form-control mt-4'>
-                <label htmlFor='userType' className='label'>
-                  <span className='label-text'>Typ użytkownika</span>
+              <div className='form-control'>
+                <label htmlFor='lastName' className='label'>
+                  <span className='label-text'>Nazwisko</span>
                 </label>
                 <Field
-                  as='select'
-                  id='userType'
-                  name='userType'
-                  className='select select-bordered w-full'
-                >
-                  <option value='' label='Wybierz typ użytkownika' />
-                  <option value='private' label='Osoba prywatna' />
-                  <option value='organization' label='Organizacja' />
-                </Field>
+                  type='text'
+                  id='lastName'
+                  name='lastName'
+                  className='input input-bordered w-full'
+                  placeholder='Wpisz nazwisko'
+                />
                 <ErrorMessage
-                  name='userType'
+                  name='lastName'
                   component='div'
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              <div className='form-control mt-4'>
-                <label className='cursor-pointer flex items-center'>
-                  <Field type='checkbox' name='termsAccepted' className='checkbox' />
-                  <span className='ml-2'>Akceptuję regulamin</span>
+              <div className='form-control'>
+                <label htmlFor='email' className='label'>
+                  <span className='label-text'>Email</span>
                 </label>
+                <Field
+                  type='email'
+                  id='email'
+                  name='email'
+                  className='input input-bordered w-full'
+                  placeholder='Wpisz email'
+                />
+                <ErrorMessage name='email' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              <div className='form-control'>
+                <label htmlFor='city' className='label'>
+                  <span className='label-text'>Miasto</span>
+                </label>
+                <Field
+                  type='text'
+                  id='city'
+                  name='city'
+                  className='input input-bordered w-full'
+                  placeholder='Wpisz miasto'
+                />
+                <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              <div className='form-control'>
+                <label htmlFor='postalCode' className='label'>
+                  <span className='label-text'>Kod pocztowy</span>
+                </label>
+                <Field
+                  type='text'
+                  id='postalCode'
+                  name='postalCode'
+                  className='input input-bordered w-full'
+                  placeholder='00-000'
+                />
                 <ErrorMessage
-                  name='termsAccepted'
+                  name='postalCode'
                   component='div'
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              <button type='submit' className='btn btn-primary w-full mt-6'>
-                Zarejestruj się
-              </button>
-            </Form>
-          )}
+            </div>
+            <div className='form-control mt-4'>
+              <label htmlFor='password' className='label'>
+                <span className='label-text'>Hasło</span>
+              </label>
+              <Field
+                type='password'
+                id='password'
+                name='password'
+                className='input input-bordered w-full'
+                placeholder='Wpisz hasło'
+              />
+              <ErrorMessage name='password' component='div' className='text-red-500 text-sm mt-1' />
+            </div>
+            <div className='form-control mt-4'>
+              <label htmlFor='confirmPassword' className='label'>
+                <span className='label-text'>Potwierdź hasło</span>
+              </label>
+              <Field
+                type='password'
+                id='confirmPassword'
+                name='confirmPassword'
+                className='input input-bordered w-full'
+                placeholder='Potwierdź hasło'
+              />
+              <ErrorMessage
+                name='confirmPassword'
+                component='div'
+                className='text-red-500 text-sm mt-1'
+              />
+            </div>
+            <div className='form-control mt-4'>
+              <label htmlFor='userType' className='label'>
+                <span className='label-text'>Typ użytkownika</span>
+              </label>
+              <Field
+                as='select'
+                id='userType'
+                name='userType'
+                className='select select-bordered w-full'
+              >
+                <option value='' label='Wybierz typ użytkownika' />
+                <option value='private' label='Osoba prywatna' />
+                <option value='organization' label='Organizacja' />
+              </Field>
+              <ErrorMessage name='userType' component='div' className='text-red-500 text-sm mt-1' />
+            </div>
+            <div className='form-control mt-4'>
+              <label className='cursor-pointer flex items-center'>
+                <Field type='checkbox' name='termsAccepted' className='checkbox' />
+                <span className='ml-2'>Akceptuję regulamin</span>
+              </label>
+              <ErrorMessage
+                name='termsAccepted'
+                component='div'
+                className='text-red-500 text-sm mt-1'
+              />
+            </div>
+            <button type='submit' className='btn btn-primary w-full mt-6'>
+              Zarejestruj się
+            </button>
+          </Form>
         </Formik>
       </div>
     </div>

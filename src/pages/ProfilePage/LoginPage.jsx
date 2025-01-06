@@ -1,6 +1,7 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import GoogleLoginButton from '../../components/LoginButtons/GoogleLoginButton'
 
 const LoginPage = () => {
   const initialValues = {
@@ -14,7 +15,29 @@ const LoginPage = () => {
   })
 
   const handleSubmit = (values) => {
-    console.log('Dane logowania:', values)
+    const myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
+
+    const raw = JSON.stringify({
+      username: values.login,
+      password: values.password
+    })
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    }
+
+    fetch('http://127.0.0.1:8000/api/v1/auth/login_check', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('Login result:', result)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
   }
 
   return (
@@ -83,6 +106,7 @@ const LoginPage = () => {
                   </a>
                 </span>
               </div>
+              <GoogleLoginButton />
             </Form>
           )}
         </Formik>
