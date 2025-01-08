@@ -1,8 +1,20 @@
+import React from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 import { NavbarRouteName } from '@/constants/RouteName'
-import { Link, useLocation } from 'react-router-dom'
 
 const Navbar = () => {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+
+  // Check if the user is logged in
+  const token = Cookies.get('authToken')
+
+  const handleLogoutClick = () => {
+    Cookies.remove('authToken') // Remove the auth token
+    alert('Logged out successfully!')
+    navigate(NavbarRouteName.LOGIN) // Redirect to the login page
+  }
 
   return (
     <div className='navbar bg-base-100'>
@@ -28,34 +40,51 @@ const Navbar = () => {
             tabIndex={0}
             className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
           >
-            {Object.entries(NavbarRouteName).map(([key, path]) => (
-              <Link
-                key={key}
-                to={path}
-                role='tab'
-                className={`tab ${pathname === path ? 'tab-active' : ''}`}
-              >
-                <p className='font-medium'>{key.charAt(0) + key.slice(1).toLowerCase()}</p>
-              </Link>
-            ))}
+            {Object.entries(NavbarRouteName)
+              .filter(([key]) => key !== 'LOGIN' && key !== 'REGISTER') // Exclude Login and Register from the dropdown
+              .map(([key, path]) => (
+                <Link
+                  key={key}
+                  to={path}
+                  role='tab'
+                  className={`tab ${pathname === path ? 'tab-active' : ''}`}
+                >
+                  <p className='font-medium'>{key.charAt(0) + key.slice(1).toLowerCase()}</p>
+                </Link>
+              ))}
           </ul>
         </div>
         <a className='btn btn-ghost text-xl'>daisyUI</a>
       </div>
       <div className='navbar-center hidden lg:flex'>
-        {Object.entries(NavbarRouteName).map(([key, path]) => (
-          <Link
-            key={key}
-            to={path}
-            role='tab'
-            className={`tab ${pathname === path ? 'tab-active' : ''}`}
-          >
-            <p className='font-medium'>{key.charAt(0) + key.slice(1).toLowerCase()}</p>
-          </Link>
-        ))}
+        {Object.entries(NavbarRouteName)
+          .filter(([key]) => key !== 'LOGIN' && key !== 'REGISTER') // Exclude Login and Register from the center links
+          .map(([key, path]) => (
+            <Link
+              key={key}
+              to={path}
+              role='tab'
+              className={`tab ${pathname === path ? 'tab-active' : ''}`}
+            >
+              <p className='font-medium'>{key.charAt(0) + key.slice(1).toLowerCase()}</p>
+            </Link>
+          ))}
       </div>
       <div className='navbar-end'>
-        <a className='btn'>Zaloguj się</a>
+        {token ? (
+          <button className='btn' onClick={handleLogoutClick}>
+            Wyloguj się
+          </button>
+        ) : (
+          <>
+            <button className='btn' onClick={() => navigate(NavbarRouteName.LOGIN)}>
+              Zaloguj się
+            </button>
+            <button className='btn ml-2' onClick={() => navigate(NavbarRouteName.REGISTER)}>
+              Zarejestruj się
+            </button>
+          </>
+        )}
       </div>
     </div>
   )
