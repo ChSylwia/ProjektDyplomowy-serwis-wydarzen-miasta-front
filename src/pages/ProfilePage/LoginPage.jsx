@@ -2,6 +2,7 @@ import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import GoogleLoginButton from '../../components/LoginButtons/GoogleLoginButton'
+import { Navigate, redirect } from 'react-router-dom'
 
 const LoginPage = () => {
   const initialValues = {
@@ -33,7 +34,7 @@ const LoginPage = () => {
     fetch('http://127.0.0.1:8000/api/v1/auth/login_check', requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log('Login result:', result)
+        window.location.href = `http://localhost:5173/success?token=${result.token}`
       })
       .catch((error) => {
         console.error('Error:', error)

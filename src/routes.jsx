@@ -5,8 +5,8 @@ import SelectPage from './pages/SelectPage/SelectPage'
 import LoginPage from './pages/ProfilePage/LoginPage'
 import { RouteName } from './constants/RouteName'
 import RegisterPage from './pages/ProfilePage/RegisterPage'
-import SuccessLoggedPage from './pages/SuccessLoggedPage'
-
+import SuccessLoggedPage from './pages/Other/SuccessLoggedPage'
+import EventAdd from './pages/LocalEvent/EventAdd'
 export const routes = [
   {
     path: RouteName.HOME,
@@ -39,6 +39,10 @@ export const routes = [
       {
         path: `/success`,
         element: <SuccessLoggedPage />
+      },
+      {
+        path: `/events/add`,
+        element: <EventAdd />
       }
     ]
   }
