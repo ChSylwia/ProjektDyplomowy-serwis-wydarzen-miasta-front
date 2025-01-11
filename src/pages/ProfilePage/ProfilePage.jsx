@@ -45,7 +45,7 @@ const ProfilePage = () => {
   }
 
   if (!userData) {
-    return <p>User data not available</p>
+    return <p>Dane użytkownika nie są dostępne</p>
   }
   const { firstName, lastName, email, city, postalCode } = userData
 
@@ -56,8 +56,8 @@ const ProfilePage = () => {
         <div className='flex-1 flex flex-col items-center md:items-start'>
           {/* Profile Avatar */}
           <div className='w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold'>
-            {firstName}
-            {lastName}
+            {firstName[0]}
+            {lastName[0]}
           </div>
           {/* User Information */}
           <div className='mt-4 text-center md:text-left'>

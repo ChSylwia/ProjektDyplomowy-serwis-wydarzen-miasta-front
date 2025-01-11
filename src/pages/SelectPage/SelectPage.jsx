@@ -181,22 +181,16 @@ const items = [
     cost: 25
   }
 ]
-const eventUsers = [
-  {
-    id: 1,
-    image: 'https://picsum.photos/400/300',
-    title: 'Summer Music Festival',
-    content: 'Experience the best summer vibes with live music and amazing food.',
-    link: 'https://example.com/summer-festival',
-    cost: 0
-  }
-]
 
 const SelectPage = () => {
   const { type } = useParams()
   const [filter, setFilter] = useState(null)
   const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   const [typeEvent, setTypeEvent] = useState(type || null)
+
+  const [eventUsers, setEvent] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const handleFilter = (typeEvent) => {
     setFilter((prev) => (prev === typeEvent ? null : typeEvent)) // Toggle filter
@@ -213,16 +207,45 @@ const SelectPage = () => {
     if (type) {
       setTypeEvent(type)
     }
+    const fetchEventDetails = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/all-local-events/`)
+        if (!response.ok) throw new Error('Failed to fetch event details')
+        const data = await response.json()
+        console.log('Fetched eventUsers:', data.events)
+        setEvent(data.events)
+      } catch (err) {
+        console.error(err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchEventDetails()
   }, [type])
 
   const allEvents = [
-    ...items.map((item) => ({ ...item, cost: item.cost || 0, typeEvent: 'event' })),
-    ...movies.map((movie) => ({ ...movie, cost: movie.price || 0, typeEvent: 'movie' })),
-    ...eventUsers.map((eventUser) => ({
-      ...eventUser,
-      cost: eventUser.cost || 0,
-      typeEvent: 'user'
-    }))
+    ...(items?.length
+      ? items.map((item) => ({
+          ...item,
+          cost: item.cost || 0,
+          typeEvent: 'event'
+        }))
+      : []),
+    ...(movies?.length
+      ? movies.map((movie) => ({
+          ...movie,
+          cost: movie.price || 0,
+          typeEvent: 'movie'
+        }))
+      : []),
+    ...(eventUsers?.length
+      ? eventUsers.map((eventUser) => ({
+          ...eventUser,
+          cost: eventUser.cost || 0,
+          typeEvent: 'user'
+        }))
+      : [])
   ]
 
   // Filtrowanie według aktywnego filtra
@@ -305,11 +328,11 @@ const SelectPage = () => {
         <div className='wrapper-for-elements-smaller grid grid-cols-1 md:grid-cols-3 gap-4'>
           {filteredEvents.map((event) =>
             event.typeEvent === 'movie' ? (
-              <CardCinema key={event.id} movie={event} />
+              <CardCinema key={`C${event.id}`} movie={event} />
             ) : event.typeEvent === 'event' ? (
-              <CardEvents key={event.id} item={event} />
+              <CardEvents key={`E${event.id}`} item={event} />
             ) : (
-              <CardEventUser key={event.id} movie={event} />
+              <CardEventUser key={`EU${event.id}`} movie={event} />
             )
           )}
         </div>

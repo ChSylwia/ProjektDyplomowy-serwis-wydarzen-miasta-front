@@ -7,6 +7,9 @@ import { RouteName } from './constants/RouteName'
 import RegisterPage from './pages/ProfilePage/RegisterPage'
 import SuccessLoggedPage from './pages/Other/SuccessLoggedPage'
 import EventAdd from './pages/LocalEvent/EventAdd'
+import EventConfigurate from './pages/LocalEvent/EventConfigurate'
+import EventEdit from './pages/LocalEvent/EventEdit'
+import LocalEventsDetails from './pages/Details/LocalEventDetails'
 export const routes = [
   {
     path: RouteName.HOME,
@@ -43,6 +46,18 @@ export const routes = [
       {
         path: `/events/add`,
         element: <EventAdd />
+      },
+      {
+        path: `/events/configure`,
+        element: <EventConfigurate />
+      },
+      {
+        path: `/events/edit/:id`,
+        element: <EventEdit />
+      },
+      {
+        path: `/events/details/localEventDetails/:id`,
+        element: <LocalEventsDetails />
       }
     ]
   }

@@ -13,7 +13,7 @@ const Root = () => {
         <img src={ReactLogo} className='w-12' />
         <img src={ReactRouterLogo} className='w-12' />
       </div>
-      <h1 className='mb-3'>React Starter Template</h1>
+      <h1 className='mb-3'>Strona z wydarzeniami miasta</h1>
       <Outlet />
     </div>
   )
