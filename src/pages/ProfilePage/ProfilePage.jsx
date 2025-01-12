@@ -27,7 +27,9 @@ const ProfilePage = () => {
 
     fetchDataProfile()
   }, [])
-
+  const handleEditPasswdProfile = () => {
+    navigate('/profile/edit/passwd')
+  }
   const handleEditProfile = () => {
     navigate('/profile/edit')
   }
@@ -73,6 +75,12 @@ const ProfilePage = () => {
             </p>
           </div>
           <div className='flex flex-col space-y-2 p-2'>
+            <button
+              className='text-left font-semibold text-sm hover:underline'
+              onClick={handleEditPasswdProfile}
+            >
+              Zmień hasło
+            </button>
             <button
               className='text-left font-semibold text-sm hover:underline'
               onClick={handleEditProfile}

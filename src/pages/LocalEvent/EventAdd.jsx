@@ -56,7 +56,7 @@ const EventAdd = () => {
   }
 
   return (
-    <div className='max-w-lg w-full mx-auto p-6 bg-white rounded-lg shadow-lg'>
+    <div className='w-full p-6 bg-white rounded-lg shadow-lg'>
       <h2 className='text-2xl font-semibold mb-4'>Dodaj własne wydarzenie lokalne</h2>
       {success && <div className='alert alert-success mb-4'>Udało się dodać wydarzenie!</div>}
       {error && <div className='alert alert-error mb-4'>{error}</div>}

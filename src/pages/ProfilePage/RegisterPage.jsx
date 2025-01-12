@@ -1,5 +1,6 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { toast, ToastContainer } from 'react-toastify'
 import * as Yup from 'yup'
 
 const RegisterPage = () => {
@@ -64,30 +65,23 @@ const RegisterPage = () => {
 
     fetch('http://127.0.0.1:8000/api/v1/user/create', requestOptions)
       .then((response) => {
-        console.log('Raw response:', response)
         if (response.ok) {
+          toast.success('Rejestracja zakończona sukcesem!')
           return response.json()
         } else {
-          return response.text()
-        }
-      })
-      .then((result) => {
-        if (result.error) {
-          // Handle error response
-          console.error('Registration failed:', result.description)
-        } else {
-          // Handle successful registration
-          console.log('Registration successful:', result)
+          return response.json().then((err) => {
+            throw new Error(err.message)
+          })
         }
       })
       .catch((error) => {
-        // Handle network or server error
-        console.error('Error during registration:', error)
+        toast.error(`Rejestracja nieudana: ${error.message}`)
       })
   }
 
   return (
     <div className='min-h-screen flex items-center justify-center '>
+      <ToastContainer />
       <div className='w-full max-w-2xl bg-white shadow-md rounded-lg p-6 md:p-8'>
         <h2 className='text-3xl font-bold text-center mb-8 text-gray-800'>Zarejestruj</h2>
         <Formik

@@ -10,6 +10,8 @@ import EventAdd from './pages/LocalEvent/EventAdd'
 import EventConfigurate from './pages/LocalEvent/EventConfigurate'
 import EventEdit from './pages/LocalEvent/EventEdit'
 import LocalEventsDetails from './pages/Details/LocalEventDetails'
+import EditProfilePage from './pages/ProfilePage/EditProfilePage'
+import EditProfilePasswdPage from './pages/ProfilePage/EditProfilePasswdPage'
 export const routes = [
   {
     path: RouteName.HOME,
@@ -58,6 +60,14 @@ export const routes = [
       {
         path: `/events/details/localEventDetails/:id`,
         element: <LocalEventsDetails />
+      },
+      {
+        path: `/profile/edit`,
+        element: <EditProfilePage />
+      },
+      {
+        path: `/profile/edit/passwd`,
+        element: <EditProfilePasswdPage />
       }
     ]
   }
