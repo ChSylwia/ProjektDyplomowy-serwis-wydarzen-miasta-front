@@ -77,7 +77,7 @@ const EditProfilePage = () => {
   }
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center'>
+    <div className='min-h-screen w-full flex items-center justify-center z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
         <h2 className='text-lg font-bold mb-4'>Edytuj profil</h2>
         <form onSubmit={handleSubmit} className='space-y-4'>

@@ -44,7 +44,7 @@ const EditProfilePasswdPage = () => {
   }
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center'>
+    <div className='min-h-screen w-full flex items-center justify-center z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-md'>
         <h2 className='text-lg font-bold mb-4'>Edit Password</h2>
         {error && <p className='text-red-500'>{error}</p>}

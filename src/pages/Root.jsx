@@ -1,18 +1,20 @@
 import { Outlet } from 'react-router-dom'
-import TailwindCSSLogo from '@/assets/tailwindcss-icon.svg'
-import ReactLogo from '@/assets/react-icon.svg'
-import ReactRouterLogo from '@/assets/react-router-icon.svg'
 import Navbar from '@/components/Navbar/Navbar'
 
 const Root = () => {
   return (
-    <div className='min-h-screen flex flex-col justify-center items-center relative'>
+    <div className='min-h-screen flex flex-col justify-center items-center relative main'>
+      {/* Animated circles */}
+      <div className='circle-1'></div>
+      <div className='circle-2'></div>
+      <div className='circle-3'></div>
+      <div className='circle-4'></div>
+      <div className='circle-5'></div>
+      <div className='circle-6'></div>
+      {/* Navbar */}
       <Navbar />
-      <div className='flex space-x-4 mb-6'>
-        <img src={TailwindCSSLogo} className='w-12' />
-        <img src={ReactLogo} className='w-12' />
-        <img src={ReactRouterLogo} className='w-12' />
-      </div>
+
+      {/* Content */}
       <h1 className='mb-3'>Strona z wydarzeniami miasta</h1>
       <Outlet />
     </div>

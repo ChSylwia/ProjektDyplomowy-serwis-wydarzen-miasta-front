@@ -52,8 +52,8 @@ const ProfilePage = () => {
   const { firstName, lastName, email, city, postalCode } = userData
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center'>
-      <div className='bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-center md:items-start w-full max-w-4xl'>
+    <div className='min-h-screen w-full flex items-center justify-center z-10'>
+      <div className='bg-white rounded-lg shadow-lg p-6 flex flex-col  md:flex-row items-center md:items-start w-full max-w-4xl'>
         {/* Left Section */}
         <div className='flex-1 flex flex-col items-center md:items-start'>
           {/* Profile Avatar */}

@@ -48,7 +48,7 @@ const EventConfigurate = () => {
   }
 
   return (
-    <div className='max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg'>
+    <div className='max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg z-10'>
       <h1 className='text-2xl font-semibold mb-6'>Manage Local Events</h1>
       {error && <div className='alert alert-error mb-4'>{error}</div>}
 

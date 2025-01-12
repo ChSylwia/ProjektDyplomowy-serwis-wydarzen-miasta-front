@@ -80,7 +80,7 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center '>
+    <div className='min-h-screen flex items-center justify-center z-10'>
       <ToastContainer />
       <div className='w-full max-w-2xl bg-white shadow-md rounded-lg p-6 md:p-8'>
         <h2 className='text-3xl font-bold text-center mb-8 text-gray-800'>Zarejestruj</h2>
