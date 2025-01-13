@@ -2,11 +2,12 @@ import { useNavigate } from 'react-router-dom'
 
 function CardCinema({ movie }) {
   const navigate = useNavigate()
-  const handleClickRedireict = () => {
-    navigate(`/events/details/localEventDetails/${movie.id}`)
+  const handleClickRedirect = () => {
+    // Pass the full event data as state
+    navigate(`/events/details/localEventDetails/${movie.id}`, { state: { event: movie } })
   }
   return (
-    <div className='card card-side shadow-xl bg-tertiary z-10'>
+    <div className='card card-side shadow-xl bg-tertiary bg-white z-10'>
       <figure>
         <img src={movie.image} alt={movie.title} className='h-full' />
       </figure>
@@ -16,7 +17,7 @@ function CardCinema({ movie }) {
         <div className='card-actions justify-end'>
           <button
             className='btn btn-primary bg-primary text-white hover:bg-primary/90'
-            onClick={handleClickRedireict}
+            onClick={handleClickRedirect}
           >
             Zobacz więcej
           </button>

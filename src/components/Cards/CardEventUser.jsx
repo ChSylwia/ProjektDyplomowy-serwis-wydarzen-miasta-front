@@ -1,14 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 
-function CardEventUser({ item }) {
+function CardEventUser({ item: itemDetails }) {
+  const item = itemDetails.event
+  console.log({ item, id: itemDetails.id })
+
   const navigate = useNavigate()
 
-  const handleClickRedireict = () => {
-    navigate(`/events/details/localEventDetails/${item.id}`)
+  const handleClickRedirect = () => {
+    // Pass the full event data as state
+    navigate(`/events/details/localEventDetails/${item.id}`, { state: { event: item } })
   }
 
   return (
-    <div key={item.id} className='card bg-tertiary shadow-xl z-10'>
+    <div key={itemDetails.id} className='card bg-tertiary bg-white shadow-xl z-10'>
       <figure>
         <img src={item.image} alt={item.title} className='h-full' />
       </figure>
@@ -18,7 +22,7 @@ function CardEventUser({ item }) {
         <div className='card-actions justify-end'>
           <button
             className='btn btn-primary bg-primary text-white hover:bg-primary/90'
-            onClick={handleClickRedireict}
+            onClick={handleClickRedirect}
           >
             Zobacz więcej
           </button>

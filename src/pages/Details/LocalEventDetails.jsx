@@ -1,38 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import iconGoogle from '@/assets/google-icon-logo.svg'
+import { useLocation } from 'react-router-dom'
+
 const LocalEventsDetails = () => {
-  const { id } = useParams()
-  const [event, setEvent] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const fetchEventDetails = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/all-local-events/${id}`)
-        if (!response.ok) throw new Error('Failed to fetch event details')
-        const data = await response.json()
-
-        setEvent(data[0])
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchEventDetails()
-  }, [id])
+  const location = useLocation() // Access the state passed with the navigate function
+  const [event, setEvent] = useState(location.state?.event)
 
   const handleGoogleCalendar = () => {
     if (!event) return
     const googleCalendarLink = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${event.title}&details=${event.description}&dates=${event.date}&location=${event.link}`
     window.open(googleCalendarLink, '_blank')
   }
-
-  if (loading) return <div className='text-center mt-10'>Ładowanie szczegółów wydarzenia...</div>
-  if (error) return <div className='alert alert-error'>{error}</div>
-  if (!event) return <div className='text-center mt-10'>Nie znaleziono wydarzenia.</div>
+  console.log(event)
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
