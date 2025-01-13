@@ -52,12 +52,12 @@ const ProfilePage = () => {
   const { firstName, lastName, email, city, postalCode } = userData
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center z-10'>
+    <div className='min-h-full w-full flex items-center justify-center z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 flex flex-col  md:flex-row items-center md:items-start w-full max-w-4xl'>
         {/* Left Section */}
         <div className='flex-1 flex flex-col items-center md:items-start'>
           {/* Profile Avatar */}
-          <div className='w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold'>
+          <div className='w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-2xl font-bold'>
             {firstName[0]}
             {lastName[0]}
           </div>
@@ -99,13 +99,13 @@ const ProfilePage = () => {
           <h3 className='text-lg font-bold'>Moje wydarzenia</h3>
           <div className='mt-4 space-y-4'>
             <button
-              className='px-4 py-2 w-full bg-blue-500 text-white rounded shadow hover:bg-blue-600'
+              className='px-4 py-2 w-full bg-primary text-white hover:bg-primary/90 rounded shadow'
               onClick={handleAddEvent}
             >
               Dodaj wydarzenie
             </button>
             <button
-              className='px-4 py-2 w-full bg-blue-500 text-white rounded shadow hover:bg-blue-600'
+              className='px-4 py-2 w-full bg-primary text-white hover:bg-primary/90 rounded shadow'
               onClick={handleEventConfiguration}
             >
               Zarządzaj wydarzeniami

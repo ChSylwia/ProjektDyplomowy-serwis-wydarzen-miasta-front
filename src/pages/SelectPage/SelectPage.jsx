@@ -212,7 +212,6 @@ const SelectPage = () => {
         const response = await fetch(`http://127.0.0.1:8000/api/v1/all-local-events/`)
         if (!response.ok) throw new Error('Failed to fetch event details')
         const data = await response.json()
-        console.log('Fetched eventUsers:', data.events)
         setEvent(data.events)
       } catch (err) {
         console.error(err)
@@ -266,10 +265,10 @@ const SelectPage = () => {
 
   return (
     <>
-      <div className='flex'>
+      <div className='flex '>
         <div className='p-4'>
           <button
-            className={`btn ${selectedDate === format(new Date(), 'yyyy-MM-dd') ? 'active' : ''}`}
+            className={`btn  ${selectedDate === format(new Date(), 'yyyy-MM-dd') ? 'active' : ''}`}
             onClick={() => handleDateChange(0)}
           >
             DZIŚ
@@ -332,7 +331,7 @@ const SelectPage = () => {
             ) : event.typeEvent === 'event' ? (
               <CardEvents key={`E${event.id}`} item={event} />
             ) : (
-              <CardEventUser key={`EU${event.id}`} movie={event} />
+              <CardEventUser key={`EU${event.id}`} item={event} />
             )
           )}
         </div>

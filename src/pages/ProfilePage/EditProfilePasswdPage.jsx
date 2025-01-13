@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useApiClient from '../../components/Cookie/useApiClient'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
+import imageAddEvent from '@/assets/add-event.svg'
 const EditProfilePasswdPage = () => {
   const navigate = useNavigate()
   const { post } = useApiClient()
@@ -44,9 +44,9 @@ const EditProfilePasswdPage = () => {
   }
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center z-10'>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-6/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-md'>
-        <h2 className='text-lg font-bold mb-4'>Edit Password</h2>
+        <h2 className='text-lg font-bold mb-4'>Zmień hasło</h2>
         {error && <p className='text-red-500'>{error}</p>}
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
@@ -58,7 +58,7 @@ const EditProfilePasswdPage = () => {
               id='currentPassword'
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className='w-full px-4 py-2 border border-gray-300 rounded-md'
+              className='w-full px-4 py-2 border bg-tertiary rounded-md'
               required
             />
           </div>
@@ -71,7 +71,7 @@ const EditProfilePasswdPage = () => {
               id='newPassword'
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className='w-full px-4 py-2 border border-gray-300 rounded-md'
+              className='w-full px-4 py-2 border bg-tertiary rounded-md'
               required
             />
           </div>
@@ -84,19 +84,30 @@ const EditProfilePasswdPage = () => {
               id='confirmPassword'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className='w-full px-4 py-2 border border-gray-300 rounded-md'
+              className='w-full px-4 py-2 border bg-tertiary rounded-md'
               required
             />
           </div>
-          <button
-            type='submit'
-            className='w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
-          >
-            {loading ? <span>Loading...</span> : 'Zmień hasło'}
-          </button>
+          <div className='flex justify-end space-x-4'>
+            <button type='submit' className='w-full py-2 bg-primary text-white hover:bg-primary/90'>
+              {loading ? <span>Ładoanie...</span> : 'Zmień hasło'}
+            </button>
+            <button
+              type='button'
+              onClick={() => navigate('/profile')}
+              className='px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+            >
+              Anuluj
+            </button>
+          </div>
         </form>
       </div>
-
+      <div
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        style={{
+          backgroundImage: `url(${imageAddEvent})`
+        }}
+      ></div>
       {/* Toast container to display toasts */}
       <ToastContainer />
     </div>

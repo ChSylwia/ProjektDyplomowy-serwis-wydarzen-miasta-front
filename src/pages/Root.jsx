@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar/Navbar'
 
 const Root = () => {
   return (
-    <div className='min-h-screen flex flex-col justify-center items-center relative main'>
+    <div className='min-h-screen flex flex-col items-center relative main'>
       {/* Animated circles */}
       <div className='circle-1'></div>
       <div className='circle-2'></div>
@@ -15,7 +15,9 @@ const Root = () => {
       <Navbar />
 
       {/* Content */}
-      <h1 className='mb-3'>Strona z wydarzeniami miasta</h1>
+      <div className='min-h-40 p-4 '>
+        <h1 className='mb-3'>Strona z wydarzeniami miasta</h1>
+      </div>
       <Outlet />
     </div>
   )

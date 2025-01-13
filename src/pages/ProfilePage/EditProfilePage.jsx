@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useApiClient from '../../components/Cookie/useApiClient'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
+import imageAddEvent from '@/assets/add-event.svg'
 const EditProfilePage = () => {
   const navigate = useNavigate()
   const { get, put } = useApiClient()
@@ -77,7 +77,7 @@ const EditProfilePage = () => {
   }
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center z-10'>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
         <h2 className='text-lg font-bold mb-4'>Edytuj profil</h2>
         <form onSubmit={handleSubmit} className='space-y-4'>
@@ -92,7 +92,7 @@ const EditProfilePage = () => {
               name='firstName'
               value={formData.firstName}
               onChange={handleChange}
-              className='w-full p-2 border border-gray-300 rounded'
+              className='w-full p-2 border  bg-tertiary rounded'
             />
           </div>
           <div>
@@ -105,7 +105,7 @@ const EditProfilePage = () => {
               name='lastName'
               value={formData.lastName}
               onChange={handleChange}
-              className='w-full p-2 border border-gray-300 rounded'
+              className='w-full p-2 border bg-tertiary rounded'
             />
           </div>
           <div>
@@ -118,7 +118,7 @@ const EditProfilePage = () => {
               name='email'
               value={formData.email}
               onChange={handleChange}
-              className='w-full p-2 border border-gray-300 rounded'
+              className='w-full p-2 border bg-tertiary rounded'
             />
           </div>
           <div>
@@ -131,7 +131,7 @@ const EditProfilePage = () => {
               name='city'
               value={formData.city}
               onChange={handleChange}
-              className='w-full p-2 border border-gray-300 rounded'
+              className='w-full p-2 border bg-tertiary rounded'
             />
           </div>
           <div>
@@ -144,11 +144,17 @@ const EditProfilePage = () => {
               name='postalCode'
               value={formData.postalCode}
               onChange={handleChange}
-              className='w-full p-2 border border-gray-300 rounded'
+              className='w-full p-2 border bg-tertiary rounded'
             />
           </div>
           {/* Buttons */}
           <div className='flex justify-end space-x-4'>
+            <button
+              type='submit'
+              className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+            >
+              Zapisz zmiany
+            </button>
             <button
               type='button'
               onClick={() => navigate('/profile')}
@@ -156,16 +162,16 @@ const EditProfilePage = () => {
             >
               Anuluj
             </button>
-            <button
-              type='submit'
-              className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-            >
-              Zapisz zmiany
-            </button>
           </div>
         </form>
       </div>
-      <ToastContainer position='top-right' autoClose={3000} />
+      <div
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        style={{
+          backgroundImage: `url(${imageAddEvent})`
+        }}
+      ></div>
+      <ToastContainer position='top-right' autoClose={2000} />
     </div>
   )
 }

@@ -1,20 +1,25 @@
 import { useNavigate } from 'react-router-dom'
 
-function CardEventUser({ movie }) {
+function CardEventUser({ item }) {
   const navigate = useNavigate()
+
   const handleClickRedireict = () => {
-    navigate(`/events/details/localEventDetails/${movie.id}`)
+    navigate(`/events/details/localEventDetails/${item.id}`)
   }
+
   return (
-    <div className='card card-side bg-base-100 shadow-xl'>
+    <div key={item.id} className='card bg-tertiary shadow-xl'>
       <figure>
-        <img src={movie.image} alt={movie.title} />
+        <img src={item.image} alt={item.title} className='h-full' />
       </figure>
       <div className='card-body'>
-        <h2 className='card-title'>{movie.title}</h2>
-        <p>{movie.description}</p>
+        <h2 className='card-title'>{item.title}</h2>
+        <p>{item.content}</p>
         <div className='card-actions justify-end'>
-          <button className='btn btn-primary' onClick={handleClickRedireict}>
+          <button
+            className='btn btn-primary bg-primary text-white hover:bg-primary/90'
+            onClick={handleClickRedireict}
+          >
             Zobacz więcej
           </button>
         </div>

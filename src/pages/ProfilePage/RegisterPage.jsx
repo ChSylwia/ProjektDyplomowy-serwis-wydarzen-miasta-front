@@ -2,7 +2,8 @@ import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { toast, ToastContainer } from 'react-toastify'
 import * as Yup from 'yup'
-
+import imageAddEvent from '@/assets/add-event.svg'
+import { useNavigate } from 'react-router-dom'
 const RegisterPage = () => {
   const initialValues = {
     login: '',
@@ -16,7 +17,7 @@ const RegisterPage = () => {
     userType: '',
     termsAccepted: false
   }
-
+  const navigate = useNavigate()
   const validationSchema = Yup.object({
     login: Yup.string()
       .min(4, 'Login musi mieć co najmniej 4 znaki')
@@ -80,10 +81,9 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center z-10'>
-      <ToastContainer />
-      <div className='w-full max-w-2xl bg-white shadow-md rounded-lg p-6 md:p-8'>
-        <h2 className='text-3xl font-bold text-center mb-8 text-gray-800'>Zarejestruj</h2>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
+      <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
+        <h2 className='text-3xl font-bold text-center mb-8 text-gray-800'>Zarejestruj się</h2>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -92,19 +92,6 @@ const RegisterPage = () => {
           <Form>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div className='form-control'>
-                <label htmlFor='login' className='label'>
-                  <span className='label-text'>Login</span>
-                </label>
-                <Field
-                  type='text'
-                  id='login'
-                  name='login'
-                  className='input input-bordered w-full'
-                  placeholder='Wpisz login'
-                />
-                <ErrorMessage name='login' component='div' className='text-red-500 text-sm mt-1' />
-              </div>
-              <div className='form-control'>
                 <label htmlFor='firstName' className='label'>
                   <span className='label-text'>Imię</span>
                 </label>
@@ -112,7 +99,7 @@ const RegisterPage = () => {
                   type='text'
                   id='firstName'
                   name='firstName'
-                  className='input input-bordered w-full'
+                  className='input input-bordered w-full bg-tertiary'
                   placeholder='Wpisz imię'
                 />
                 <ErrorMessage
@@ -129,7 +116,7 @@ const RegisterPage = () => {
                   type='text'
                   id='lastName'
                   name='lastName'
-                  className='input input-bordered w-full'
+                  className='input input-bordered w-full bg-tertiary'
                   placeholder='Wpisz nazwisko'
                 />
                 <ErrorMessage
@@ -139,6 +126,19 @@ const RegisterPage = () => {
                 />
               </div>
               <div className='form-control'>
+                <label htmlFor='login' className='label'>
+                  <span className='label-text'>Login</span>
+                </label>
+                <Field
+                  type='text'
+                  id='login'
+                  name='login'
+                  className='input input-bordered w-full bg-tertiary'
+                  placeholder='Wpisz login'
+                />
+                <ErrorMessage name='login' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              <div className='form-control'>
                 <label htmlFor='email' className='label'>
                   <span className='label-text'>Email</span>
                 </label>
@@ -146,7 +146,7 @@ const RegisterPage = () => {
                   type='email'
                   id='email'
                   name='email'
-                  className='input input-bordered w-full'
+                  className='input input-bordered w-full bg-tertiary'
                   placeholder='Wpisz email'
                 />
                 <ErrorMessage name='email' component='div' className='text-red-500 text-sm mt-1' />
@@ -159,7 +159,7 @@ const RegisterPage = () => {
                   type='text'
                   id='city'
                   name='city'
-                  className='input input-bordered w-full'
+                  className='input input-bordered w-full bg-tertiary'
                   placeholder='Wpisz miasto'
                 />
                 <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
@@ -172,7 +172,7 @@ const RegisterPage = () => {
                   type='text'
                   id='postalCode'
                   name='postalCode'
-                  className='input input-bordered w-full'
+                  className='input input-bordered w-full bg-tertiary'
                   placeholder='00-000'
                 />
                 <ErrorMessage
@@ -190,7 +190,7 @@ const RegisterPage = () => {
                 type='password'
                 id='password'
                 name='password'
-                className='input input-bordered w-full'
+                className='input input-bordered w-full bg-tertiary'
                 placeholder='Wpisz hasło'
               />
               <ErrorMessage name='password' component='div' className='text-red-500 text-sm mt-1' />
@@ -203,7 +203,7 @@ const RegisterPage = () => {
                 type='password'
                 id='confirmPassword'
                 name='confirmPassword'
-                className='input input-bordered w-full'
+                className='input input-bordered w-full bg-tertiary'
                 placeholder='Potwierdź hasło'
               />
               <ErrorMessage
@@ -220,7 +220,7 @@ const RegisterPage = () => {
                 as='select'
                 id='userType'
                 name='userType'
-                className='select select-bordered w-full'
+                className='select select-bordered w-full bg-tertiary'
               >
                 <option value='' label='Wybierz typ użytkownika' />
                 <option value='private' label='Osoba prywatna' />
@@ -239,12 +239,22 @@ const RegisterPage = () => {
                 className='text-red-500 text-sm mt-1'
               />
             </div>
-            <button type='submit' className='btn btn-primary w-full mt-6'>
+            <button
+              type='submit'
+              className='btn btn-primary w-full mt-6 bg-primary text-white hover:bg-primary/90'
+            >
               Zarejestruj się
             </button>
           </Form>
         </Formik>
       </div>
+      <div
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        style={{
+          backgroundImage: `url(${imageAddEvent})`
+        }}
+      ></div>
+      <ToastContainer />
     </div>
   )
 }

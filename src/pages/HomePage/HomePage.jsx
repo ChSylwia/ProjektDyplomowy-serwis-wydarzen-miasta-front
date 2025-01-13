@@ -204,9 +204,9 @@ const HomePage = () => {
       <CardCinema movie={movie} />
     </CarouselItem>
   ))
-  const cardsEventUser = eventUsers.map((movie) => (
-    <CarouselItem key={movie.id} className='basis-1/3 cards-movie'>
-      <CardEventUser movie={movie} />
+  const cardsEventUser = eventUsers.map((item) => (
+    <CarouselItem key={item.id} className='basis-1/3 cards-movie'>
+      <CardEventUser item={item} />
     </CarouselItem>
   ))
   const handleClickToSelectPage = (type) => {
@@ -225,7 +225,10 @@ const HomePage = () => {
           <CarouselNext />
         </Carousel>
         <div className='flex justify-center p-3'>
-          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage('big-event')}>
+          <button
+            className='btn btn-lg bg-secondary text-white hover:bg-secondary/90'
+            onClick={() => handleClickToSelectPage('big-event')}
+          >
             Zobacz więcej
           </button>
         </div>
@@ -238,7 +241,10 @@ const HomePage = () => {
           <CarouselNext />
         </Carousel>
         <div className='flex justify-center p-3'>
-          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage('movie')}>
+          <button
+            className='btn btn-lg bg-secondary text-white hover:bg-secondary/90'
+            onClick={() => handleClickToSelectPage('movie')}
+          >
             Zobacz więcej
           </button>
         </div>
@@ -251,7 +257,10 @@ const HomePage = () => {
           <CarouselNext />
         </Carousel>
         <div className='flex justify-center p-3'>
-          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage('local-event')}>
+          <button
+            className='btn btn-lg bg-secondary text-white hover:bg-secondary/90'
+            onClick={() => handleClickToSelectPage('local-event')}
+          >
             Zobacz więcej
           </button>
         </div>
@@ -267,7 +276,10 @@ const HomePage = () => {
           <CarouselNext />
         </Carousel>
         <div className='flex justify-center p-3'>
-          <button className='btn btn-lg ' onClick={() => handleClickToSelectPage(null)}>
+          <button
+            className='btn btn-lg bg-secondary text-white hover:bg-secondary/90'
+            onClick={() => handleClickToSelectPage(null)}
+          >
             Zobacz więcej
           </button>
         </div>
