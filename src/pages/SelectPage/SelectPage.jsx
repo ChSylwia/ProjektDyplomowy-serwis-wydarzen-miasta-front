@@ -265,7 +265,7 @@ const SelectPage = () => {
 
   return (
     <>
-      <div className='flex '>
+      <div className='flex z-10'>
         <div className='p-4'>
           <button
             className={`btn  ${selectedDate === format(new Date(), 'yyyy-MM-dd') ? 'active' : ''}`}
@@ -322,7 +322,7 @@ const SelectPage = () => {
           </button>
         </div>
       </div>
-      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto '>
+      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto z-10'>
         <p> Lista wydarzeń kup bilet znajdź atrakcje dla siebie</p>
         <div className='wrapper-for-elements-smaller grid grid-cols-1 md:grid-cols-3 gap-4'>
           {filteredEvents.map((event) =>

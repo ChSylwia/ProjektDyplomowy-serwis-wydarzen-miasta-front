@@ -6,11 +6,11 @@ function CardCinema({ movie }) {
     navigate(`/events/details/localEventDetails/${movie.id}`)
   }
   return (
-    <div className='card card-side shadow-xl bg-tertiary'>
+    <div className='card card-side shadow-xl bg-tertiary z-10'>
       <figure>
         <img src={movie.image} alt={movie.title} className='h-full' />
       </figure>
-      <div className='card-body'>
+      <div className='card-body bg-tertiary bg-white'>
         <h2 className='card-title'>{movie.title}</h2>
         <p>{movie.description}</p>
         <div className='card-actions justify-end'>
