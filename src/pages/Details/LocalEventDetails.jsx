@@ -8,11 +8,10 @@ const LocalEventsDetails = () => {
   const [event, setEvent] = useState(location.state?.event)
 
   const handleGoogleCalendar = () => {
-    if (!event) return
-    const googleCalendarLink = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${event.title}&details=${event.description}&dates=${event.date}&location=${event.link}`
-    window.open(googleCalendarLink, '_blank')
+    // if (!event) return
+    // const googleCalendarLink = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${event.title}&details=${event.description}&dates=${event.date}&location=${event.link}`
+    // window.open(googleCalendarLink, '_blank')
   }
-  console.log(event)
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
@@ -39,18 +38,22 @@ const LocalEventsDetails = () => {
           <span className='font-semibold'>Data:</span> {new Date(event.date).toLocaleString()}
         </p>
         <p>
-          <span className='font-semibold'>Cena:</span> {event.price ? `${event.price} PLN` : 'Free'}
+          {event.price != 0 && event.price != null ? (
+            <span className='font-semibold'>Cena: {event.price} zł</span>
+          ) : null}
         </p>
 
         <div className='mt-4 space-y-2'>
-          <a
-            href={event.link}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='btn btn-primary w-full bg-primary text-white hover:bg-primary/90'
-          >
-            Przejdź do strony wydarzenia
-          </a>
+          {event.link === '' ? (
+            <a
+              href={event.link}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='btn btn-primary w-full bg-primary text-white hover:bg-primary/90'
+            >
+              Przejdź do strony wydarzenia
+            </a>
+          ) : null}
           <button
             onClick={handleGoogleCalendar}
             className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300'

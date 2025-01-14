@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 
 function CardEventUser({ item: itemDetails }) {
   const item = itemDetails.event
-  console.log({ item, id: itemDetails.id })
 
   const navigate = useNavigate()
 
