@@ -42,13 +42,30 @@ const useApiClient = () => {
       setLoading(false)
     }
   }
-
+  if (loading) {
+    return (
+      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p class='text-lg font-semibold'>
+          <span class='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
+  }
+  const getUserDetails = async () => {
+    try {
+      const userDetails = await get('/user/me')
+      return userDetails
+    } catch (error) {
+      console.error('Failed to fetch user details:', error)
+      throw error
+    }
+  }
   const get = (endpoint) => request(endpoint, 'GET')
   const post = (endpoint, payload) => request(endpoint, 'POST', payload)
   const put = (endpoint, payload) => request(endpoint, 'PUT', payload)
   const deleteRequest = (endpoint) => request(endpoint, 'DELETE')
 
-  return { get, post, put, deleteRequest, loading }
+  return { get, post, put, deleteRequest, loading, getToken, getUserDetails }
 }
 
 export default useApiClient

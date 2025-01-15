@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { toast, ToastContainer } from 'react-toastify'
 import * as Yup from 'yup'
 import imageAddEvent from '@/assets/add-event.svg'
 import { useNavigate } from 'react-router-dom'
 const RegisterPage = () => {
+  const [loading, setLoading] = useState(false)
   const initialValues = {
     login: '',
     firstName: '',
@@ -40,6 +41,7 @@ const RegisterPage = () => {
   })
 
   const handleSubmit = (values) => {
+    setLoading(true)
     // Prepare the request headers
     const myHeaders = new Headers()
     myHeaders.append('Content-Type', 'application/json')
@@ -66,16 +68,26 @@ const RegisterPage = () => {
 
     fetch('http://127.0.0.1:8000/api/v1/user/create', requestOptions)
       .then((response) => {
-        if (response.ok) {
-          toast.success('Rejestracja zakończona sukcesem!')
-          return response.json()
-        } else {
-          return response.json().then((err) => {
-            throw new Error(err.message)
-          })
-        }
+        setLoading(false)
+        return response.text().then((text) => {
+          try {
+            const json = JSON.parse(text) // Parse manually
+            if (response.ok) {
+              toast.success('Rejestracja zakończona sukcesem!')
+              setTimeout(() => {
+                navigate('/login') // Redirect to login page
+              }, 2000)
+              return json
+            } else {
+              throw new Error(json.message || 'Wystąpił błąd')
+            }
+          } catch (e) {
+            throw new Error('Nieprawidłowa odpowiedź JSON: ' + text)
+          }
+        })
       })
       .catch((error) => {
+        setLoading(false)
         toast.error(`Rejestracja nieudana: ${error.message}`)
       })
   }
@@ -243,7 +255,7 @@ const RegisterPage = () => {
               type='submit'
               className='btn btn-primary w-full mt-6 bg-primary text-white hover:bg-primary/90'
             >
-              Zarejestruj się
+              {loading ? 'Ładowanie...' : 'Zarejestruj się'}
             </button>
           </Form>
         </Formik>

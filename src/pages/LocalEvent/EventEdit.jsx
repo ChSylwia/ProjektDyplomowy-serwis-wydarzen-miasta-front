@@ -66,6 +66,15 @@ const EventEdit = () => {
       setLoading(false)
     }
   }
+  if (loading) {
+    return (
+      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p class='text-lg font-semibold'>
+          <span class='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
+  }
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>

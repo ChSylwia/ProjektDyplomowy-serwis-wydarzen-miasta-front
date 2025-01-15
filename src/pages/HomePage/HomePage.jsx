@@ -48,7 +48,15 @@ const HomePage = () => {
 
     fetchData()
   }, [])
-  if (loading) return <div>Loading...</div>
+  if (loading) {
+    return (
+      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p class='text-lg font-semibold'>
+          <span class='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
+  }
   if (error) return <div>Error: {error}</div>
 
   const cardsEvent = event
@@ -77,15 +85,14 @@ const HomePage = () => {
 
   const allEvents = [...cardsEvent, ...cardsEventUser]
   const handleClickToSelectPage = (type) => {
-    navigate(`${RouteName.SELECT}/${type}`)
+    navigate(`${RouteName.WYDARZENIA}/${type}`)
   }
   return (
     <>
-      <div></div>
-      <h2>Odkryj atrakcje miasta</h2>
-      <p>Wstep</p>
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
-        <p> Lista wydarzeń kup bilet znajdź atrakcje dla siebie</p>
+        <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+          <p class='text-lg font-semibold'> Lista większych wydarzeń w mieście Płock</p>
+        </div>
         <Carousel>
           <CarouselContent className='p-3 items-center'>{cardsEvent}</CarouselContent>
           <CarouselPrevious />
@@ -117,7 +124,9 @@ const HomePage = () => {
         </div>
       </div> */}
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
-        <p>Lista wydarzeń od użytkowników odkryj atrakcje swojego miasta</p>
+        <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+          <p class='text-lg font-semibold'> Lista wydarzeń lokalnych miasta Płock</p>
+        </div>
         <Carousel>
           <CarouselContent className='p-3 items-center'>{cardsEventUser}</CarouselContent>
           <CarouselPrevious />
@@ -133,7 +142,12 @@ const HomePage = () => {
         </div>
       </div>
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
-        <p>Lista wydarzeń od użytkowników odkryj atrakcje swojego miasta</p>
+        <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+          <p class='text-lg font-semibold'>
+            {' '}
+            Dla niezdecydowanych wszystkie wydarzenia miasta Płock
+          </p>
+        </div>
         <Carousel>
           <CarouselContent className='p-3 items-center'>
             {cardsEvent}

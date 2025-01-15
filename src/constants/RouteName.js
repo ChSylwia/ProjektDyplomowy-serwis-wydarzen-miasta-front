@@ -1,7 +1,7 @@
 const NavbarRouteName = {
-  PROFILE: '/profile',
   HOME: '/',
-  SELECT: '/select',
+  WYDARZENIA: '/select',
+  PROFIL: '/profile',
   LOGIN: '/login',
   REGISTER: '/register'
 }

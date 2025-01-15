@@ -1,18 +1,64 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import iconGoogle from '@/assets/google-icon-logo.svg'
 import { useLocation } from 'react-router-dom'
+import iconGoogle from '@/assets/google-icon-logo.svg'
+import useApiClient from '../../components/Cookie/useApiClient'
+import { toast, ToastContainer } from 'react-toastify'
 
 const LocalEventsDetails = () => {
   const location = useLocation() // Access the state passed with the navigate function
   const [event, setEvent] = useState(location.state?.event)
+  const { getToken, getUserDetails, post } = useApiClient() // Destructure getToken and post methods from the useApiClient hook
+  const [userType, setUserType] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const handleGoogleCalendar = () => {
-    // if (!event) return
-    // const googleCalendarLink = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${event.title}&details=${event.description}&dates=${event.date}&location=${event.link}`
-    // window.open(googleCalendarLink, '_blank')
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const userDetails = await getUserDetails()
+        setUserType(userDetails.user_type)
+        console.log('User details:', userDetails)
+      } catch (error) {
+        console.error('Error fetching user details:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserType()
+  }, [])
+
+  const handleGoogleCalendar = async () => {
+    setLoading(true)
+    const token = getToken()
+
+    if (!token || userType != 'google') {
+      window.location.href = 'http://127.0.0.1:8000/auth/google'
+      setLoading(false)
+      return
+    }
+
+    try {
+      const response = await post('/google/calendar/events', {
+        title: event.title,
+        description: event.description,
+        date: event.date,
+        location: event.link
+      })
+
+      if (response?.message === 'Event successfully created.') {
+        console.log('Event saved to Google Calendar:', response)
+        toast.success('Event successfully added to Google Calendar!')
+      } else {
+        console.error('Failed to save event:', response?.error || 'Unknown error')
+        toast.error('Failed to save event.')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      toast.error('An error occurred while saving the event.')
+    } finally {
+      setLoading(false)
+    }
   }
-
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       {/* Image */}
@@ -44,7 +90,7 @@ const LocalEventsDetails = () => {
         </p>
 
         <div className='mt-4 space-y-2'>
-          {event.link === '' ? (
+          {event.link != '' ? (
             <a
               href={event.link}
               target='_blank'
@@ -59,10 +105,11 @@ const LocalEventsDetails = () => {
             className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300'
           >
             <img src={iconGoogle} alt='Google Icon' className='w-5 h-5' />
-            <span>Zapisz w kalendarzu Google</span>
+            {loading ? 'Ładowanie...' : 'Zapisz w kalendarzu Google'}
           </button>
         </div>
       </div>
+      <ToastContainer className='z-50 fixed top-16 right-0 m-4' />
     </div>
   )
 }

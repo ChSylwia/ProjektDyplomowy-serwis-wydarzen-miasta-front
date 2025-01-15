@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { NavbarRouteName } from '@/constants/RouteName'
-
+import { toast, ToastContainer } from 'react-toastify'
 const Navbar = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const handleLogoutClick = () => {
     Cookies.remove('authToken') // Remove the auth token
-    alert('Logged out successfully!')
+    toast.success('Logged out successfully!')
     navigate(NavbarRouteName.LOGIN) // Redirect to the login page
   }
 
@@ -54,7 +54,7 @@ const Navbar = () => {
               ))}
           </ul>
         </div>
-        <a className='btn btn-ghost text-xl'>daisyUI</a>
+        <a className='btn btn-ghost text-xl'>Events</a>
       </div>
       <div className='navbar-center hidden lg:flex'>
         {Object.entries(NavbarRouteName)
@@ -86,6 +86,7 @@ const Navbar = () => {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   )
 }

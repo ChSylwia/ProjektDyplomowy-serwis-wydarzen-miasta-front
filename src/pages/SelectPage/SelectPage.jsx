@@ -1,33 +1,25 @@
 import CardCinema from '../../components/Cards/CardCinema'
 import CardEvents from '../../components/Cards/CardEvents'
 import CardEventUser from '../../components/Cards/CardEventUser'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '../../components/ui/carousel'
+import { format, addDays, isSameDay, parseISO } from 'date-fns'
 import { useState } from 'react'
-import { format, addDays } from 'date-fns'
 import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
 const SelectPage = () => {
   const { type } = useParams()
   const [filter, setFilter] = useState(null)
-  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'))
+  const [selectedDate, setSelectedDate] = useState(null)
   const [typeEvent, setTypeEvent] = useState(type || null)
-
   const [eventUsers, setEvent] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   const handleFilter = (typeEvent) => {
-    setFilter((prev) => (prev === typeEvent ? null : typeEvent)) // Toggle filter
+    setFilter((prev) => (prev === typeEvent ? null : typeEvent))
   }
   const handleFiltertypeEvent = (typeEvent) => {
-    setTypeEvent((prev) => (prev === typeEvent ? null : typeEvent)) // Toggle filter typeEvent
+    setTypeEvent((prev) => (prev === typeEvent ? null : typeEvent))
   }
   const handleDateChange = (daysOffset) => {
     const newDate = format(addDays(new Date(), daysOffset), 'yyyy-MM-dd')
@@ -53,7 +45,15 @@ const SelectPage = () => {
     }
     fetchEventDetails()
   }, [type])
-
+  if (loading) {
+    return (
+      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p class='text-lg font-semibold'>
+          <span class='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
+  }
   const allEvents = [
     ...(eventUsers?.length
       ? eventUsers.map((eventUser) => ({
@@ -63,38 +63,53 @@ const SelectPage = () => {
       : [])
   ]
 
-  // Filtrowanie według aktywnego filtra
-  const filteredEvents = allEvents
-    .filter((event) => {
-      if (!filter) return true // Bez filtra wyświetl wszystko
-      if (filter === 'free') return event.cost === 0
-      if (filter === 'paid') return event.cost > 0
-      return true
-    })
-    .filter((event) => {
-      console.log(event.event.typeEvent)
+  const filteredEvents = allEvents.filter((event) => {
+    const eventDate = event.event?.date ? parseISO(event.event.date) : null
+    const selectedDateObj = selectedDate ? parseISO(selectedDate) : null
 
-      if (!event.typeEvent) return true
-      if (event.event.typeEvent === 'big-event') return event.event.typeEvent === 'event'
-      if (event.event.typeEvent === 'local-event') return event.event.typeEvent === 'user'
-      if (event.event.typeEvent === 'cinema-event') return event.event.typeEvent === 'movie' // Wydarzenia kinowe
-      return true
-    })
-  console.log(filteredEvents)
+    const isDateMatch = selectedDate ? isSameDay(eventDate, selectedDateObj) : true
+
+    const eventType = event.event?.typeEvent?.toLowerCase().trim()
+    const selectedType = typeEvent?.toLowerCase().trim()
+
+    if (!event.event?.typeEvent) {
+      return isDateMatch
+    }
+
+    if (selectedType === 'big-event' && eventType !== 'big-event') return false
+    if (selectedType === 'local-event' && eventType !== 'local-event') return false
+    if (selectedType === 'cinema-event' && eventType !== 'cinema-event') return false
+
+    const isTypeMatch = !selectedType || eventType === selectedType
+
+    return isDateMatch && isTypeMatch
+  })
 
   return (
     <>
       <div className='flex z-10'>
         <div className='p-4'>
           <button
-            className={`btn  ${selectedDate === format(new Date(), 'yyyy-MM-dd') ? 'active' : ''}`}
-            onClick={() => handleDateChange(0)}
+            className={`btn ${selectedDate === format(new Date(), 'yyyy-MM-dd') ? 'active' : ''}`}
+            onClick={() => {
+              const newDate =
+                selectedDate === format(new Date(), 'yyyy-MM-dd')
+                  ? null
+                  : format(new Date(), 'yyyy-MM-dd')
+              setSelectedDate(newDate)
+            }}
           >
             DZIŚ
           </button>
           <button
             className={`btn ${selectedDate === format(addDays(new Date(), 1), 'yyyy-MM-dd') ? 'active' : ''}`}
-            onClick={() => handleDateChange(1)}
+            onClick={() => {
+              const newDate =
+                selectedDate === format(addDays(new Date(), 1), 'yyyy-MM-dd')
+                  ? null
+                  : format(addDays(new Date(), 1), 'yyyy-MM-dd')
+              setSelectedDate(newDate)
+            }}
           >
             JUTRO
           </button>
@@ -106,20 +121,7 @@ const SelectPage = () => {
             onChange={(e) => setSelectedDate(e.target.value)}
           />
         </div>
-        <div className='p-4'>
-          <button
-            className={`btn ${filter === 'free' ? 'active' : ''}`}
-            onClick={() => handleFilter('free')}
-          >
-            FREE
-          </button>
-          <button
-            className={`btn ${filter === 'paid' ? 'active' : ''}`}
-            onClick={() => handleFilter('paid')}
-          >
-            PŁATNE
-          </button>
-        </div>
+
         <div className='p-4'>
           <button
             className={`btn ${typeEvent === 'big-event' ? 'active' : ''}`}
@@ -142,7 +144,6 @@ const SelectPage = () => {
         </div>
       </div>
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto z-10'>
-        <p> Lista wydarzeń kup bilet znajdź atrakcje dla siebie</p>
         <div className='wrapper-for-elements-smaller grid grid-cols-1 md:grid-cols-3 gap-4'>
           {filteredEvents.map((event) =>
             event.typeEvent === 'movie' ? (

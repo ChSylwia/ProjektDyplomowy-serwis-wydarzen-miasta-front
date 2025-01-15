@@ -23,9 +23,14 @@ const SuccessLoggedPage = () => {
   }, [location.search, navigate])
 
   return (
-    <div className='min-h-full flex flex-col items-center justify-center z-10'>
-      <h1 className='text-3xl font-bold text-blue-600 mb-4'>Udało się zalogować!</h1>
-      <p className='text-gray-700'>Zostaniesz za chwilę przekierowany...</p>
+    <div className=' flex flex-col items-center justify-center bg-gray-50 z-10'>
+      <div className='bg-white p-8 rounded-lg shadow-lg text-center w-11/12 max-w-md'>
+        <h1 className='text-3xl font-bold text-primary mb-4'>Udało się zalogować!</h1>
+        <p className='text-gray-700 text-lg mb-6'>Zostaniesz za chwilę przekierowany...</p>
+        <div className='flex justify-center'>
+          <div className='loading loading-dots loading-lg text-primary'></div>
+        </div>
+      </div>
     </div>
   )
 }

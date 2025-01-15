@@ -22,15 +22,15 @@ export const routes = [
         element: <HomePage />
       },
       {
-        path: RouteName.PROFILE,
+        path: RouteName.PROFIL,
         element: <ProfilePage />
       },
       {
-        path: RouteName.SELECT,
+        path: RouteName.WYDARZENIA,
         element: <SelectPage />
       },
       {
-        path: `${RouteName.SELECT}/:type`,
+        path: `${RouteName.WYDARZENIA}/:type`,
         element: <SelectPage />
       },
       {

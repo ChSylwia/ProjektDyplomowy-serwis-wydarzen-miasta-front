@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import GoogleLoginButton from '../../components/LoginButtons/GoogleLoginButton'
@@ -7,6 +7,7 @@ import imageAddEvent from '@/assets/add-event.svg'
 import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState(false)
   const initialValues = {
     login: '',
     password: ''
@@ -19,6 +20,7 @@ const LoginPage = () => {
   })
 
   const handleSubmit = (values) => {
+    setLoading(true)
     const myHeaders = new Headers()
     myHeaders.append('Content-Type', 'application/json')
 
@@ -37,9 +39,11 @@ const LoginPage = () => {
     fetch('http://127.0.0.1:8000/api/v1/auth/login_check', requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        setLoading(false)
         window.location.href = `http://localhost:5173/success?token=${result.token}`
       })
       .catch((error) => {
+        setLoading(false)
         console.error('Error:', error)
       })
   }
@@ -98,10 +102,11 @@ const LoginPage = () => {
 
               {/* Zaloguj się */}
               <button
+                disabled={loading}
                 type='submit'
                 className='btn btn-primary w-full mb-4 bg-primary text-white hover:bg-primary/90'
               >
-                Zaloguj się
+                {loading ? 'Ładowanie...' : 'Zaloguj się'}
               </button>
               <GoogleLoginButton />
               {/* Zarejestruj się */}

@@ -43,7 +43,13 @@ const ProfilePage = () => {
   }
 
   if (loading) {
-    return <p>Loading...</p>
+    return (
+      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p class='text-lg font-semibold'>
+          <span class='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
   }
 
   if (!userData) {

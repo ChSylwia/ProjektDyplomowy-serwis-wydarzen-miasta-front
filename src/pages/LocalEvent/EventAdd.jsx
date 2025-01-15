@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useApiClient from '../../components/Cookie/useApiClient'
 import imageAddEvent from '@/assets/add-event.svg'
+import { ToastContainer, toast } from 'react-toastify'
 
 import { useNavigate } from 'react-router-dom'
 const EventAdd = () => {
@@ -47,6 +48,12 @@ const EventAdd = () => {
           link: '',
           image: ''
         })
+        toast.success('Wydarzenie zostało pomyślnie dodane!')
+
+        // Optionally, redirect or perform other actions here
+        setTimeout(() => {
+          navigate('/profile') // Redirect to the profile page after a successful event creation
+        }, 2000)
       } else {
         throw new Error('Failed to add event')
       }
@@ -56,7 +63,15 @@ const EventAdd = () => {
       setLoading(false)
     }
   }
-
+  if (loading) {
+    return (
+      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p class='text-lg font-semibold'>
+          <span class='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
+  }
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
@@ -169,6 +184,11 @@ const EventAdd = () => {
           backgroundImage: `url(${imageAddEvent})`
         }}
       ></div>
+      <ToastContainer
+        position='top-right'
+        autoClose={2000}
+        className={'z-50 fixed top-16 right-0 m-4'}
+      />
     </div>
   )
 }

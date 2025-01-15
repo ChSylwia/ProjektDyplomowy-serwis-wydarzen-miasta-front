@@ -41,6 +41,15 @@ const EditProfilePasswdPage = () => {
       setError('An error occurred while updating the password.')
       toast.error('An error occurred while updating the password.')
     }
+    if (loading) {
+      return (
+        <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+          <p class='text-lg font-semibold'>
+            <span class='loading loading-dots loading-lg'></span>
+          </p>
+        </div>
+      )
+    }
   }
 
   return (
@@ -90,7 +99,7 @@ const EditProfilePasswdPage = () => {
           </div>
           <div className='flex justify-end space-x-4'>
             <button type='submit' className='w-full py-2 bg-primary text-white hover:bg-primary/90'>
-              {loading ? <span>Ładoanie...</span> : 'Zmień hasło'}
+              {loading ? <span>Ładowanie...</span> : 'Zmień hasło'}
             </button>
             <button
               type='button'
@@ -109,7 +118,7 @@ const EditProfilePasswdPage = () => {
         }}
       ></div>
       {/* Toast container to display toasts */}
-      <ToastContainer />
+      <ToastContainer className={'z-50 fixed top-16 right-0 m-4'} />
     </div>
   )
 }
