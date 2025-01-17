@@ -37,7 +37,7 @@ const EventConfigurate = () => {
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this event?')) return
+    if (!window.confirm('Na pewno chcesz usunąć to wydarzenie?')) return
 
     try {
       const response = await deleteRequest(`/local-events/${id}`)
@@ -89,10 +89,10 @@ const EventConfigurate = () => {
                   className='btn btn-secondary bg-primary text-white'
                   onClick={() => handleEditClick(event)}
                 >
-                  Edit Event
+                  Edyttuj
                 </button>
                 <button className='btn btn-error text-white' onClick={() => handleDelete(event.id)}>
-                  Delete Event
+                  Usuń
                 </button>
               </div>
             </div>

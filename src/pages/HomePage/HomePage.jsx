@@ -29,7 +29,7 @@ const HomePage = () => {
         //  throw new Error('Failed to fetch data')
         //}
         if (!resEvents.ok) {
-          throw new Error('Failed to fetch data')
+          throw new Error('Nie udało się pobrać danych')
         }
         //const [dataItems, dataMovies, dataEvents] = await Promise.all([
         //  resItems.json(),
@@ -57,7 +57,7 @@ const HomePage = () => {
       </div>
     )
   }
-  if (error) return <div>Error: {error}</div>
+  if (error) return <div>Błąd: {error}</div>
 
   const cardsEvent = event
     .filter(
@@ -159,7 +159,7 @@ const HomePage = () => {
         <div className='flex justify-center p-3'>
           <button
             className='btn btn-lg bg-secondary text-white hover:bg-secondary/90'
-            onClick={() => handleClickToSelectPage(null)}
+            onClick={() => navigate(`${RouteName.WYDARZENIA}`)}
           >
             Zobacz więcej
           </button>

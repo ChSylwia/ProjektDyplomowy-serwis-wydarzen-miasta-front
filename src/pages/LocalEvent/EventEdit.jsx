@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import useApiClient from '../../components/Cookie/useApiClient'
 import imageAddEvent from '@/assets/add-event.svg'
 
-import { useNavigate } from 'react-router-dom'
 const EventEdit = () => {
   const { id } = useParams()
   const { get, put } = useApiClient()
@@ -38,6 +39,7 @@ const EventEdit = () => {
         }
       } catch (err) {
         setError(err.message)
+        toast.error(err.message) // Toast for error
       }
     }
     fetchEvent()
@@ -56,33 +58,38 @@ const EventEdit = () => {
     try {
       const response = await put(`/local-events/${id}/edit`, formData)
       if (response.ok) {
-        alert('Event updated successfully!')
+        toast.success('Udało się zaktualizować wydarzenie!') // Success toast
+        setTimeout(() => navigate('//configure'), 2000) // Redirect after success
       } else {
         throw new Error('Failed to update the event')
       }
     } catch (err) {
       setError(err.message)
+      toast.error(err.message) // Error toast
     } finally {
       setLoading(false)
     }
   }
+
   if (loading) {
     return (
-      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
-        <p class='text-lg font-semibold'>
-          <span class='loading loading-dots loading-lg'></span>
+      <div className='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p className='text-lg font-semibold'>
+          <span className='loading loading-dots loading-lg'></span>
         </p>
       </div>
     )
   }
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
+      <ToastContainer />
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
-        <h1 className='text-2xl font-semibold mb-6'>Edit Event</h1>
+        <h1 className='text-2xl font-semibold mb-6'>Edycja wydarzenia</h1>
         {error && <div className='alert alert-error'>{error}</div>}
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div className='form-control'>
-            <label className='label'>Image URL</label>
+            <label className='label'>Zdjęcie</label>
             <input
               type='text'
               name='image'
@@ -92,7 +99,7 @@ const EventEdit = () => {
             />
           </div>
           <div className='form-control'>
-            <label className='label'>Title</label>
+            <label className='label'>Tytuł</label>
             <input
               type='text'
               name='title'
@@ -103,7 +110,7 @@ const EventEdit = () => {
             />
           </div>
           <div className='form-control'>
-            <label className='label'>Description</label>
+            <label className='label'>Opis</label>
             <textarea
               name='description'
               value={formData.description}
@@ -113,7 +120,7 @@ const EventEdit = () => {
             ></textarea>
           </div>
           <div className='form-control'>
-            <label className='label'>Date</label>
+            <label className='label'>Data</label>
             <input
               type='datetime-local'
               name='date'
@@ -124,7 +131,7 @@ const EventEdit = () => {
             />
           </div>
           <div className='form-control'>
-            <label className='label'>Price</label>
+            <label className='label'>Cena</label>
             <input
               type='number'
               name='price'
@@ -134,8 +141,7 @@ const EventEdit = () => {
             />
           </div>
           <div className='form-control'>
-            <label className='label'>Link</label>
-
+            <label className='label'>Link do wydarzenia</label>
             <input
               type='url'
               name='link'
@@ -154,7 +160,6 @@ const EventEdit = () => {
         </form>
       </div>
 
-      {/* Photo Section */}
       <div
         className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
         style={{

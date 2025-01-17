@@ -12,6 +12,8 @@ const LocalEventsDetails = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    const token = getToken()
+    if (!token) return
     const fetchUserType = async () => {
       try {
         const userDetails = await getUserDetails()
@@ -45,16 +47,16 @@ const LocalEventsDetails = () => {
         location: event.link
       })
 
-      if (response?.message === 'Event successfully created.') {
-        console.log('Event saved to Google Calendar:', response)
-        toast.success('Event successfully added to Google Calendar!')
+      if (response?.message === 'Udało się utworzyć wydarzenie.') {
+        console.log('Wydarzenie zapisano do Google Calendar:', response)
+        toast.success('Wydarzenie zapisano do Google Calendar!')
       } else {
-        console.error('Failed to save event:', response?.error || 'Unknown error')
-        toast.error('Failed to save event.')
+        console.error('Nie udało się zapisać wydarzenia:', response?.error || 'Unknown error')
+        toast.error('Nie udało się zapisać wydarzenia.')
       }
     } catch (error) {
       console.error('Error:', error)
-      toast.error('An error occurred while saving the event.')
+      toast.error('Wykryto błąd podczas zapisywania wydarzenia.')
     } finally {
       setLoading(false)
     }
@@ -105,7 +107,7 @@ const LocalEventsDetails = () => {
             className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300'
           >
             <img src={iconGoogle} alt='Google Icon' className='w-5 h-5' />
-            {loading ? 'Ładowanie...' : 'Zapisz w kalendarzu Google'}
+            {loading ? 'Ładowanie...' : 'Zapisz w Google Calendar'}
           </button>
         </div>
       </div>

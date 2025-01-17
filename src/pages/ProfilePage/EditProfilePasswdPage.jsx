@@ -32,14 +32,14 @@ const EditProfilePasswdPage = () => {
         setError(response.message)
         toast.error(response.message)
       } else {
-        toast.success('Password updated successfully!')
+        toast.success('Udało się zmienić hasło!')
         setTimeout(() => navigate('/profile'), 2000)
       }
     } catch (error) {
       console.log(error)
 
       setError('An error occurred while updating the password.')
-      toast.error('An error occurred while updating the password.')
+      toast.error('Wystąpił błąd podczas zmiany hasła.')
     }
     if (loading) {
       return (

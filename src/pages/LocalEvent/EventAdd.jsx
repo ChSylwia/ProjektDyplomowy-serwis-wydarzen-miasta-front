@@ -55,7 +55,7 @@ const EventAdd = () => {
           navigate('/profile') // Redirect to the profile page after a successful event creation
         }, 2000)
       } else {
-        throw new Error('Failed to add event')
+        throw new Error('Nie udało się dodać wydarzenia')
       }
     } catch (err) {
       setError('Error while creating event. Please try again.')
@@ -76,8 +76,6 @@ const EventAdd = () => {
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
         <h2 className='text-2xl font-semibold mb-4'>Dodaj własne wydarzenie lokalne</h2>
-        {success && <div className='alert alert-success mb-4'>Udało się dodać wydarzenie!</div>}
-        {error && <div className='alert alert-error mb-4'>{error}</div>}
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div className='form-control'>
             <label htmlFor='title' className='label'>
