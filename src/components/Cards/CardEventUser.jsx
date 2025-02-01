@@ -17,7 +17,7 @@ function CardEventUser({ item: itemDetails }) {
       </figure>
       <div className='card-body bg-tertiary bg-white'>
         <h2 className='card-title'>{item.title}</h2>
-        <p>{item.content}</p>
+        <p>{item.description}</p>
         <div className='card-actions justify-end'>
           <button
             className='btn btn-primary bg-primary text-white hover:bg-primary/90'

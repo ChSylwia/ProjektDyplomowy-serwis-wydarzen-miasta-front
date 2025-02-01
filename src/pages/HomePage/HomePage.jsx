@@ -64,15 +64,15 @@ const HomePage = () => {
       (item) => item.event.typeEvent === 'big-event' // Correct comparison
     )
     .map((item) => (
-      <CarouselItem key={item.event.id} className='basis-1/3 cards-event'>
+      <CarouselItem key={item.event.id} className='basis-1/3 flex cards-event'>
         <CardEvents item={item.event} />
       </CarouselItem>
     ))
 
   const cardsEventUser = event
-    .filter((item) => item.event.typeEvent === 'local-event') // Correct comparison
+    .filter((item) => item.event.typeEvent === 'local-event')
     .map((item) => (
-      <CarouselItem key={item.id} className='basis-1/3 cards-movie'>
+      <CarouselItem key={item.id} className='basis-1/3 flex cards-movie'>
         <CardEventUser item={item} />
       </CarouselItem>
     ))
@@ -94,7 +94,7 @@ const HomePage = () => {
           <p class='text-lg font-semibold'> Lista większych wydarzeń w mieście Płock</p>
         </div>
         <Carousel>
-          <CarouselContent className='p-3 items-center'>{cardsEvent}</CarouselContent>
+          <CarouselContent className='p-3 items-normal'>{cardsEvent}</CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
@@ -110,7 +110,7 @@ const HomePage = () => {
       {/* <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
         <p>Lista reperuaru z kina przejdź się na film</p>
         <Carousel>
-          <CarouselContent className='p-3 items-center'>{cardsMovie}</CarouselContent>
+          <CarouselContent className='p-3 items-normal'>{cardsMovie}</CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
@@ -128,7 +128,7 @@ const HomePage = () => {
           <p class='text-lg font-semibold'> Lista wydarzeń lokalnych miasta Płock</p>
         </div>
         <Carousel>
-          <CarouselContent className='p-3 items-center'>{cardsEventUser}</CarouselContent>
+          <CarouselContent className='p-3 items-normal'>{cardsEventUser}</CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
@@ -149,7 +149,7 @@ const HomePage = () => {
           </p>
         </div>
         <Carousel>
-          <CarouselContent className='p-3 items-center'>
+          <CarouselContent className='p-3 items-normal'>
             {cardsEvent}
             {cardsEventUser}
           </CarouselContent>

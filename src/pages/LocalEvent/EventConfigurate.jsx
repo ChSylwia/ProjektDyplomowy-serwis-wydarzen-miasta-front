@@ -7,17 +7,21 @@ const EventConfigurate = () => {
   const [events, setEvents] = useState([])
   const [error, setError] = useState(null)
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await get('/local-events')
-        if (response.ok) {
-          setEvents(response[0] || [])
+        const data = await get('/local-events')
+        console.log('Raw response:', data)
+        if (data.ok) {
+          console.log('jest')
+          console.log('Response:', data)
+
+          setEvents(data[0] || [])
         } else {
-          const errorText = await response.text()
+          const errorText = await data.text()
           throw new Error(`Failed to fetch events: ${errorText}`)
         }
       } catch (err) {
@@ -60,6 +64,9 @@ const EventConfigurate = () => {
       </div>
     )
   }
+  events.map((event) => {
+    console.log(event.title, event.image)
+  })
   return (
     <div className='w-9/12 mx-auto p-6 bg-white rounded-lg shadow-lg z-10 m-8'>
       <h1 className='text-2xl text-center font-semibold mb-6'>
@@ -89,7 +96,7 @@ const EventConfigurate = () => {
                   className='btn btn-secondary bg-primary text-white'
                   onClick={() => handleEditClick(event)}
                 >
-                  Edyttuj
+                  Edytuj
                 </button>
                 <button className='btn btn-error text-white' onClick={() => handleDelete(event.id)}>
                   Usuń
