@@ -5,9 +5,9 @@ import useApiClient from '../../components/Cookie/useApiClient'
 import { toast, ToastContainer } from 'react-toastify'
 
 const LocalEventsDetails = () => {
-  const location = useLocation() // Access the state passed with the navigate function
+  const location = useLocation()
   const [event, setEvent] = useState(location.state?.event)
-  const { getToken, getUserDetails, post } = useApiClient() // Destructure getToken and post methods from the useApiClient hook
+  const { getToken, getUserDetails, post } = useApiClient()
   const [userType, setUserType] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -18,7 +18,6 @@ const LocalEventsDetails = () => {
       try {
         const userDetails = await getUserDetails()
         setUserType(userDetails.user_type)
-        console.log('User details:', userDetails)
       } catch (error) {
         console.error('Error fetching user details:', error)
       } finally {
@@ -33,7 +32,7 @@ const LocalEventsDetails = () => {
     setLoading(true)
     const token = getToken()
 
-    if (!token || userType != 'google') {
+    if (!token || userType !== 'google') {
       window.location.href = 'http://127.0.0.1:8000/auth/google'
       setLoading(false)
       return
@@ -61,11 +60,25 @@ const LocalEventsDetails = () => {
       setLoading(false)
     }
   }
+
+  const getPriceText = (min, max) => {
+    if (min == null && max == null) {
+      return 'Odwiedź stronę wydarzenia, aby dowiedzieć się więcej'
+    }
+    if ((min === 0 || min == null) && (max === 0 || max == null)) {
+      return 'Za darmo'
+    }
+    if (min != null && max != null) {
+      return min !== max ? `Cena: ${min} zł - ${max} zł` : `Cena: ${min} zł`
+    }
+    return `Cena: ${min ?? max} zł`
+  }
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       {/* Image */}
       <div className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'>
-        {event.image ? (
+        {event?.image ? (
           <img
             src={event.image}
             alt={event.title}
@@ -78,21 +91,21 @@ const LocalEventsDetails = () => {
 
       {/* Details */}
       <div className='ml-6 mt-6 md:mt-0 flex-1'>
-        <h2 className='text-2xl font-bold  mb-4'>{event.title}</h2>
+        <h2 className='text-2xl font-bold mb-4'>{event?.title || 'Brak tytułu'}</h2>
         <p>
-          <span className='font-semibold'>Opis:</span> {event.description}
+          <span className='font-semibold'>Opis:</span> {event?.description || 'Brak opisu'}
         </p>
         <p>
-          <span className='font-semibold'>Data:</span> {new Date(event.date).toLocaleString()}
+          <span className='font-semibold'>Data:</span>{' '}
+          {event?.date ? new Date(event.date).toLocaleString() : 'Brak daty'}
         </p>
         <p>
-          {event.price != 0 && event.price != null ? (
-            <span className='font-semibold'>Cena: {event.price} zł</span>
-          ) : null}
+          <span className='font-semibold'>Cena: </span>
+          {getPriceText(event.priceMin, event.priceMax)}
         </p>
 
         <div className='mt-4 space-y-2'>
-          {event.link != '' ? (
+          {event?.link ? (
             <a
               href={event.link}
               target='_blank'
