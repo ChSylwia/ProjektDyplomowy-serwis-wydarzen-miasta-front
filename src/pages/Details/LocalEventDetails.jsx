@@ -47,20 +47,63 @@ const LocalEventsDetails = () => {
       })
 
       if (response?.message === 'Udało się utworzyć wydarzenie.') {
-        console.log('Wydarzenie zapisano do Google Calendar:', response)
         toast.success('Wydarzenie zapisano do Google Calendar!')
       } else {
-        console.error('Nie udało się zapisać wydarzenia:', response?.error || 'Unknown error')
         toast.error('Nie udało się zapisać wydarzenia.')
       }
     } catch (error) {
-      console.error('Error:', error)
       toast.error('Wykryto błąd podczas zapisywania wydarzenia.')
     } finally {
       setLoading(false)
     }
   }
 
+  const generateICS = () => {
+    const startDate = new Date(event.date).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//My App//EN
+BEGIN:VEVENT
+UID:${Date.now()}@myapp.com
+DTSTAMP:${startDate}
+DTSTART:${startDate}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description}
+LOCATION:${event.link}
+END:VEVENT
+END:VCALENDAR`
+
+    const blob = new Blob([icsContent], { type: 'text/calendar' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${event.title.replace(/\s+/g, '_')}.ics`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    toast.success('Plik .ics został pobrany!')
+  }
+  /*const sendICSByEmail = async () => {
+    try {
+      const response = await post('/sendEventEmail', {
+        title: event.title,
+        description: event.description,
+        date: event.date,
+        location: event.link
+      })
+
+      if (response.message === 'Email sent successfully.') {
+        toast.success('Wydarzenie zostało wysłane na e-mail!')
+      } else {
+        toast.error('Nie udało się wysłać e-maila.')
+      }
+    } catch (error) {
+      console.error('Email error:', error)
+      toast.error('Wykryto błąd podczas wysyłania e-maila.')
+    }
+  }
+*/
   const getPriceText = (min, max) => {
     if (min == null && max == null) {
       return 'Odwiedź stronę wydarzenia, aby dowiedzieć się więcej'
@@ -76,7 +119,6 @@ const LocalEventsDetails = () => {
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
-      {/* Image */}
       <div className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'>
         {event?.image ? (
           <img
@@ -89,7 +131,6 @@ const LocalEventsDetails = () => {
         )}
       </div>
 
-      {/* Details */}
       <div className='ml-6 mt-6 md:mt-0 flex-1'>
         <h2 className='text-2xl font-bold mb-4'>{event?.title || 'Brak tytułu'}</h2>
         <p>
@@ -105,7 +146,7 @@ const LocalEventsDetails = () => {
         </p>
 
         <div className='mt-4 space-y-2'>
-          {event?.link ? (
+          {event?.link && (
             <a
               href={event.link}
               target='_blank'
@@ -114,16 +155,32 @@ const LocalEventsDetails = () => {
             >
               Przejdź do strony wydarzenia
             </a>
-          ) : null}
+          )}
+
           <button
             onClick={handleGoogleCalendar}
-            className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300'
+            className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500'
           >
             <img src={iconGoogle} alt='Google Icon' className='w-5 h-5' />
             {loading ? 'Ładowanie...' : 'Zapisz w Google Calendar'}
           </button>
+
+          <button
+            onClick={generateICS}
+            className='w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500'
+          >
+            Pobierz plik .ICS
+          </button>
+
+          {/*<button
+            onClick={sendICSByEmail}
+            className='w-full px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-500'
+          >
+            Wyślij wydarzenie na e-mail
+          </button>*/}
         </div>
       </div>
+
       <ToastContainer className='z-50 fixed top-16 right-0 m-4' />
     </div>
   )
