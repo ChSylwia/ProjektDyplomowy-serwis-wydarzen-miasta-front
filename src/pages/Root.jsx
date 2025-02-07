@@ -15,9 +15,7 @@ const Root = () => {
       <Navbar />
 
       {/* Content */}
-      <div className='min-h-40 p-4 '>
-        <h1 className='mb-3'>Strona z wydarzeniami miasta</h1>
-      </div>
+      <div className='min-h-20 p-4'></div>
       <Outlet />
     </div>
   )

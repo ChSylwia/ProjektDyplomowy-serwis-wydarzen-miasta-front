@@ -24,7 +24,7 @@ function CardEventUser({ item: itemDetails }) {
       </figure>
       <div className='card-body bg-tertiary bg-white flex flex-col h-full'>
         <h2 className='card-title'>{item.title}</h2>
-        <p className='flex-grow'>{truncateText(item.description, 18)}</p>
+        <p className='flex-grow'>{truncateText(item.description, 10)}</p>
         <div className='card-actions justify-end'>
           <button
             className='btn btn-primary bg-primary text-white hover:bg-primary/90'

@@ -21,21 +21,11 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        //const resItems = await fetch('http://127.0.0.1:8000/api/v1/items')
-        //const resMovies = await fetch('http://127.0.0.1:8000/api/v1/movies')
         const resEvents = await fetch('http://127.0.0.1:8000/api/v1/all-local-events')
 
-        //if (!resItems.ok || !resMovies.ok || !resEvents.ok) {
-        //  throw new Error('Failed to fetch data')
-        //}
         if (!resEvents.ok) {
           throw new Error('Nie udało się pobrać danych')
         }
-        //const [dataItems, dataMovies, dataEvents] = await Promise.all([
-        //  resItems.json(),
-        //  resMovies.json(),
-        //  resEvents.json()
-        //])
         const [dataEvents] = await Promise.all([resEvents.json()])
 
         setEvent(dataEvents.events || [])
@@ -60,9 +50,7 @@ const HomePage = () => {
   if (error) return <div>Błąd: {error}</div>
 
   const cardsEvent = event
-    .filter(
-      (item) => item.event.typeEvent === 'big-event' // Correct comparison
-    )
+    .filter((item) => item.event.typeEvent === 'big-event')
     .map((item) => (
       <CarouselItem key={item.event.id} className='basis-1/3 flex cards-event'>
         <CardEvents item={item.event} />
@@ -76,14 +64,14 @@ const HomePage = () => {
         <CardEventUser item={item} />
       </CarouselItem>
     ))
+  const cardsMovie = event
+    .filter((item) => item.event.typeEvent === 'cinema')
+    .map((movie) => (
+      <CarouselItem key={movie.event.id} className='basis-1/3 cards-movie'>
+        <CardCinema movie={movie.event} />
+      </CarouselItem>
+    ))
 
-  //const cardsMovie = movies.map((movie) => (
-  //  <CarouselItem key={movie.id} className='basis-1/3 cards-movie'>
-  //    <CardCinema movie={movie} />
-  //  </CarouselItem>
-  //))
-
-  const allEvents = [...cardsEvent, ...cardsEventUser]
   const handleClickToSelectPage = (type) => {
     navigate(`${RouteName.WYDARZENIA}/${type}`)
   }
@@ -107,8 +95,10 @@ const HomePage = () => {
           </button>
         </div>
       </div>
-      {/* <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
-        <p>Lista reperuaru z kina przejdź się na film</p>
+      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
+        <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+          <p class='text-lg font-semibold'> Lista repertuaru kina Przedwiośnie miasta Płock</p>
+        </div>
         <Carousel>
           <CarouselContent className='p-3 items-normal'>{cardsMovie}</CarouselContent>
           <CarouselPrevious />
@@ -117,12 +107,12 @@ const HomePage = () => {
         <div className='flex justify-center p-3'>
           <button
             className='btn btn-lg bg-secondary text-white hover:bg-secondary/90'
-            onClick={() => handleClickToSelectPage('cinema-event')}
+            onClick={() => handleClickToSelectPage('cinema')}
           >
             Zobacz więcej
           </button>
         </div>
-      </div> */}
+      </div>
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
         <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
           <p class='text-lg font-semibold'> Lista wydarzeń lokalnych miasta Płock</p>
