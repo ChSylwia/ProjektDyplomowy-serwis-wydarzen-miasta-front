@@ -12,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '../../components/ui/carousel'
+import Billboard from './Billboard'
 
 const HomePage = () => {
   const [event, setEvent] = useState([])
@@ -77,6 +78,7 @@ const HomePage = () => {
   }
   return (
     <>
+      <Billboard />
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
         <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
           <p class='text-lg font-semibold'> Lista większych wydarzeń w mieście Płock</p>
