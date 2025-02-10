@@ -231,7 +231,7 @@ const EventAdd = () => {
             <button
               type='submit'
               disabled={loading}
-              className='btn btn-primary w-10/12 bg-primary text-white hover:bg-primary/90'
+              className='btn btn-primary w-9/12 bg-primary text-white hover:bg-primary/90'
             >
               {loading ? 'Dodawanie...' : 'Dodaj wydarzenie'}
             </button>

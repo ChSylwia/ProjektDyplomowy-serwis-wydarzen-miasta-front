@@ -12,6 +12,8 @@ import EventEdit from './pages/LocalEvent/EventEdit'
 import LocalEventsDetails from './pages/Details/LocalEventDetails'
 import EditProfilePage from './pages/ProfilePage/EditProfilePage'
 import EditProfilePasswdPage from './pages/ProfilePage/EditProfilePasswdPage'
+import AdminProfilePage from './pages/Admin/AdminProfilePage'
+
 export const routes = [
   {
     path: RouteName.HOME,
@@ -68,7 +70,8 @@ export const routes = [
       {
         path: `/profile/edit/passwd`,
         element: <EditProfilePasswdPage />
-      }
+      },
+      { path: '/admin', element: <AdminProfilePage /> }
     ]
   }
 ]

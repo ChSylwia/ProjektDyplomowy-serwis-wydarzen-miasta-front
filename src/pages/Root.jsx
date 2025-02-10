@@ -19,7 +19,7 @@ const Root = () => {
       <Outlet />
       {/* Footer */}
       <footer className='w-full bg-base-200 text-center py-4 shadow-inner z-50 mt-32'>
-        <p className='text-gray-600'>&copy; 2025 Twoja Firma. Wszelkie prawa zastrzeżone.</p>
+        <p className='text-gray-600'>&copy; 2025 Projekt dyplomowy.</p>
         <div className='mt-2 space-x-4'>
           <a href='/' className='text-primary hover:underline'>
             Strona główna

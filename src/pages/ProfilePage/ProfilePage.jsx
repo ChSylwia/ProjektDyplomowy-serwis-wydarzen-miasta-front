@@ -16,10 +16,10 @@ const ProfilePage = () => {
           throw new Error(data.message)
         }
 
-        setUserData(data.datas) // Assuming 'datas' contains user info
+        setUserData(data.datas)
       } catch (error) {
         console.error('Error fetching profile:', error)
-        navigate('/login') // Redirect to login if error occurs
+        navigate('/login')
       } finally {
         setLoading(false)
       }
