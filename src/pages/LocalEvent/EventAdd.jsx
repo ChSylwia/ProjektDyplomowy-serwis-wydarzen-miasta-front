@@ -1,15 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 import useApiClient from '../../components/Cookie/useApiClient'
 import imageAddEvent from '@/assets/add-event.svg'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useNavigate } from 'react-router-dom'
+
+const categories = ['teatr', 'muzyka', 'rodzina', 'widowisko', 'sport', 'sztuka', 'kino', 'inne']
 
 const EventAdd = () => {
-  const { post, postWithFile } = useApiClient()
+  const { postWithFile } = useApiClient()
   const navigate = useNavigate()
 
-  const [formData, setFormData] = useState({
+  const initialValues = {
     title: '',
     description: '',
     date: '',
@@ -17,252 +21,242 @@ const EventAdd = () => {
     priceMax: '',
     category: '',
     link: '',
-    image: ''
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-
-  // List of category options
-  const categories = ['teatr', 'muzyka', 'rodzina', 'widowisko', 'sport', 'sztuka', 'kino', 'inne']
-
-  // Handle text input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-
-    setFormData({
-      ...formData,
-      [name]: value
-    })
+    image: null
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+  const validationSchema = Yup.object({
+    title: Yup.string().required('Tytuł wydarzenia jest wymagany'),
+    description: Yup.string().required('Opis wydarzenia jest wymagany'),
+    date: Yup.date()
+      .min(new Date(), 'Data wydarzenia musi być w przyszłości')
+      .required('Data wydarzenia jest wymagana'),
+    priceMin: Yup.number()
+      .typeError('Minimalna cena musi być liczbą')
+      .min(0, 'Minimalna cena musi być co najmniej 0')
+      .nullable(),
+    priceMax: Yup.number()
+      .typeError('Maksymalna cena musi być liczbą')
+      .min(0, 'Maksymalna cena musi być co najmniej 0')
+      .nullable()
+      .when('priceMin', (priceMin, schema) =>
+        priceMin !== undefined && priceMin !== null && priceMin !== ''
+          ? schema.min(priceMin, 'Maksymalna cena musi być większa lub równa minimalnej cenie')
+          : schema
+      ),
+    category: Yup.string()
+      .oneOf(categories, 'Wybierz poprawną kategorię')
+      .required('Kategoria jest wymagana'),
+    link: Yup.string().url('Podaj poprawny URL').nullable(),
+    image: Yup.mixed()
+      .required('Zdjęcie jest wymagane')
+      .test(
+        'fileType',
+        'Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.',
+        (value) => value && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
+      )
+      .test(
+        'fileSize',
+        'Plik jest za duży. Maksymalny rozmiar: 2MB.',
+        (value) => value && value.size <= 2 * 1024 * 1024
+      )
+  })
 
-    const priceMin = parseFloat(formData.priceMin)
-    const priceMax = parseFloat(formData.priceMax)
-    const eventDate = new Date(formData.date)
-    const currentDate = new Date()
-
-    // Walidacja daty na frontendzie
-    if (eventDate < currentDate) {
-      setError('Data wydarzenia musi być w przyszłości.')
-      toast.error('Data wydarzenia musi być w przyszłości.')
-      setLoading(false)
-      return
-    }
-
-    // Walidacja cen na frontendzie
-    if (
-      !isNaN(priceMin) &&
-      !isNaN(priceMax) &&
-      priceMin > priceMax &&
-      priceMin < 0 &&
-      priceMax < 0
-    ) {
-      setError('Minimalna cena nie może być większa niż maksymalna.')
-      toast.error('Minimalna cena nie może być większa niż maksymalna.')
-      setLoading(false)
-      return
-    }
-
+  const onSubmit = async (values, { setSubmitting }) => {
+    setSubmitting(true)
     const formDataToSend = new FormData()
-    for (const key in formData) {
-      if (formData[key]) {
-        formDataToSend.append(key, formData[key])
+    // Append all fields to FormData
+    for (const key in values) {
+      if (values[key] !== null && values[key] !== undefined) {
+        formDataToSend.append(key, values[key])
       }
     }
 
     try {
-      console.log(formDataToSend)
-
       const response = await postWithFile('/local-events/create', formDataToSend)
       if (response.ok) {
         toast.success('Wydarzenie zostało pomyślnie dodane!')
         setTimeout(() => navigate('/profile'), 2000)
       } else {
         const errorMessage = response.data?.error || 'Nie udało się dodać wydarzenia'
-        setError(errorMessage)
         toast.error(errorMessage)
       }
     } catch (err) {
-      setError('Błąd podczas dodawania wydarzenia. Spróbuj ponownie.')
       toast.error('Błąd podczas dodawania wydarzenia. Spróbuj ponownie.')
-    } finally {
-      setLoading(false)
     }
-  }
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
-      const maxSize = 2 * 1024 * 1024 // 2MB
-
-      if (!allowedTypes.includes(file.type)) {
-        setError('Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.')
-        toast.error('Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.')
-        return
-      }
-
-      if (file.size > maxSize) {
-        setError('Plik jest za duży. Maksymalny rozmiar: 2MB.')
-        toast.error('Plik jest za duży. Maksymalny rozmiar: 2MB.')
-        return
-      }
-
-      setError(null)
-      setFormData({ ...formData, image: file })
-    }
+    setSubmitting(false)
   }
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
         <h2 className='text-2xl font-semibold mb-4'>Dodaj własne wydarzenie lokalne</h2>
-        <form onSubmit={handleSubmit} className='space-y-4'>
-          <div className='form-control'>
-            <label htmlFor='title' className='label'>
-              Tytuł wydarzenia
-            </label>
-            <input
-              type='text'
-              id='title'
-              name='title'
-              value={formData.title}
-              onChange={handleInputChange}
-              required
-              className='input input-bordered w-full bg-tertiary'
-            />
-          </div>
-          <div className='form-control'>
-            <label htmlFor='description' className='label'>
-              Opis wydarzenia
-            </label>
-            <textarea
-              id='description'
-              name='description'
-              value={formData.description}
-              onChange={handleInputChange}
-              required
-              className='textarea textarea-bordered w-full bg-tertiary'
-            />
-          </div>
-          <div className='form-control'>
-            <label htmlFor='date' className='label'>
-              Data wydarzenia
-            </label>
-            <input
-              type='datetime-local'
-              id='date'
-              name='date'
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-              className='input input-bordered w-full bg-tertiary'
-            />
-          </div>
-          <div className='form-control'>
-            <label htmlFor='priceMin' className='label'>
-              Minimalna cena (opcjonalna)
-            </label>
-            <input
-              type='number'
-              id='priceMin'
-              name='priceMin'
-              value={formData.priceMin}
-              onChange={handleInputChange}
-              className='input input-bordered w-full bg-tertiary'
-            />
-          </div>
-          <div className='form-control'>
-            <label htmlFor='priceMax' className='label'>
-              Maksymalna cena (opcjonalna)
-            </label>
-            <input
-              type='number'
-              id='priceMax'
-              name='priceMax'
-              value={formData.priceMax}
-              onChange={handleInputChange}
-              className='input input-bordered w-full bg-tertiary'
-            />
-          </div>
-          <div className='form-control'>
-            <label htmlFor='category' className='label'>
-              Kategoria
-            </label>
-            <select
-              id='category'
-              name='category'
-              value={formData.category}
-              onChange={handleInputChange}
-              required
-              className='select select-bordered w-full bg-tertiary'
-            >
-              <option value=''>Wybierz kategorię</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className='form-control'>
-            <label htmlFor='link' className='label'>
-              Link do wydarzenia (opcjonalny)
-            </label>
-            <input
-              type='url'
-              id='link'
-              name='link'
-              value={formData.link}
-              onChange={handleInputChange}
-              className='input input-bordered w-full bg-tertiary'
-            />
-          </div>
-          <div className='form-control'>
-            <label htmlFor='image' className='label'>
-              Dodaj zdjęcie
-            </label>
-            <input
-              type='file'
-              id='image'
-              name='image'
-              onChange={handleFileChange}
-              accept='image/*'
-              className='file-input file-input-ghost w-full bg-tertiary'
-            />
-          </div>
-          <div className='flex justify-end space-x-4'>
-            <button
-              type='submit'
-              disabled={loading}
-              className='btn btn-primary w-9/12 bg-primary text-white hover:bg-primary/90'
-            >
-              {loading ? 'Dodawanie...' : 'Dodaj wydarzenie'}
-            </button>
-            <button
-              type='button'
-              onClick={() => navigate('/profile')}
-              className='px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
-            >
-              Anuluj
-            </button>
-          </div>
-        </form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ isSubmitting, setFieldValue }) => (
+            <Form className='space-y-4'>
+              {/* Title */}
+              <div className='form-control'>
+                <label htmlFor='title' className='label'>
+                  Tytuł wydarzenia
+                </label>
+                <Field
+                  type='text'
+                  id='title'
+                  name='title'
+                  className='input input-bordered w-full bg-tertiary'
+                />
+                <ErrorMessage name='title' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              {/* Description */}
+              <div className='form-control'>
+                <label htmlFor='description' className='label'>
+                  Opis wydarzenia
+                </label>
+                <Field
+                  as='textarea'
+                  id='description'
+                  name='description'
+                  className='textarea textarea-bordered w-full bg-tertiary'
+                />
+                <ErrorMessage
+                  name='description'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+              {/* Date */}
+              <div className='form-control'>
+                <label htmlFor='date' className='label'>
+                  Data wydarzenia
+                </label>
+                <Field
+                  type='datetime-local'
+                  id='date'
+                  name='date'
+                  className='input input-bordered w-full bg-tertiary'
+                />
+                <ErrorMessage name='date' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              {/* Price Min */}
+              <div className='form-control'>
+                <label htmlFor='priceMin' className='label'>
+                  Minimalna cena (opcjonalna)
+                </label>
+                <Field
+                  type='number'
+                  id='priceMin'
+                  name='priceMin'
+                  className='input input-bordered w-full bg-tertiary'
+                />
+                <ErrorMessage
+                  name='priceMin'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+              {/* Price Max */}
+              <div className='form-control'>
+                <label htmlFor='priceMax' className='label'>
+                  Maksymalna cena (opcjonalna)
+                </label>
+                <Field
+                  type='number'
+                  id='priceMax'
+                  name='priceMax'
+                  className='input input-bordered w-full bg-tertiary'
+                />
+                <ErrorMessage
+                  name='priceMax'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+              {/* Category */}
+              <div className='form-control'>
+                <label htmlFor='category' className='label'>
+                  Kategoria
+                </label>
+                <Field
+                  as='select'
+                  id='category'
+                  name='category'
+                  className='select select-bordered w-full bg-tertiary'
+                >
+                  <option value=''>Wybierz kategorię</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name='category'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+              {/* Link */}
+              <div className='form-control'>
+                <label htmlFor='link' className='label'>
+                  Link do wydarzenia (opcjonalny)
+                </label>
+                <Field
+                  type='url'
+                  id='link'
+                  name='link'
+                  className='input input-bordered w-full bg-tertiary'
+                />
+                <ErrorMessage name='link' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              {/* Image */}
+              <div className='form-control'>
+                <label htmlFor='image' className='label'>
+                  Dodaj zdjęcie
+                </label>
+                <input
+                  type='file'
+                  id='image'
+                  name='image'
+                  accept='image/*'
+                  className='file-input file-input-ghost w-full bg-tertiary'
+                  onChange={(e) => {
+                    setFieldValue('image', e.currentTarget.files[0])
+                  }}
+                />
+                <ErrorMessage name='image' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+              {/* Buttons */}
+              <div className='flex justify-end space-x-4'>
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className='btn btn-primary w-9/12 bg-primary text-white hover:bg-primary/90'
+                >
+                  {isSubmitting ? 'Dodawanie...' : 'Dodaj wydarzenie'}
+                </button>
+                <button
+                  type='button'
+                  onClick={() => navigate('/profile')}
+                  className='px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+                >
+                  Anuluj
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
       <div
         className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
-        style={{
-          backgroundImage: `url(${imageAddEvent})`
-        }}
+        style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
       <ToastContainer
         position='top-right'
         autoClose={2000}
-        className={'z-50 fixed top-16 right-0 m-4'}
+        className='z-50 fixed top-16 right-0 m-4'
       />
     </div>
   )

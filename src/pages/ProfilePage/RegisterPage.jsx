@@ -20,9 +20,6 @@ const RegisterPage = () => {
   }
   const navigate = useNavigate()
   const validationSchema = Yup.object({
-    login: Yup.string()
-      .min(4, 'Login musi mieć co najmniej 4 znaki')
-      .required('Login jest wymagany'),
     firstName: Yup.string().required('Imię jest wymagane'),
     lastName: Yup.string().required('Nazwisko jest wymagane'),
     email: Yup.string().email('Nieprawidłowy email').required('Email jest wymagany'),
@@ -51,7 +48,7 @@ const RegisterPage = () => {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
-      username: values.login, // Using login field for username
+      username: values.email,
       city: values.city,
       postalCode: values.postalCode,
       userType: values.userType,
@@ -137,32 +134,7 @@ const RegisterPage = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              <div className='form-control'>
-                <label htmlFor='login' className='label'>
-                  <span className='label-text'>Login</span>
-                </label>
-                <Field
-                  type='text'
-                  id='login'
-                  name='login'
-                  className='input input-bordered w-full bg-tertiary'
-                  placeholder='Wpisz login'
-                />
-                <ErrorMessage name='login' component='div' className='text-red-500 text-sm mt-1' />
-              </div>
-              <div className='form-control'>
-                <label htmlFor='email' className='label'>
-                  <span className='label-text'>Email</span>
-                </label>
-                <Field
-                  type='email'
-                  id='email'
-                  name='email'
-                  className='input input-bordered w-full bg-tertiary'
-                  placeholder='Wpisz email'
-                />
-                <ErrorMessage name='email' component='div' className='text-red-500 text-sm mt-1' />
-              </div>
+
               <div className='form-control'>
                 <label htmlFor='city' className='label'>
                   <span className='label-text'>Miasto</span>
@@ -193,6 +165,19 @@ const RegisterPage = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
+            </div>
+            <div className='form-control'>
+              <label htmlFor='email' className='label'>
+                <span className='label-text'>Email (Login)</span>
+              </label>
+              <Field
+                type='email'
+                id='email'
+                name='email'
+                className='input input-bordered w-full bg-tertiary'
+                placeholder='Wpisz email'
+              />
+              <ErrorMessage name='email' component='div' className='text-red-500 text-sm mt-1' />
             </div>
             <div className='form-control mt-4'>
               <label htmlFor='password' className='label'>
@@ -243,7 +228,13 @@ const RegisterPage = () => {
             <div className='form-control mt-4'>
               <label className='cursor-pointer flex items-center'>
                 <Field type='checkbox' name='termsAccepted' className='checkbox' />
-                <span className='ml-2'>Akceptuję regulamin</span>
+                <span className='ml-2'>
+                  Akceptuję regulamin (
+                  <a href='#' className='hover:text-primary/90'>
+                    link
+                  </a>
+                  )
+                </span>
               </label>
               <ErrorMessage
                 name='termsAccepted'
@@ -257,6 +248,14 @@ const RegisterPage = () => {
             >
               {loading ? 'Ładowanie...' : 'Zarejestruj się'}
             </button>
+            <div className='text-center p-2'>
+              <span className='text-sm text-gray-600'>
+                Masz konto?{' '}
+                <a href='/login' className='text-blue-500 hover:underline'>
+                  Zaloguj się
+                </a>
+              </span>
+            </div>
           </Form>
         </Formik>
       </div>
@@ -266,7 +265,11 @@ const RegisterPage = () => {
           backgroundImage: `url(${imageAddEvent})`
         }}
       ></div>
-      <ToastContainer />
+      <ToastContainer
+        position='top-right'
+        autoClose={2000}
+        className={'z-50 fixed top-16 right-0 m-4'}
+      />
     </div>
   )
 }

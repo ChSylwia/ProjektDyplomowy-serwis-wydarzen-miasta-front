@@ -81,7 +81,7 @@ const HomePage = () => {
       <Billboard />
       <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center'>
         <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
-          <p class='text-lg font-semibold'> Lista większych wydarzeń w mieście Płock</p>
+          <p class='text-lg font-semibold'> Lista wydarzeń z biletem w mieście Płock</p>
         </div>
         <Carousel>
           <CarouselContent className='p-3 items-normal'>{cardsEvent}</CarouselContent>

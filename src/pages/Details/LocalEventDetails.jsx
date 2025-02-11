@@ -35,6 +35,7 @@ const LocalEventsDetails = () => {
     if (!token || userType !== 'google') {
       window.location.href = 'http://127.0.0.1:8000/auth/google'
       setLoading(false)
+
       return
     }
 
@@ -46,7 +47,7 @@ const LocalEventsDetails = () => {
         location: event.link
       })
 
-      if (response?.message === 'Udało się utworzyć wydarzenie.') {
+      if (response?.message === 'Event successfully created.') {
         toast.success('Wydarzenie zapisano do Google Calendar!')
       } else {
         toast.error('Nie udało się zapisać wydarzenia.')

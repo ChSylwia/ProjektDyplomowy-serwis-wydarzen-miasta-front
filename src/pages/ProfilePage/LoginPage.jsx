@@ -70,7 +70,6 @@ const LoginPage = () => {
 
   return (
     <>
-      <ToastContainer position='top-right' autoClose={3000} />
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
         <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
           <h2 className='text-3xl font-bold text-center mb-6 text-gray-800'>Logowanie</h2>
@@ -118,12 +117,15 @@ const LoginPage = () => {
                     className='text-red-500 text-sm mt-1'
                   />
                 </div>
-
                 {/* Zapomniałem hasła */}
                 <div className='text-right mb-4'>
-                  <a href='/forgot-password' className='text-blue-500 hover:underline text-sm'>
+                  <button
+                    type='button'
+                    onClick={() => navigate('/forgot-password')}
+                    className='text-blue-500 hover:underline text-sm'
+                  >
                     Zapomniałem hasła
-                  </a>
+                  </button>
                 </div>
 
                 {/* Zaloguj się */}
@@ -154,6 +156,11 @@ const LoginPage = () => {
             backgroundImage: `url(${imageAddEvent})`
           }}
         ></div>
+        <ToastContainer
+          position='top-right'
+          autoClose={2000}
+          className={'z-50 fixed top-16 right-0 m-4'}
+        />
       </div>
     </>
   )

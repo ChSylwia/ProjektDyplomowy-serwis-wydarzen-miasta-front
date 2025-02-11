@@ -128,7 +128,7 @@ const LocalEventsManagement = () => {
 
   return (
     <div className='container mx-auto px-4 py-4'>
-      <h2 className='text-2xl font-bold text-primary mb-4'>Local Events Management</h2>
+      <h2 className='text-2xl font-bold text-primary mb-4'>Zarządzaj wydarzeniami użytkowników</h2>
 
       <div className='mb-4'>
         <input
@@ -323,8 +323,11 @@ const LocalEventsManagement = () => {
           </tbody>
         </table>
       </div>
-      {/* Render ToastContainer; you may also place this in a top-level component (e.g., App.js) */}
-      <ToastContainer position='top-right' autoClose={5000} />
+      <ToastContainer
+        position='top-right'
+        autoClose={2000}
+        className={'z-50 fixed top-16 right-0 m-4'}
+      />
     </div>
   )
 }

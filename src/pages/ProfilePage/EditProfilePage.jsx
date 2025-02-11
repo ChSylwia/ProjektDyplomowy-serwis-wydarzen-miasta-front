@@ -1,39 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 import useApiClient from '../../components/Cookie/useApiClient'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import imageAddEvent from '@/assets/add-event.svg'
+
 const EditProfilePage = () => {
   const navigate = useNavigate()
   const { get, put } = useApiClient()
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    city: '',
-    postalCode: ''
+
+  // Yup validation schema for the form
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required('Imię jest wymagane'),
+    lastName: Yup.string().required('Nazwisko jest wymagane'),
+    email: Yup.string().email('Nieprawidłowy email').required('Email jest wymagany'),
+    city: Yup.string().required('Miasto jest wymagane'),
+    postalCode: Yup.string()
+      .matches(/^\d{2}-\d{3}$/, 'Kod pocztowy musi być w formacie 00-000')
+      .required('Kod pocztowy jest wymagany')
   })
 
+  // Fetch user profile data
   useEffect(() => {
     const fetchDataProfile = async () => {
       try {
         const data = await get('/user/current')
-
         if (data.error) {
           throw new Error(data.message)
         }
-
         setUserData(data.datas)
-        setFormData({
-          firstName: data.datas.firstName,
-          lastName: data.datas.lastName,
-          email: data.datas.email,
-          city: data.datas.city,
-          postalCode: data.datas.postalCode
-        })
       } catch (error) {
         console.error('Error fetching profile:', error)
         navigate('/login')
@@ -41,22 +40,13 @@ const EditProfilePage = () => {
         setLoading(false)
       }
     }
-
     fetchDataProfile()
-  }, [])
+  }, [get, navigate])
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
+  // Handler for form submission
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await put(`/user/edit/${userData.id}`, formData)
+      const response = await put(`/user/edit/${userData.id}`, values)
       if (response.error) {
         toast.error(response.message || 'Wystąpił błąd')
       } else {
@@ -66,13 +56,15 @@ const EditProfilePage = () => {
     } catch (error) {
       toast.error('Nie udało się zaktualizować profilu.')
     }
+    setSubmitting(false)
   }
 
+  // Show loading indicator while fetching data
   if (loading) {
     return (
-      <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
-        <p class='text-lg font-semibold'>
-          <span class='loading loading-dots loading-lg'></span>
+      <div className='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p className='text-lg font-semibold'>
+          <span className='loading loading-dots loading-lg'></span>
         </p>
       </div>
     )
@@ -82,105 +74,138 @@ const EditProfilePage = () => {
     return <p>Dane użytkownika nie są dostępne</p>
   }
 
+  // Set form initial values based on the fetched user data
+  const formInitialValues = {
+    firstName: userData.firstName || '',
+    lastName: userData.lastName || '',
+    email: userData.email || '',
+    city: userData.city || '',
+    postalCode: userData.postalCode || ''
+  }
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-9/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl'>
         <h2 className='text-lg font-bold mb-4'>Edytuj profil</h2>
-        <form onSubmit={handleSubmit} className='space-y-4'>
-          {/* Form Fields */}
-          <div>
-            <label htmlFor='firstName' className='block text-sm font-semibold'>
-              Imię
-            </label>
-            <input
-              type='text'
-              id='firstName'
-              name='firstName'
-              value={formData.firstName}
-              onChange={handleChange}
-              className='w-full p-2 border  bg-tertiary rounded'
-            />
-          </div>
-          <div>
-            <label htmlFor='lastName' className='block text-sm font-semibold'>
-              Nazwisko
-            </label>
-            <input
-              type='text'
-              id='lastName'
-              name='lastName'
-              value={formData.lastName}
-              onChange={handleChange}
-              className='w-full p-2 border bg-tertiary rounded'
-            />
-          </div>
-          <div>
-            <label htmlFor='email' className='block text-sm font-semibold'>
-              Email
-            </label>
-            <input
-              type='email'
-              id='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              className='w-full p-2 border bg-tertiary rounded'
-            />
-          </div>
-          <div>
-            <label htmlFor='city' className='block text-sm font-semibold'>
-              Miasto
-            </label>
-            <input
-              type='text'
-              id='city'
-              name='city'
-              value={formData.city}
-              onChange={handleChange}
-              className='w-full p-2 border bg-tertiary rounded'
-            />
-          </div>
-          <div>
-            <label htmlFor='postalCode' className='block text-sm font-semibold'>
-              Kod pocztowy
-            </label>
-            <input
-              type='text'
-              id='postalCode'
-              name='postalCode'
-              value={formData.postalCode}
-              onChange={handleChange}
-              className='w-full p-2 border bg-tertiary rounded'
-            />
-          </div>
-          {/* Buttons */}
-          <div className='flex justify-end space-x-4'>
-            <button
-              type='submit'
-              className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-            >
-              Zapisz zmiany
-            </button>
-            <button
-              type='button'
-              onClick={() => navigate('/profile')}
-              className='px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
-            >
-              Anuluj
-            </button>
-          </div>
-        </form>
+        <Formik
+          initialValues={formInitialValues}
+          enableReinitialize
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className='space-y-4'>
+              {/* First Name */}
+              <div>
+                <label htmlFor='firstName' className='block text-sm font-semibold'>
+                  Imię
+                </label>
+                <Field
+                  type='text'
+                  id='firstName'
+                  name='firstName'
+                  className='w-full p-2 border bg-tertiary rounded'
+                />
+                <ErrorMessage
+                  name='firstName'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+
+              {/* Last Name */}
+              <div>
+                <label htmlFor='lastName' className='block text-sm font-semibold'>
+                  Nazwisko
+                </label>
+                <Field
+                  type='text'
+                  id='lastName'
+                  name='lastName'
+                  className='w-full p-2 border bg-tertiary rounded'
+                />
+                <ErrorMessage
+                  name='lastName'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label htmlFor='email' className='block text-sm font-semibold'>
+                  Email
+                </label>
+                <Field
+                  type='email'
+                  id='email'
+                  name='email'
+                  className='w-full p-2 border bg-tertiary rounded'
+                />
+                <ErrorMessage name='email' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+
+              {/* City */}
+              <div>
+                <label htmlFor='city' className='block text-sm font-semibold'>
+                  Miasto
+                </label>
+                <Field
+                  type='text'
+                  id='city'
+                  name='city'
+                  className='w-full p-2 border bg-tertiary rounded'
+                />
+                <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
+              </div>
+
+              {/* Postal Code */}
+              <div>
+                <label htmlFor='postalCode' className='block text-sm font-semibold'>
+                  Kod pocztowy
+                </label>
+                <Field
+                  type='text'
+                  id='postalCode'
+                  name='postalCode'
+                  className='w-full p-2 border bg-tertiary rounded'
+                />
+                <ErrorMessage
+                  name='postalCode'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className='flex justify-end space-x-4'>
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+                >
+                  Zapisz zmiany
+                </button>
+                <button
+                  type='button'
+                  onClick={() => navigate('/profile')}
+                  className='px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+                >
+                  Anuluj
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
       <div
         className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
-        style={{
-          backgroundImage: `url(${imageAddEvent})`
-        }}
+        style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
       <ToastContainer
         position='top-right'
         autoClose={2000}
-        className={'z-50 fixed top-16 right-0 m-4'}
+        className='z-50 fixed top-16 right-0 m-4'
       />
     </div>
   )

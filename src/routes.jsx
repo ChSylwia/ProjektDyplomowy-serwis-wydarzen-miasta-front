@@ -13,6 +13,7 @@ import LocalEventsDetails from './pages/Details/LocalEventDetails'
 import EditProfilePage from './pages/ProfilePage/EditProfilePage'
 import EditProfilePasswdPage from './pages/ProfilePage/EditProfilePasswdPage'
 import AdminProfilePage from './pages/Admin/AdminProfilePage'
+import ForgotPasswordPage from './pages/ProfilePage/ForgotPasswordPage'
 
 export const routes = [
   {
@@ -47,6 +48,7 @@ export const routes = [
         path: `/success`,
         element: <SuccessLoggedPage />
       },
+      { path: '/forgot-password', element: <ForgotPasswordPage /> },
       {
         path: `/events/add`,
         element: <EventAdd />

@@ -13,7 +13,7 @@ const Navbar = () => {
 
   const handleLogoutClick = () => {
     Cookies.remove('authToken') // Usunięcie tokena autoryzacyjnego
-    toast.success('Logged out successfully!')
+    toast.success('Wylogowano pomyślnie!')
     navigate(NavbarRouteName.LOGIN) // Przekierowanie do strony logowania
   }
 
@@ -92,7 +92,11 @@ const Navbar = () => {
           </>
         )}
       </div>
-      <ToastContainer />
+      <ToastContainer
+        position='top-right'
+        autoClose={2000}
+        className={'z-50 fixed top-16 right-0 m-4'}
+      />
     </div>
   )
 }

@@ -93,7 +93,8 @@ const ProfilePage = () => {
             >
               Edytuj dane
             </button>
-            <button className='text-left font-semibold text-sm hover:underline'>Usuń konto</button>
+            {/*           <button className='text-left font-semibold text-sm hover:underline'>Usuń konto</button>
+             */}{' '}
           </div>
         </div>
 

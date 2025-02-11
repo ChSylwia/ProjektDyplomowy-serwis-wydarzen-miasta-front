@@ -76,7 +76,6 @@ const UsersManagement = () => {
         userType: editForm.userType,
         termsAccepted: editForm.termsAccepted
       })
-      console.log('Save operation succeeded')
       toast.success('Użytkownik został zaktualizowany')
 
       setEditingUserId(null)
@@ -113,11 +112,11 @@ const UsersManagement = () => {
       </div>
     )
   }
-  if (!users.length) return <div className='text-center py-4'>No users found.</div>
+  if (!users.length) return <div className='text-center py-4'>Nie znaleziono użytkowników.</div>
 
   return (
     <div className='container mx-auto px-4 py-4 bg-white '>
-      <h2 className='text-2xl font-bold text-primary mb-4'>Users Management</h2>
+      <h2 className='text-2xl font-bold text-primary mb-4'>Zarządzaj użytkownikami</h2>
 
       <div className='mb-4'>
         <input
@@ -137,7 +136,7 @@ const UsersManagement = () => {
               <th className='border px-4 py-2'>Email</th>
               <th className='border px-4 py-2'>Imię</th>
               <th className='border px-4 py-2'>Nazwisko</th>
-              <th className='border px-4 py-2'>Username</th>
+              {/*<th className='border px-4 py-2'>Username</th>*/}
               <th className='border px-4 py-2'>Miasto</th>
               <th className='border px-4 py-2'>Kod Pocztowy</th>
               <th className='border px-4 py-2'>Typ</th>
@@ -174,7 +173,7 @@ const UsersManagement = () => {
                     user.lastName
                   )}
                 </td>
-                <td className='border px-4 py-2'>
+                {/*<td className='border px-4 py-2'>
                   {editingUserId === user.id ? (
                     <input
                       name='username'
@@ -185,7 +184,7 @@ const UsersManagement = () => {
                   ) : (
                     user.username
                   )}
-                </td>
+                </td>*/}
                 <td className='border px-4 py-2'>
                   {editingUserId === user.id ? (
                     <input

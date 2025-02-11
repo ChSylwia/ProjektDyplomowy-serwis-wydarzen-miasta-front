@@ -47,7 +47,7 @@ const AdminProfilePage = () => {
 
   return (
     <div className='gap-6 w-11/12 mx-auto m-8 p-4 bg-white rounded-lg shadow-lg z-10'>
-      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Admin panel</h1>
+      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Panel administracyjny</h1>
       <div className='p-2'>
         {/* Tabs for selecting which management view to display */}
         <div className='mb-4 space-x-2'>
@@ -55,20 +55,20 @@ const AdminProfilePage = () => {
             className={`px-4 py-2 rounded ${activeTab === 'users' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}
             onClick={() => setActiveTab('users')}
           >
-            Users
+            Użytkownicy
           </button>
 
           <button
             className={`px-4 py-2 rounded ${activeTab === 'localEvents' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}
             onClick={() => setActiveTab('localEvents')}
           >
-            Local Events
+            Wydarzenia użytkowników
           </button>
           <button
             className={`px-4 py-2 rounded ${activeTab === 'globalEvents' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}
             onClick={() => setActiveTab('globalEvents')}
           >
-            Global Events
+            Wydarzenia z API
           </button>
         </div>
 

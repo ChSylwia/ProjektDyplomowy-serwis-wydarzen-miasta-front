@@ -90,7 +90,11 @@ const SelectPage = () => {
     const selectedType = typeEvent?.toLowerCase().trim()
     const isTypeMatch = !selectedType || eventType === selectedType
 
-    const isFree = event.event.priceMin === 0
+    const isFree =
+      event.event.priceMin === 0 ||
+      event.event.priceMin === 0.0 ||
+      event.event.priceMin === '.00' ||
+      event.event.priceMin === '0'
     const isPriceMatch = isFreeOnly ? isFree : true
 
     const eventCategory = event.event.category?.toLowerCase()
@@ -198,7 +202,19 @@ const SelectPage = () => {
                   className={`btn ${typeEvent === 'local-event' ? 'active' : ''}`}
                   onClick={() => handleFiltertypeEvent('local-event')}
                 >
-                  WYDARZENIA LOKALNE
+                  LOKALNE
+                </button>
+                <button
+                  className={`btn ${typeEvent === 'big-event' ? 'active' : ''}`}
+                  onClick={() => handleFiltertypeEvent('big-event')}
+                >
+                  Z BILETEM
+                </button>
+                <button
+                  className={`btn ${typeEvent === 'cinema' ? 'active' : ''}`}
+                  onClick={() => handleFiltertypeEvent('cinema')}
+                >
+                  PRZEDWIOŚNIE
                 </button>
               </div>
             </div>

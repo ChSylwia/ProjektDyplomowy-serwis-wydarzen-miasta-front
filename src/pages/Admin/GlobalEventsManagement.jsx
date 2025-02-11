@@ -131,7 +131,9 @@ const GlobalEventsManagement = () => {
   }
   return (
     <div className='container mx-auto px-4 py-4'>
-      <h2 className='text-2xl font-bold text-primary mb-4'>Global Events Management</h2>
+      <h2 className='text-2xl font-bold text-primary mb-4'>
+        Zarządzaj wydarzeniami z API (kino, teatr, ebilet)
+      </h2>
 
       {/* Input do wyszukiwania po tytule */}
       <div className='mb-4'>
