@@ -32,7 +32,7 @@ const AdminProfilePage = () => {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center'>
+      <div className='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
         <p className='text-lg font-semibold'>
           <span className='loading loading-dots loading-lg'></span>
         </p>
@@ -46,39 +46,35 @@ const AdminProfilePage = () => {
   }
 
   return (
-    <div className='grid  gap-6 w-11/12 mx-auto m-8 p-6 bg-white rounded-lg shadow-lg z-10'>
-      <div className='bg-white rounded-lg shadow-lg p-6  '>
-        <h2 className='text-3xl font-bold text-center mb-6 text-gray-800'>Admin panel</h2>
+    <div className='gap-6 w-11/12 mx-auto m-8 p-4 bg-white rounded-lg shadow-lg z-10'>
+      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Admin panel</h1>
+      <div className='p-2'>
+        {/* Tabs for selecting which management view to display */}
+        <div className='mb-4 space-x-2'>
+          <button
+            className={`px-4 py-2 rounded ${activeTab === 'users' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}
+            onClick={() => setActiveTab('users')}
+          >
+            Users
+          </button>
 
-        <p>Welcome to the admin dashboard. You have full access here.</p>
-        <div className='p-4'>
-          <h1 className='text-2xl font-bold mb-4'>Admin Dashboard</h1>
-          {/* Tabs for selecting which management view to display */}
-          <div className='mb-4 space-x-2'>
-            <button
-              className={`px-4 py-2 rounded ${activeTab === 'users' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-              onClick={() => setActiveTab('users')}
-            >
-              Users
-            </button>
-            <button
-              className={`px-4 py-2 rounded ${activeTab === 'localEvents' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-              onClick={() => setActiveTab('localEvents')}
-            >
-              Local Events
-            </button>
-            <button
-              className={`px-4 py-2 rounded ${activeTab === 'globalEvents' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-              onClick={() => setActiveTab('globalEvents')}
-            >
-              Global Events
-            </button>
-          </div>
-
-          {activeTab === 'users' && <UsersManagement />}
-          {activeTab === 'localEvents' && <LocalEventsManagement />}
-          {activeTab === 'globalEvents' && <GlobalEventsManagement />}
+          <button
+            className={`px-4 py-2 rounded ${activeTab === 'localEvents' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}
+            onClick={() => setActiveTab('localEvents')}
+          >
+            Local Events
+          </button>
+          <button
+            className={`px-4 py-2 rounded ${activeTab === 'globalEvents' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}
+            onClick={() => setActiveTab('globalEvents')}
+          >
+            Global Events
+          </button>
         </div>
+
+        {activeTab === 'users' && <UsersManagement />}
+        {activeTab === 'localEvents' && <LocalEventsManagement />}
+        {activeTab === 'globalEvents' && <GlobalEventsManagement />}
       </div>
     </div>
   )

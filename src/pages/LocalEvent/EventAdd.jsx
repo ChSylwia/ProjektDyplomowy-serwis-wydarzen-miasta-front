@@ -19,7 +19,6 @@ const EventAdd = () => {
     link: '',
     image: ''
   })
-
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -29,6 +28,7 @@ const EventAdd = () => {
   // Handle text input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target
+
     setFormData({
       ...formData,
       [name]: value
@@ -54,7 +54,13 @@ const EventAdd = () => {
     }
 
     // Walidacja cen na frontendzie
-    if (!isNaN(priceMin) && !isNaN(priceMax) && priceMin > priceMax) {
+    if (
+      !isNaN(priceMin) &&
+      !isNaN(priceMax) &&
+      priceMin > priceMax &&
+      priceMin < 0 &&
+      priceMax < 0
+    ) {
       setError('Minimalna cena nie może być większa niż maksymalna.')
       toast.error('Minimalna cena nie może być większa niż maksymalna.')
       setLoading(false)
@@ -69,6 +75,8 @@ const EventAdd = () => {
     }
 
     try {
+      console.log(formDataToSend)
+
       const response = await postWithFile('/local-events/create', formDataToSend)
       if (response.ok) {
         toast.success('Wydarzenie zostało pomyślnie dodane!')

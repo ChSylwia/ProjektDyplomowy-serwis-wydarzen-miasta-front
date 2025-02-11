@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+// src/pages/LocalEventsManagement.jsx
+import React, { useState, useEffect } from 'react'
 import useApiClient from '../../components/Cookie/useApiClient'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const LocalEventsManagement = () => {
-  const { get, put, deleteRequest } = useApiClient()
+  const { get, postWithFile, deleteRequest } = useApiClient()
   const [localEvents, setLocalEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [editingEventId, setEditingEventId] = useState(null)
@@ -15,8 +18,10 @@ const LocalEventsManagement = () => {
     link: '',
     typeEvent: '',
     category: '',
-    deleted: false
+    deleted: false,
+    image: ''
   })
+  const [search, setSearch] = useState('')
 
   const fetchLocalEvents = async () => {
     setLoading(true)
@@ -32,6 +37,7 @@ const LocalEventsManagement = () => {
       }
     } catch (error) {
       console.error('Error fetching local events:', error)
+      toast.error('Błąd podczas pobierania wydarzeń lokalnych')
     } finally {
       setLoading(false)
     }
@@ -52,7 +58,8 @@ const LocalEventsManagement = () => {
       link: event.link,
       typeEvent: event.typeEvent,
       category: event.category,
-      deleted: event.deleted
+      deleted: event.deleted,
+      image: event.image
     })
   }
 
@@ -66,50 +73,107 @@ const LocalEventsManagement = () => {
 
   const handleSave = async (eventId) => {
     try {
-      await put(`/admin/local-events/${eventId}`, editForm)
+      const formData = new FormData()
+
+      Object.keys(editForm).forEach((key) => {
+        if (key === 'image' && editForm[key]) {
+          // Append the image file if it's being edited
+          const fileInput = document.querySelector('input[name="image"]')
+          if (fileInput.files[0]) {
+            formData.append('image', fileInput.files[0])
+          }
+        } else {
+          formData.append(key, editForm[key])
+        }
+      })
+      await postWithFile(`/admin/local-events/${eventId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      toast.success('Wydarzenie lokalne zostało zaktualizowane')
       setEditingEventId(null)
-      fetchLocalEvents()
+      setTimeout(() => fetchLocalEvents(), 2000)
     } catch (error) {
       console.error('Error saving local event:', error)
+      toast.error('Błąd podczas zapisywania wydarzenia lokalnego')
     }
   }
 
   const handleDelete = async (eventId) => {
+    if (!window.confirm('Czy na pewno chcesz usunąć to wydarzenie lokalne?')) {
+      return
+    }
     try {
       await deleteRequest(`/admin/local-events/${eventId}`)
-      fetchLocalEvents()
+      toast.success('Wydarzenie lokalne zostało usunięte')
+      setTimeout(() => fetchLocalEvents(), 2000)
     } catch (error) {
       console.error('Error deleting local event:', error)
+      toast.error('Błąd podczas usuwania wydarzenia lokalnego')
     }
   }
 
-  if (loading) return <div>Loading local events...</div>
+  if (loading) {
+    return (
+      <div className='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
+        <p className='text-lg font-semibold'>
+          <span className='loading loading-dots loading-lg'></span>
+        </p>
+      </div>
+    )
+  }
+  const filteredEvents = localEvents.filter((event) =>
+    event.title.toLowerCase().includes(search.toLowerCase())
+  )
 
   return (
     <div className='container mx-auto px-4 py-4'>
-      <h2 className='text-xl font-bold mb-4'>Local Events Management</h2>
+      <h2 className='text-2xl font-bold text-primary mb-4'>Local Events Management</h2>
+
+      <div className='mb-4'>
+        <input
+          type='text'
+          placeholder='Wyszukaj po tytule'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className='w-full p-2 border border-gray-300 rounded'
+        />
+      </div>
       <div className='overflow-x-auto'>
-        <table className='min-w-full border-collapse border border-gray-300'>
+        <table className='min-w-full divide-y divide-gray-200 table-auto'>
           <thead>
             <tr className='bg-gray-200'>
-              <th className='border border-gray-300 px-4 py-2'>ID</th>
-              <th className='border border-gray-300 px-4 py-2'>Title</th>
-              <th className='border border-gray-300 px-4 py-2'>Description</th>
-              <th className='border border-gray-300 px-4 py-2'>Date</th>
-              <th className='border border-gray-300 px-4 py-2'>Price Min</th>
-              <th className='border border-gray-300 px-4 py-2'>Price Max</th>
-              <th className='border border-gray-300 px-4 py-2'>Link</th>
-              <th className='border border-gray-300 px-4 py-2'>Type</th>
-              <th className='border border-gray-300 px-4 py-2'>Category</th>
-              <th className='border border-gray-300 px-4 py-2'>Deleted</th>
-              <th className='border border-gray-300 px-4 py-2'>Actions</th>
+              <th className='py-2'>ID</th>
+              <th className='py-2'>Zdjęcie</th>
+              <th className='py-2'>Tytuł</th>
+              <th className='py-2'>Opis</th>
+              <th className='py-2'>Data</th>
+              <th className='py-2'>Cena Min</th>
+              <th className='py-2'>Cena Max</th>
+              <th className='py-2'>Link</th>
+              <th className='py-2'>Typ</th>
+              <th className='py-2'>Kategoria</th>
+              <th className='py-2'>Usunięty</th>
+              <th className='py-2'>Zarządzaj</th>
             </tr>
           </thead>
           <tbody>
-            {localEvents.map((event) => (
+            {filteredEvents.map((event) => (
               <tr key={event.id} className='hover:bg-gray-50'>
-                <td className='border border-gray-300 px-4 py-2'>{event.id}</td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>{event.id}</td>
+                <td className='p-2 border'>
+                  {editingEventId === event.id ? (
+                    <input
+                      type='file'
+                      name='image'
+                      onChange={handleInputChange}
+                      className='file-input file-input-ghost w-full bg-tertiary'
+                    />
+                  ) : (
+                    <img src={event.image} alt='Event' className='w-16 h-16 rounded-lg' />
+                  )}
+                </td>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='title'
@@ -118,22 +182,23 @@ const LocalEventsManagement = () => {
                       className='border p-1 w-full'
                     />
                   ) : (
-                    event.title
+                    <div className='overflow-auto max-h-24'>{event.title}</div>
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
-                    <input
+                    <textarea
                       name='description'
                       value={editForm.description}
                       onChange={handleInputChange}
-                      className='border p-1 w-full'
+                      wrap='soft'
+                      className='resize-none overflow-auto max-h-24 w-full p-1 border rounded'
                     />
                   ) : (
-                    event.description
+                    <div className='overflow-auto max-h-24'>{event.description}</div>
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='date'
@@ -145,7 +210,7 @@ const LocalEventsManagement = () => {
                     event.date
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='priceMin'
@@ -157,7 +222,7 @@ const LocalEventsManagement = () => {
                     event.priceMin
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='priceMax'
@@ -169,7 +234,7 @@ const LocalEventsManagement = () => {
                     event.priceMax
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='link'
@@ -181,7 +246,7 @@ const LocalEventsManagement = () => {
                     event.link
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='typeEvent'
@@ -193,7 +258,7 @@ const LocalEventsManagement = () => {
                     event.typeEvent
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2'>
+                <td className='border px-2 overflow-auto max-h-24'>
                   {editingEventId === event.id ? (
                     <input
                       name='category'
@@ -205,7 +270,7 @@ const LocalEventsManagement = () => {
                     event.category
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2 text-center'>
+                <td className='border px-2 overflow-auto max-h-24 text-center'>
                   {editingEventId === event.id ? (
                     <input
                       type='checkbox'
@@ -220,17 +285,17 @@ const LocalEventsManagement = () => {
                     'No'
                   )}
                 </td>
-                <td className='border border-gray-300 px-4 py-2 space-x-2'>
+                <td className='border px-4 py-2 flex space-x-2'>
                   {editingEventId === event.id ? (
                     <>
                       <button
-                        className='bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600'
+                        className='w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
                         onClick={() => handleSave(event.id)}
                       >
                         Save
                       </button>
                       <button
-                        className='bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600'
+                        className='bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500'
                         onClick={() => setEditingEventId(null)}
                       >
                         Cancel
@@ -239,13 +304,13 @@ const LocalEventsManagement = () => {
                   ) : (
                     <>
                       <button
-                        className='bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600'
+                        className='px-4 py-2 btn-primary bg-primary rounded text-white hover:bg-primary/90'
                         onClick={() => handleEditClick(event)}
                       >
                         Edit
                       </button>
                       <button
-                        className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'
+                        className='bg-red-700/70 px-4 py-2 btn-error rounded text-white hover:bg-red-700/80'
                         onClick={() => handleDelete(event.id)}
                       >
                         Delete
@@ -258,6 +323,8 @@ const LocalEventsManagement = () => {
           </tbody>
         </table>
       </div>
+      {/* Render ToastContainer; you may also place this in a top-level component (e.g., App.js) */}
+      <ToastContainer position='top-right' autoClose={5000} />
     </div>
   )
 }

@@ -7,7 +7,7 @@ import imageAddEvent from '@/assets/add-event.svg'
 
 const EventEdit = () => {
   const { id } = useParams()
-  const { get, post } = useApiClient()
+  const { get, postWithFile } = useApiClient()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     image: '',
@@ -16,26 +16,38 @@ const EventEdit = () => {
     date: '',
     priceMin: '',
     priceMax: '',
-    link: ''
+    link: '',
+    category: ''
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
+  const categories = ['teatr', 'muzyka', 'rodzina', 'widowisko', 'sport', 'sztuka', 'kino', 'inne']
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await get(`/local-events/${id}`)
         if (response.ok) {
+          console.log(response)
+
           const event = (await response[0]) || {}
           setFormData({
             image: event.image || '',
             title: event.title || '',
             description: event.description || '',
             date: event.date ? event.date.substring(0, 16) : '',
-            priceMin: event.priceMin || '',
-            priceMax: event.priceMax || '',
-            link: event.link || ''
+            priceMin:
+              event.priceMin !== null && event.priceMin !== undefined
+                ? event.priceMin.toString()
+                : '',
+            priceMax:
+              event.priceMax !== null && event.priceMax !== undefined
+                ? event.priceMax.toString()
+                : '',
+            link: event.link || '',
+            category: event.category || ''
           })
+          console.log(event)
+
           setLoading(false)
         } else {
           throw new Error('Nie udało się pobrać wydarzenia')
@@ -60,7 +72,33 @@ const EventEdit = () => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
 
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+      const maxSize = 2 * 1024 * 1024 // 2MB
+
+      if (!allowedTypes.includes(file.type)) {
+        setError('Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.')
+        toast.error('Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.')
+        return
+      }
+
+      if (file.size > maxSize) {
+        setError('Plik jest za duży. Maksymalny rozmiar: 2MB.')
+        toast.error('Plik jest za duży. Maksymalny rozmiar: 2MB.')
+        return
+      }
+
+      setError(null)
+      setFormData((prev) => ({
+        ...prev,
+        image: file, // Plik do wysłania
+        imagePreview: URL.createObjectURL(file) // Podgląd dla użytkownika
+      }))
+    }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -80,6 +118,17 @@ const EventEdit = () => {
     }
 
     // Walidacja cen
+    if (!isNaN(priceMin) && priceMin < 0) {
+      toast.error('Minimalna cena nie może być ujemna.')
+      setLoading(false)
+      return
+    }
+
+    if (!isNaN(priceMax) && priceMax < 0) {
+      toast.error('Maksymalna cena nie może być ujemna.')
+      setLoading(false)
+      return
+    }
     if (!isNaN(priceMin) && !isNaN(priceMax) && priceMin > priceMax) {
       setError('Minimalna cena nie może być większa niż maksymalna.')
       toast.error('Minimalna cena nie może być większa niż maksymalna.')
@@ -88,7 +137,22 @@ const EventEdit = () => {
     }
 
     try {
-      const response = await post(`/local-events/${id}/edit`, formData)
+      const formDataToSend = new FormData()
+      formDataToSend.append('title', formData.title)
+      formDataToSend.append('description', formData.description)
+      formDataToSend.append('date', formData.date)
+      formDataToSend.append('priceMin', formData.priceMin !== '' ? formData.priceMin : '0')
+      formDataToSend.append('priceMax', formData.priceMax !== '' ? formData.priceMax : '0')
+      formDataToSend.append('link', formData.link !== '' ? formData.link : '')
+      formDataToSend.append('category', formData.category !== '' ? formData.category : '')
+
+      if (formData.image) {
+        formDataToSend.append('image', formData.image)
+      }
+
+      const response = await postWithFile(`/local-events/${id}/edit`, formDataToSend)
+
+      console.log('Server response:', response) // <-- Debugowanie
       if (response.ok) {
         toast.success('Wydarzenie zostało zaktualizowane!')
         setTimeout(() => navigate('/profile'), 2000)
@@ -115,7 +179,7 @@ const EventEdit = () => {
               type='file'
               name='image'
               accept='image/*'
-              onChange={handleInputChange}
+              onChange={handleFileChange}
               className='file-input file-input-ghost w-full bg-tertiary'
             />
           </div>
@@ -170,6 +234,35 @@ const EventEdit = () => {
               onChange={handleInputChange}
               className='input input-bordered w-full bg-tertiary'
             />
+          </div>
+          <div className='form-control'>
+            <label className='label'>Link</label>
+            <input
+              type='text'
+              name='link'
+              value={formData.link}
+              onChange={handleInputChange}
+              className='input input-bordered w-full bg-tertiary'
+            />
+          </div>
+          <div className='form-control'>
+            <label className='label'>Kategoria</label>
+            <select
+              name='category'
+              value={formData.category}
+              onChange={handleInputChange}
+              className='select select-bordered w-full bg-tertiary'
+              required
+            >
+              <option value='' disabled>
+                Wybierz kategorię
+              </option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
           <button type='submit' disabled={loading} className='btn btn-primary w-full'>
             {loading ? 'Zapisywanie...' : 'Zapisz zmiany'}
