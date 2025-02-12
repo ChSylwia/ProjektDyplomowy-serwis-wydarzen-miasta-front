@@ -18,20 +18,16 @@ const EventEdit = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Fetch event data on component mount
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await get(`/local-events/${id}`)
         if (response.ok) {
-          // Assume the API returns an array and we take the first event object.
           const event = response[0] || {}
           setInitialData({
-            // For editing, we start with an empty file field.
             image: '',
             title: event.title || '',
             description: event.description || '',
-            // For datetime-local inputs, we use the first 16 characters.
             date: event.date ? event.date.substring(0, 16) : '',
             priceMin:
               event.priceMin !== null && event.priceMin !== undefined
@@ -55,9 +51,8 @@ const EventEdit = () => {
       }
     }
     fetchEvent()
-  }, [get, id])
+  }, [])
 
-  // Yup validation schema
   const validationSchema = Yup.object({
     title: Yup.string().required('Tytuł jest wymagany'),
     description: Yup.string().required('Opis jest wymagany'),
@@ -82,7 +77,6 @@ const EventEdit = () => {
       .oneOf(categories, 'Wybierz poprawną kategorię')
       .required('Kategoria jest wymagana'),
     image: Yup.mixed()
-      // For editing, the image is optional. If a file is provided, validate its type and size.
       .test('fileType', 'Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.', (value) => {
         if (!value) return true
         return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
@@ -111,7 +105,7 @@ const EventEdit = () => {
       const response = await postWithFile(`/local-events/${id}/edit`, formDataToSend)
       if (response.ok) {
         toast.success('Wydarzenie zostało zaktualizowane!')
-        setTimeout(() => navigate('/profile'), 2000)
+        setTimeout(() => navigate('/profile'), 1000)
       } else {
         throw new Error('Nie udało się zaktualizować wydarzenia')
       }
@@ -149,7 +143,6 @@ const EventEdit = () => {
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form className='space-y-4'>
-              {/* Image */}
               <div className='form-control'>
                 <label className='label'>Zdjęcie</label>
                 <input
@@ -163,7 +156,6 @@ const EventEdit = () => {
                 />
                 <ErrorMessage name='image' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Title */}
               <div className='form-control'>
                 <label className='label'>Tytuł</label>
                 <Field
@@ -174,7 +166,6 @@ const EventEdit = () => {
                 />
                 <ErrorMessage name='title' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Description */}
               <div className='form-control'>
                 <label className='label'>Opis</label>
                 <Field
@@ -189,7 +180,6 @@ const EventEdit = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Date */}
               <div className='form-control'>
                 <label className='label'>Data</label>
                 <Field
@@ -200,7 +190,6 @@ const EventEdit = () => {
                 />
                 <ErrorMessage name='date' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Price Min */}
               <div className='form-control'>
                 <label className='label'>Cena minimalna</label>
                 <Field
@@ -214,7 +203,6 @@ const EventEdit = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Price Max */}
               <div className='form-control'>
                 <label className='label'>Cena maksymalna</label>
                 <Field
@@ -228,7 +216,6 @@ const EventEdit = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Link */}
               <div className='form-control'>
                 <label className='label'>Link</label>
                 <Field
@@ -238,7 +225,6 @@ const EventEdit = () => {
                 />
                 <ErrorMessage name='link' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Category */}
               <div className='form-control'>
                 <label className='label'>Kategoria</label>
                 <Field
@@ -265,7 +251,7 @@ const EventEdit = () => {
               <div className='flex justify-end space-x-4'>
                 <button
                   type='submit'
-                  disabled={isSubmitting}
+                  disabled={loading || isSubmitting}
                   className='btn btn-primary w-9/12 bg-primary text-white hover:bg-primary/90'
                 >
                   {isSubmitting ? 'Zapisywanie...' : 'Zapisz zmiany'}
@@ -289,7 +275,7 @@ const EventEdit = () => {
       ></div>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className='z-50 fixed top-16 right-0 m-4'
       />
     </div>

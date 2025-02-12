@@ -15,15 +15,14 @@ const AdminProfilePage = () => {
     const fetchUserDetails = async () => {
       try {
         const userDetails = await getUserDetails()
-        // Check if the user has the 'ROLE_ADMIN' role.
         if (userDetails?.roles?.includes('ROLE_ADMIN')) {
           setIsAdmin(true)
         } else {
-          navigate('/profile') // Redirect non-admin users.
+          navigate('/profile')
         }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
-        navigate('/login') // Redirect to login if the API call fails.
+        navigate('/login')
       }
     }
 
@@ -41,7 +40,6 @@ const AdminProfilePage = () => {
   }
 
   if (!isAdmin) {
-    // Optionally, you could render a "Not authorized" message here
     return null
   }
 
@@ -49,7 +47,6 @@ const AdminProfilePage = () => {
     <div className='gap-6 w-11/12 mx-auto m-8 p-4 bg-white rounded-lg shadow-lg z-10'>
       <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Panel administracyjny</h1>
       <div className='p-2'>
-        {/* Tabs for selecting which management view to display */}
         <div className='mb-4 space-x-2'>
           <button
             className={`px-4 py-2 rounded ${activeTab === 'users' ? 'btn-primary bg-primary text-white hover:bg-primary/90' : 'bg-gray-200'}`}

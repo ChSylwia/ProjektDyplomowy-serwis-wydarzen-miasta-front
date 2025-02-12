@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 function CardEvents({ item }) {
   const navigate = useNavigate()
   const handleClickRedirect = () => {
-    // Pass the full event data as state
     navigate(`/events/details/localEventDetails/${item.id}`, { state: { event: item } })
   }
   const truncateText = (text, wordLimit) => {

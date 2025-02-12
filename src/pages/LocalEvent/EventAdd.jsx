@@ -12,7 +12,6 @@ const categories = ['teatr', 'muzyka', 'rodzina', 'widowisko', 'sport', 'sztuka'
 const EventAdd = () => {
   const { postWithFile } = useApiClient()
   const navigate = useNavigate()
-
   const initialValues = {
     title: '',
     description: '',
@@ -64,7 +63,6 @@ const EventAdd = () => {
   const onSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true)
     const formDataToSend = new FormData()
-    // Append all fields to FormData
     for (const key in values) {
       if (values[key] !== null && values[key] !== undefined) {
         formDataToSend.append(key, values[key])
@@ -75,7 +73,7 @@ const EventAdd = () => {
       const response = await postWithFile('/local-events/create', formDataToSend)
       if (response.ok) {
         toast.success('Wydarzenie zostało pomyślnie dodane!')
-        setTimeout(() => navigate('/profile'), 2000)
+        setTimeout(() => navigate('/profile'), 1000)
       } else {
         const errorMessage = response.data?.error || 'Nie udało się dodać wydarzenia'
         toast.error(errorMessage)
@@ -97,7 +95,6 @@ const EventAdd = () => {
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form className='space-y-4'>
-              {/* Title */}
               <div className='form-control'>
                 <label htmlFor='title' className='label'>
                   Tytuł wydarzenia
@@ -110,7 +107,6 @@ const EventAdd = () => {
                 />
                 <ErrorMessage name='title' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Description */}
               <div className='form-control'>
                 <label htmlFor='description' className='label'>
                   Opis wydarzenia
@@ -127,7 +123,6 @@ const EventAdd = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Date */}
               <div className='form-control'>
                 <label htmlFor='date' className='label'>
                   Data wydarzenia
@@ -140,7 +135,6 @@ const EventAdd = () => {
                 />
                 <ErrorMessage name='date' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Price Min */}
               <div className='form-control'>
                 <label htmlFor='priceMin' className='label'>
                   Minimalna cena (opcjonalna)
@@ -157,7 +151,6 @@ const EventAdd = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Price Max */}
               <div className='form-control'>
                 <label htmlFor='priceMax' className='label'>
                   Maksymalna cena (opcjonalna)
@@ -174,7 +167,6 @@ const EventAdd = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Category */}
               <div className='form-control'>
                 <label htmlFor='category' className='label'>
                   Kategoria
@@ -198,7 +190,6 @@ const EventAdd = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-              {/* Link */}
               <div className='form-control'>
                 <label htmlFor='link' className='label'>
                   Link do wydarzenia (opcjonalny)
@@ -211,7 +202,6 @@ const EventAdd = () => {
                 />
                 <ErrorMessage name='link' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Image */}
               <div className='form-control'>
                 <label htmlFor='image' className='label'>
                   Dodaj zdjęcie
@@ -228,11 +218,10 @@ const EventAdd = () => {
                 />
                 <ErrorMessage name='image' component='div' className='text-red-500 text-sm mt-1' />
               </div>
-              {/* Buttons */}
               <div className='flex justify-end space-x-4'>
                 <button
-                  type='submit'
                   disabled={isSubmitting}
+                  type='submit'
                   className='btn btn-primary w-9/12 bg-primary text-white hover:bg-primary/90'
                 >
                   {isSubmitting ? 'Dodawanie...' : 'Dodaj wydarzenie'}
@@ -255,7 +244,7 @@ const EventAdd = () => {
       ></div>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className='z-50 fixed top-16 right-0 m-4'
       />
     </div>

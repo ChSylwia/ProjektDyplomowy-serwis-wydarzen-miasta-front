@@ -9,9 +9,7 @@ const categories = ['teatr', 'muzyka', 'rodzina', 'widowisko', 'sport', 'sztuka'
 
 const SelectPage = () => {
   const { type } = useParams()
-  // Filtr pojedynczej daty
   const [selectedDate, setSelectedDate] = useState(null)
-  // Filtr zakresu daty
   const [selectedStartDate, setSelectedStartDate] = useState(null)
   const [selectedEndDate, setSelectedEndDate] = useState(null)
 
@@ -75,15 +73,15 @@ const SelectPage = () => {
     : []
 
   const filteredEvents = allEvents.filter((event) => {
-    const eventDate = event.event?.date ? parseISO(event.event.date) : null
+    const eventDateTime = event.event?.date ? parseISO(event.event.date) : null
     let dateMatch = true
 
     if (selectedStartDate && selectedEndDate) {
       const start = parseISO(selectedStartDate)
       const end = parseISO(selectedEndDate)
-      dateMatch = eventDate >= start && eventDate <= end
+      dateMatch = eventDateTime >= start && eventDateTime <= end
     } else if (selectedDate) {
-      dateMatch = isSameDay(eventDate, parseISO(selectedDate))
+      dateMatch = isSameDay(eventDateTime, parseISO(selectedDate))
     }
 
     const eventType = event.event?.typeEvent?.toLowerCase().trim()
@@ -108,7 +106,6 @@ const SelectPage = () => {
 
   return (
     <>
-      {/* Biały kafelek z filtrami */}
       <div className='bg-white rounded-lg shadow-lg p-6 mb-6 z-40 '>
         <div className='flex z-10 flex-col'>
           <div className='p-4 grid-cols-1 sm:grid-cols-2 gap-4 flex justify-center align-center'>
@@ -162,27 +159,31 @@ const SelectPage = () => {
                     />
                   </div>
                 </div>
-                {/* Filtr zakresu daty */}
                 <div>
                   <p className='font-bold'>Zakres daty:</p>
                   <div className='flex gap-2'>
                     <input
-                      type='date'
+                      type='datetime-local'
                       className='btn p-2'
                       placeholder='Od'
                       value={selectedStartDate || ''}
-                      min={format(new Date(), 'yyyy-MM-dd')}
+                      min={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
                       onChange={(e) => {
-                        setSelectedStartDate(e.target.value)
+                        const newStartDate = e.target.value
+                        setSelectedStartDate(newStartDate)
+                        if (selectedEndDate && newStartDate > selectedEndDate) {
+                          setSelectedEndDate('')
+                        }
+
                         setSelectedDate(null)
                       }}
                     />
                     <input
-                      type='date'
+                      type='datetime-local'
                       className='btn p-2'
                       placeholder='Do'
                       value={selectedEndDate || ''}
-                      min={selectedStartDate || format(new Date(), 'yyyy-MM-dd')}
+                      min={selectedStartDate || format(new Date(), "yyyy-MM-dd'T'HH:mm")}
                       onChange={(e) => {
                         setSelectedEndDate(e.target.value)
                         setSelectedDate(null)

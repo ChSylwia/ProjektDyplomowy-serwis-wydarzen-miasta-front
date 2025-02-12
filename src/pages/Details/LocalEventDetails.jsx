@@ -131,7 +131,6 @@ END:VCALENDAR`
           <p className='text-white font-semibold'>Brak zdjęcia</p>
         )}
       </div>
-
       <div className='ml-6 mt-6 md:mt-0 flex-1'>
         <h2 className='text-2xl font-bold mb-4'>{event?.title || 'Brak tytułu'}</h2>
         <p>
@@ -159,6 +158,7 @@ END:VCALENDAR`
           )}
 
           <button
+            disabled={loading}
             onClick={handleGoogleCalendar}
             className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500'
           >
@@ -181,8 +181,11 @@ END:VCALENDAR`
           </button>*/}
         </div>
       </div>
-
-      <ToastContainer className='z-50 fixed top-16 right-0 m-4' />
+      <ToastContainer
+        position='top-right'
+        autoClose={1000}
+        className='z-50 fixed top-16 right-0 m-4'
+      />{' '}
     </div>
   )
 }

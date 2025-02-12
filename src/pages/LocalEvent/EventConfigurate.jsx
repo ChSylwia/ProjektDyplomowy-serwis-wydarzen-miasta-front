@@ -35,7 +35,6 @@ const EventConfigurate = () => {
     fetchEvents()
   }, [])
 
-  // Redirect to edit page
   const handleEditClick = (event) => {
     navigate(`/events/edit/${event.id}`, { state: { event } })
   }
@@ -46,7 +45,7 @@ const EventConfigurate = () => {
     try {
       const response = await deleteRequest(`/local-events/${id}`)
       if (response.ok) {
-        setEvents((prev) => prev.filter((event) => event.id !== id)) // Optionally remove from UI
+        setEvents((prev) => prev.filter((event) => event.id !== id))
       } else {
         throw new Error('Failed to delete event')
       }

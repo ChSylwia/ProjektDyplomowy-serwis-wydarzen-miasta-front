@@ -77,7 +77,6 @@ const LocalEventsManagement = () => {
 
       Object.keys(editForm).forEach((key) => {
         if (key === 'image' && editForm[key]) {
-          // Append the image file if it's being edited
           const fileInput = document.querySelector('input[name="image"]')
           if (fileInput.files[0]) {
             formData.append('image', fileInput.files[0])
@@ -92,7 +91,7 @@ const LocalEventsManagement = () => {
 
       toast.success('Wydarzenie lokalne zostało zaktualizowane')
       setEditingEventId(null)
-      setTimeout(() => fetchLocalEvents(), 2000)
+      setTimeout(() => fetchLocalEvents(), 1000)
     } catch (error) {
       console.error('Error saving local event:', error)
       toast.error('Błąd podczas zapisywania wydarzenia lokalnego')
@@ -106,7 +105,7 @@ const LocalEventsManagement = () => {
     try {
       await deleteRequest(`/admin/local-events/${eventId}`)
       toast.success('Wydarzenie lokalne zostało usunięte')
-      setTimeout(() => fetchLocalEvents(), 2000)
+      setTimeout(() => fetchLocalEvents(), 1000)
     } catch (error) {
       console.error('Error deleting local event:', error)
       toast.error('Błąd podczas usuwania wydarzenia lokalnego')
@@ -289,6 +288,7 @@ const LocalEventsManagement = () => {
                   {editingEventId === event.id ? (
                     <>
                       <button
+                        disabled={loading}
                         className='w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
                         onClick={() => handleSave(event.id)}
                       >
@@ -304,12 +304,14 @@ const LocalEventsManagement = () => {
                   ) : (
                     <>
                       <button
+                        disabled={loading}
                         className='px-4 py-2 btn-primary bg-primary rounded text-white hover:bg-primary/90'
                         onClick={() => handleEditClick(event)}
                       >
                         Edit
                       </button>
                       <button
+                        disabled={loading}
                         className='bg-red-700/70 px-4 py-2 btn-error rounded text-white hover:bg-red-700/80'
                         onClick={() => handleDelete(event.id)}
                       >
@@ -325,7 +327,7 @@ const LocalEventsManagement = () => {
       </div>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className={'z-50 fixed top-16 right-0 m-4'}
       />
     </div>

@@ -39,11 +39,9 @@ const RegisterPage = () => {
 
   const handleSubmit = (values) => {
     setLoading(true)
-    // Prepare the request headers
     const myHeaders = new Headers()
     myHeaders.append('Content-Type', 'application/json')
 
-    // Prepare the request body with the form values
     const raw = JSON.stringify({
       firstName: values.firstName,
       lastName: values.lastName,
@@ -68,12 +66,12 @@ const RegisterPage = () => {
         setLoading(false)
         return response.text().then((text) => {
           try {
-            const json = JSON.parse(text) // Parse manually
+            const json = JSON.parse(text)
             if (response.ok) {
               toast.success('Rejestracja zakończona sukcesem!')
               setTimeout(() => {
-                navigate('/login') // Redirect to login page
-              }, 2000)
+                navigate('/login')
+              }, 1000)
               return json
             } else {
               throw new Error(json.message || 'Wystąpił błąd')
@@ -244,6 +242,7 @@ const RegisterPage = () => {
             </div>
             <button
               type='submit'
+              disabled={loading}
               className='btn btn-primary w-full mt-6 bg-primary text-white hover:bg-primary/90'
             >
               {loading ? 'Ładowanie...' : 'Zarejestruj się'}
@@ -267,7 +266,7 @@ const RegisterPage = () => {
       ></div>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className={'z-50 fixed top-16 right-0 m-4'}
       />
     </div>

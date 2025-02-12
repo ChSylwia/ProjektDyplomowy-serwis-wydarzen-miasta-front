@@ -1,55 +1,58 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { NavbarRouteName } from '@/constants/RouteName'
 import { toast, ToastContainer } from 'react-toastify'
+import { Menu, X } from 'lucide-react'
 
 const Navbar = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-
-  // Sprawdzenie, czy użytkownik jest zalogowany
   const token = Cookies.get('authToken')
 
+  const [isOpen, setIsOpen] = useState(false)
+
   const handleLogoutClick = () => {
-    Cookies.remove('authToken') // Usunięcie tokena autoryzacyjnego
+    Cookies.remove('authToken')
     toast.success('Wylogowano pomyślnie!')
-    navigate(NavbarRouteName.LOGIN) // Przekierowanie do strony logowania
+    navigate(NavbarRouteName.LOGIN)
   }
 
   return (
     <div className='navbar fixed top-0 left-0 right-0 bg-base-100 z-50 shadow-md'>
       <div className='navbar-start'>
         <div className='dropdown'>
-          <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden'>
-            {/* Możesz dodać ikonę menu tutaj */}
-          </div>
-          <ul
+          <button
             tabIndex={0}
-            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
+            className='btn btn-ghost lg:hidden'
+            onClick={() => setIsOpen(!isOpen)}
           >
-            {Object.entries(NavbarRouteName)
-              .filter(([key]) => key !== 'LOGIN' && key !== 'REGISTER')
-              .map(([key, path]) => (
-                <Link
-                  key={key}
-                  to={path}
-                  role='tab'
-                  className={`relative px-4 py-2 font-medium ${
-                    pathname === path
-                      ? 'text-primary after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-primary'
-                      : 'hover:after:absolute hover:after:bottom-0 hover:after:left-0 hover:after:w-full hover:after:h-1 hover:after:bg-gray-400'
-                  }`}
-                >
-                  {key.charAt(0) + key.slice(1).toLowerCase()}
-                </Link>
-              ))}
-          </ul>
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          {isOpen && (
+            <ul className='absolute left-0 mt-3 w-52 bg-base-100 rounded-box z-50 p-2 shadow'>
+              {Object.entries(NavbarRouteName)
+                .filter(([key]) => key !== 'LOGIN' && key !== 'REGISTER')
+                .map(([key, path]) => (
+                  <li key={key} onClick={() => setIsOpen(false)}>
+                    <Link
+                      to={path}
+                      className={`block px-4 py-2 font-medium ${
+                        pathname === path ? 'text-primary' : 'hover:text-gray-400'
+                      }`}
+                    >
+                      {key.charAt(0) + key.slice(1).toLowerCase()}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
         <Link to={NavbarRouteName.HOME} className='btn btn-ghost p-0'>
           <img src='src/assets/Logo.svg' alt='Logo' className='h-12' />
         </Link>
       </div>
+
       <div className='navbar-center hidden lg:flex space-x-4'>
         {Object.entries(NavbarRouteName)
           .filter(([key]) => key !== 'LOGIN' && key !== 'REGISTER')
@@ -67,6 +70,7 @@ const Navbar = () => {
             </Link>
           ))}
       </div>
+
       <div className='navbar-end'>
         {token ? (
           <button
@@ -92,10 +96,11 @@ const Navbar = () => {
           </>
         )}
       </div>
+
       <ToastContainer
         position='top-right'
-        autoClose={2000}
-        className={'z-50 fixed top-16 right-0 m-4'}
+        autoClose={1000}
+        className='z-50 fixed top-16 right-0 m-4'
       />
     </div>
   )

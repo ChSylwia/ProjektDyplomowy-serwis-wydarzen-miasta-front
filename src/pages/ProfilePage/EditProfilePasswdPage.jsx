@@ -9,9 +9,9 @@ import imageAddEvent from '@/assets/add-event.svg'
 
 const EditProfilePasswdPage = () => {
   const navigate = useNavigate()
+
   const { post } = useApiClient()
 
-  // Yup validation schema
   const validationSchema = Yup.object({
     currentPassword: Yup.string().required('Aktualne hasło jest wymagane'),
     newPassword: Yup.string()
@@ -30,7 +30,6 @@ const EditProfilePasswdPage = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      // Post only currentPassword and newPassword to the API
       const response = await post('/user/edit/passwd', {
         currentPassword: values.currentPassword,
         newPassword: values.newPassword
@@ -40,7 +39,7 @@ const EditProfilePasswdPage = () => {
         toast.error(response.message)
       } else {
         toast.success('Udało się zmienić hasło!')
-        setTimeout(() => navigate('/profile'), 2000)
+        setTimeout(() => navigate('/profile'), 1000)
       }
     } catch (error) {
       console.error(error)
@@ -60,7 +59,6 @@ const EditProfilePasswdPage = () => {
         >
           {({ isSubmitting }) => (
             <Form className='space-y-4'>
-              {/* Current Password Field */}
               <div>
                 <label htmlFor='currentPassword' className='block font-medium'>
                   Aktualne hasło
@@ -78,7 +76,6 @@ const EditProfilePasswdPage = () => {
                 />
               </div>
 
-              {/* New Password Field */}
               <div>
                 <label htmlFor='newPassword' className='block font-medium'>
                   Nowe hasło
@@ -96,7 +93,6 @@ const EditProfilePasswdPage = () => {
                 />
               </div>
 
-              {/* Confirm New Password Field */}
               <div>
                 <label htmlFor='confirmPassword' className='block font-medium'>
                   Powtórz nowe hasło
@@ -138,7 +134,11 @@ const EditProfilePasswdPage = () => {
         className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
         style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
-      <ToastContainer className='z-50 fixed top-16 right-0 m-4' />
+      <ToastContainer
+        position='top-right'
+        autoClose={1000}
+        className='z-50 fixed top-16 right-0 m-4'
+      />
     </div>
   )
 }

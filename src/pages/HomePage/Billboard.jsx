@@ -10,10 +10,8 @@ const Billboard = () => {
     { id: 3, src: 'src/assets/Ratusz-Plock.webp', alt: 'Ratusz w Płocku' }
   ]
   const navigate = useNavigate()
-  // Stan przechowujący indeks aktualnego slajdu
   const [currentSlide, setCurrentSlide] = useState(0)
 
-  // Ustawienie automatycznej zmiany slajdów co 5 sekund
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length)
@@ -24,9 +22,7 @@ const Billboard = () => {
 
   return (
     <div className='hero-content flex-col lg:flex-row '>
-      {/* Lewa część – karuzela */}
       <div className='w-full lg:w-1/2'>
-        {/* Kontener o stałej wysokości; można dostosować wysokość, by pasowała do zdjęć */}
         <div className='relative w-full h-[300px] rounded-box overflow-hidden'>
           {slides.map((slide, index) => (
             <div
@@ -46,7 +42,6 @@ const Billboard = () => {
           ))}
         </div>
       </div>
-      {/* Prawa część – treść billboardu */}
       <div className='text-center lg:text-left lg:w-1/2'>
         <h1 className='text-5xl font-bold'>Wydarzenia w Płocku</h1>
         <p className='py-6 text-lg'>

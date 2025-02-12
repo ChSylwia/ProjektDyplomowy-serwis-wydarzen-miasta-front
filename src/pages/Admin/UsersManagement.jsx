@@ -79,7 +79,7 @@ const UsersManagement = () => {
       toast.success('Użytkownik został zaktualizowany')
 
       setEditingUserId(null)
-      setTimeout(() => fetchUsers(), 2000)
+      setTimeout(() => fetchUsers(), 1000)
     } catch (error) {
       console.error('Error saving user:', error)
       toast.error('Błąd podczas zapisywania użytkownika')
@@ -93,7 +93,7 @@ const UsersManagement = () => {
     try {
       await deleteRequest(`/admin/users/${userId}`)
       toast.success('Użytkownik został usunięty')
-      setTimeout(() => fetchUsers(), 2000)
+      setTimeout(() => fetchUsers(), 1000)
     } catch (error) {
       console.error('Error deleting user:', error)
       toast.error('Błąd podczas usuwania użytkownika')
@@ -237,6 +237,7 @@ const UsersManagement = () => {
                   {editingUserId === user.id ? (
                     <>
                       <button
+                        disabled={loading}
                         className='w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
                         onClick={() => handleSave(user.id)}
                       >
@@ -252,12 +253,14 @@ const UsersManagement = () => {
                   ) : (
                     <>
                       <button
+                        disabled={loading}
                         className='px-4 py-2 btn-primary bg-primary rounded text-white hover:bg-primary/90'
                         onClick={() => handleEditClick(user)}
                       >
                         Edit
                       </button>
                       <button
+                        disabled={loading}
                         className='bg-red-700/70 px-4 py-2 btn-error rounded text-white hover:bg-red-700/80'
                         onClick={() => handleDelete(user.id)}
                       >
@@ -274,7 +277,7 @@ const UsersManagement = () => {
 
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className='z-50 fixed top-16 right-0 m-4'
       />
     </div>

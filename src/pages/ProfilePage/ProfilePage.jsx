@@ -4,7 +4,7 @@ import useApiClient from '../../components/Cookie/useApiClient'
 
 const ProfilePage = () => {
   const navigate = useNavigate()
-  const { get } = useApiClient() // Using the custom API client
+  const { get } = useApiClient()
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -60,14 +60,11 @@ const ProfilePage = () => {
   return (
     <div className='min-h-full w-full flex items-center justify-center z-10'>
       <div className='bg-white rounded-lg shadow-lg p-6 flex flex-col  md:flex-row items-center md:items-start w-full max-w-4xl'>
-        {/* Left Section */}
         <div className='flex-1 flex flex-col items-center md:items-start'>
-          {/* Profile Avatar */}
           <div className='w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-2xl font-bold'>
             {firstName[0]}
             {lastName[0]}
           </div>
-          {/* User Information */}
           <div className='mt-4 text-center md:text-left'>
             <h2 className='text-lg font-bold'>{`${firstName} ${lastName}`}</h2>
             <p className='text-gray-500'>{email}</p>
@@ -98,10 +95,8 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Divider */}
         <div className='w-px bg-blue-300 mx-6 md:block'></div>
 
-        {/* Right Section */}
         <div className='flex-1 flex flex-col items-center md:items-start'>
           <h3 className='text-lg font-bold'>Moje wydarzenia</h3>
           <div className='mt-4 space-y-4'>

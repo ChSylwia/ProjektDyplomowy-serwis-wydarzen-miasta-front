@@ -13,7 +13,6 @@ const EditProfilePage = () => {
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Yup validation schema for the form
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Imię jest wymagane'),
     lastName: Yup.string().required('Nazwisko jest wymagane'),
@@ -24,7 +23,6 @@ const EditProfilePage = () => {
       .required('Kod pocztowy jest wymagany')
   })
 
-  // Fetch user profile data
   useEffect(() => {
     const fetchDataProfile = async () => {
       try {
@@ -41,9 +39,8 @@ const EditProfilePage = () => {
       }
     }
     fetchDataProfile()
-  }, [get, navigate])
+  }, [])
 
-  // Handler for form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await put(`/user/edit/${userData.id}`, values)
@@ -51,7 +48,7 @@ const EditProfilePage = () => {
         toast.error(response.message || 'Wystąpił błąd')
       } else {
         toast.success('Profil został pomyślnie zaktualizowany!')
-        setTimeout(() => navigate('/profile'), 2000)
+        setTimeout(() => navigate('/profile'), 1000)
       }
     } catch (error) {
       toast.error('Nie udało się zaktualizować profilu.')
@@ -59,7 +56,6 @@ const EditProfilePage = () => {
     setSubmitting(false)
   }
 
-  // Show loading indicator while fetching data
   if (loading) {
     return (
       <div className='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
@@ -74,7 +70,6 @@ const EditProfilePage = () => {
     return <p>Dane użytkownika nie są dostępne</p>
   }
 
-  // Set form initial values based on the fetched user data
   const formInitialValues = {
     firstName: userData.firstName || '',
     lastName: userData.lastName || '',
@@ -95,7 +90,6 @@ const EditProfilePage = () => {
         >
           {({ isSubmitting }) => (
             <Form className='space-y-4'>
-              {/* First Name */}
               <div>
                 <label htmlFor='firstName' className='block text-sm font-semibold'>
                   Imię
@@ -113,7 +107,6 @@ const EditProfilePage = () => {
                 />
               </div>
 
-              {/* Last Name */}
               <div>
                 <label htmlFor='lastName' className='block text-sm font-semibold'>
                   Nazwisko
@@ -131,7 +124,6 @@ const EditProfilePage = () => {
                 />
               </div>
 
-              {/* Email */}
               <div>
                 <label htmlFor='email' className='block text-sm font-semibold'>
                   Email
@@ -145,7 +137,6 @@ const EditProfilePage = () => {
                 <ErrorMessage name='email' component='div' className='text-red-500 text-sm mt-1' />
               </div>
 
-              {/* City */}
               <div>
                 <label htmlFor='city' className='block text-sm font-semibold'>
                   Miasto
@@ -159,7 +150,6 @@ const EditProfilePage = () => {
                 <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
               </div>
 
-              {/* Postal Code */}
               <div>
                 <label htmlFor='postalCode' className='block text-sm font-semibold'>
                   Kod pocztowy
@@ -177,12 +167,11 @@ const EditProfilePage = () => {
                 />
               </div>
 
-              {/* Buttons */}
               <div className='flex justify-end space-x-4'>
                 <button
                   type='submit'
-                  disabled={isSubmitting}
-                  className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+                  disabled={isSubmitting || loading}
+                  className='w-full py-2 bg-primary text-white hover:bg-primary/90'
                 >
                   Zapisz zmiany
                 </button>
@@ -204,7 +193,7 @@ const EditProfilePage = () => {
       ></div>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className='z-50 fixed top-16 right-0 m-4'
       />
     </div>

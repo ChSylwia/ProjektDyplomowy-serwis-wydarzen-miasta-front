@@ -15,7 +15,7 @@ const SuccessLoggedPage = () => {
 
       setTimeout(() => {
         navigate('/profile')
-      }, 2000)
+      }, 1000)
     } else {
       console.error('Token not found in URL')
       navigate('/login')

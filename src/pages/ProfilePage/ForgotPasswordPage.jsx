@@ -19,7 +19,6 @@ const ForgotPasswordPage = () => {
   const handleSubmit = (values) => {
     setLoading(true)
 
-    // Replace the URL with your API endpoint for forgot password logic.
     fetch('http://127.0.0.1:8000/api/v1/auth/forgot-password', {
       method: 'POST',
       headers: {
@@ -38,10 +37,9 @@ const ForgotPasswordPage = () => {
       .then((result) => {
         setLoading(false)
         toast.success('Link resetujący hasło został wysłany na Twój email!')
-        // Optionally navigate back to login after a delay.
         setTimeout(() => {
           navigate('/login')
-        }, 2000)
+        }, 1000)
       })
       .catch((error) => {
         setLoading(false)
@@ -92,7 +90,7 @@ const ForgotPasswordPage = () => {
       </Formik>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className='z-50 fixed top-16 right-0 m-4'
       />
     </div>

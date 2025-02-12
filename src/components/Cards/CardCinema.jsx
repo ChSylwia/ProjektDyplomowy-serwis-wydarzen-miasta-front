@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 function CardCinema({ movie }) {
   const navigate = useNavigate()
   const handleClickRedirect = () => {
-    // Pass the full event data as state
     navigate(`/events/details/localEventDetails/${movie.id}`, { state: { event: movie } })
   }
   const truncateText = (text, wordLimit) => {

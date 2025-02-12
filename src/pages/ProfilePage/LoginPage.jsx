@@ -48,14 +48,13 @@ const LoginPage = () => {
         return response.json()
       })
       .then((result) => {
-        console.log('API response:', result) // Debug output
+        console.log('API response:', result)
         setLoading(false)
         if (result.token) {
           toast.success('Zalogowano pomyślnie!')
-          // Wait a moment so the user can see the success message
           setTimeout(() => {
             window.location.href = `http://localhost:5173/success?token=${result.token}`
-          }, 2000)
+          }, 1000)
         } else {
           toast.error('Token not found in response.')
           console.error('Token not found in response', result)
@@ -80,7 +79,6 @@ const LoginPage = () => {
           >
             {() => (
               <Form>
-                {/* Login */}
                 <div className='form-control mb-4'>
                   <label htmlFor='login' className='label'>
                     <span className='label-text'>Login</span>
@@ -99,7 +97,6 @@ const LoginPage = () => {
                   />
                 </div>
 
-                {/* Hasło */}
                 <div className='form-control mb-4'>
                   <label htmlFor='password' className='label'>
                     <span className='label-text'>Hasło</span>
@@ -117,7 +114,6 @@ const LoginPage = () => {
                     className='text-red-500 text-sm mt-1'
                   />
                 </div>
-                {/* Zapomniałem hasła */}
                 <div className='text-right mb-4'>
                   <button
                     type='button'
@@ -128,7 +124,6 @@ const LoginPage = () => {
                   </button>
                 </div>
 
-                {/* Zaloguj się */}
                 <button
                   disabled={loading}
                   type='submit'
@@ -137,7 +132,6 @@ const LoginPage = () => {
                   {loading ? 'Ładowanie...' : 'Zaloguj się'}
                 </button>
                 <GoogleLoginButton />
-                {/* Zarejestruj się */}
                 <div className='text-center p-2'>
                   <span className='text-sm text-gray-600'>
                     Nie masz konta?{' '}
@@ -158,7 +152,7 @@ const LoginPage = () => {
         ></div>
         <ToastContainer
           position='top-right'
-          autoClose={2000}
+          autoClose={1000}
           className={'z-50 fixed top-16 right-0 m-4'}
         />
       </div>

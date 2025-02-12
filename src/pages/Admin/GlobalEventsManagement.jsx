@@ -18,7 +18,6 @@ const GlobalEventsManagement = () => {
     category: '',
     image: null
   })
-  // Stan do filtrowania po tytule
   const [search, setSearch] = useState('')
 
   const fetchEvents = async () => {
@@ -62,7 +61,6 @@ const GlobalEventsManagement = () => {
   const handleInputChange = (e) => {
     const { name, type, value, files } = e.target
     if (type === 'file') {
-      // If the file is changed, store the File object in state
       setEditForm({
         ...editForm,
         [name]: files[0]
@@ -78,8 +76,6 @@ const GlobalEventsManagement = () => {
     try {
       const formData = new FormData()
 
-      // Append all fields from editForm.
-      // For image, check if a new File was provided.
       Object.keys(editForm).forEach((key) => {
         if (key === 'image' && editForm.image instanceof File) {
           formData.append('image', editForm.image)
@@ -88,12 +84,11 @@ const GlobalEventsManagement = () => {
         }
       })
 
-      // DO NOT manually set the Content-Type header!
       await postWithFile(`/admin/events/${eventId}`, formData)
 
       toast.success('Zapisano zmiany')
       setEditingEventId(null)
-      setTimeout(() => fetchEvents(), 2000)
+      setTimeout(() => fetchEvents(), 1000)
     } catch (error) {
       toast.error('Wystąpił błąd podczas zapisywania zmian')
       console.error('Error saving global event:', error)
@@ -101,21 +96,19 @@ const GlobalEventsManagement = () => {
   }
 
   const handleDelete = async (eventId) => {
-    // Potwierdzenie usunięcia
     const confirmDelete = window.confirm('Czy na pewno chcesz usunąć ten element?')
     if (!confirmDelete) return
 
     try {
       await deleteRequest(`/admin/events/${eventId}`)
       toast.success('Element został usunięty pomyślnie')
-      setTimeout(() => fetchEvents(), 2000)
+      setTimeout(() => fetchEvents(), 1000)
     } catch (error) {
       toast.error('Wystąpił błąd podczas usuwania elementu')
       console.error('Error deleting global event:', error)
     }
   }
 
-  // Filtrowanie wydarzeń po tytule
   const filteredEvents = events.filter((event) =>
     event.title.toLowerCase().includes(search.toLowerCase())
   )
@@ -135,7 +128,6 @@ const GlobalEventsManagement = () => {
         Zarządzaj wydarzeniami z API (kino, teatr, ebilet)
       </h2>
 
-      {/* Input do wyszukiwania po tytule */}
       <div className='mb-4'>
         <input
           type='text'
@@ -272,6 +264,7 @@ const GlobalEventsManagement = () => {
                   {editingEventId === event.id ? (
                     <>
                       <button
+                        disabled={loading}
                         className='w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
                         onClick={() => handleSave(event.id)}
                       >
@@ -287,12 +280,14 @@ const GlobalEventsManagement = () => {
                   ) : (
                     <>
                       <button
+                        disabled={loading}
                         className='px-4 py-2 btn-primary bg-primary rounded text-white hover:bg-primary/90'
                         onClick={() => handleEditClick(event)}
                       >
                         Edit
                       </button>
                       <button
+                        disabled={loading}
                         className='bg-red-700/70 px-4 py-2 btn-error rounded text-white hover:bg-red-700/80'
                         onClick={() => handleDelete(event.id)}
                       >
@@ -311,7 +306,7 @@ const GlobalEventsManagement = () => {
       </div>
       <ToastContainer
         position='top-right'
-        autoClose={2000}
+        autoClose={1000}
         className={'z-50 fixed top-16 right-0 m-4'}
       />
     </div>

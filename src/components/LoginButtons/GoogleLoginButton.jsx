@@ -10,6 +10,7 @@ const GoogleLoginButton = () => {
   return (
     <>
       <button
+        disabled={loading}
         onClick={handleGoogleLogin}
         className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300'
       >
