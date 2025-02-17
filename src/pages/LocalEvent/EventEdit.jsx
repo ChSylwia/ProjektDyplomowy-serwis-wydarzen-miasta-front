@@ -191,7 +191,16 @@ const EventEdit = () => {
                 <ErrorMessage name='date' component='div' className='text-red-500 text-sm mt-1' />
               </div>
               <div className='form-control'>
-                <label className='label'>Cena minimalna</label>
+                <label className='label'>
+                  Cena minimalna (opcjonalna){' '}
+                  <div className='relative group cursor-pointer'>
+                    <span className='text-bg-secondary text-lg'>ℹ️</span>
+                    <div className='absolute left-0 bottom-full mb-1 hidden w-64 p-2 bg-secondary text-white text-sm rounded-md group-hover:block'>
+                      Cena minimalna uwzględnia rabaty i promocje. Jeśli cena wynosi 0, wydarzenie
+                      jest darmowe.
+                    </div>
+                  </div>
+                </label>
                 <Field
                   type='number'
                   name='priceMin'
@@ -204,7 +213,7 @@ const EventEdit = () => {
                 />
               </div>
               <div className='form-control'>
-                <label className='label'>Cena maksymalna</label>
+                <label className='label'>Cena maksymalna (opcjonalna)</label>
                 <Field
                   type='number'
                   name='priceMax'
@@ -217,7 +226,7 @@ const EventEdit = () => {
                 />
               </div>
               <div className='form-control'>
-                <label className='label'>Link</label>
+                <label className='label'>Link (opcjonalny)</label>
                 <Field
                   type='text'
                   name='link'

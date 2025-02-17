@@ -1,7 +1,7 @@
 import CardCinema from '../../components/Cards/CardCinema'
 import CardEvents from '../../components/Cards/CardEvents'
 import CardEventUser from '../../components/Cards/CardEventUser'
-import { format, addDays, isSameDay, parseISO } from 'date-fns'
+import { format, addDays, isSameDay, parseISO, startOfDay, endOfDay } from 'date-fns'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -19,6 +19,7 @@ const SelectPage = () => {
   const [error, setError] = useState(null)
   const [selectedCategories, setSelectedCategories] = useState([])
   const [isFreeOnly, setIsFreeOnly] = useState(false)
+  const [filterTitle, setFilterTitle] = useState('')
 
   const handleFiltertypeEvent = (typeEvent) => {
     setTypeEvent((prev) => (prev === typeEvent ? null : typeEvent))
@@ -73,15 +74,15 @@ const SelectPage = () => {
     : []
 
   const filteredEvents = allEvents.filter((event) => {
-    const eventDateTime = event.event?.date ? parseISO(event.event.date) : null
+    const eventDate = event.event?.date ? parseISO(event.event.date) : null
     let dateMatch = true
 
     if (selectedStartDate && selectedEndDate) {
-      const start = parseISO(selectedStartDate)
-      const end = parseISO(selectedEndDate)
-      dateMatch = eventDateTime >= start && eventDateTime <= end
+      const start = startOfDay(parseISO(selectedStartDate))
+      const end = endOfDay(parseISO(selectedEndDate))
+      dateMatch = eventDate >= start && eventDate <= end
     } else if (selectedDate) {
-      dateMatch = isSameDay(eventDateTime, parseISO(selectedDate))
+      dateMatch = isSameDay(eventDate, parseISO(selectedDate))
     }
 
     const eventType = event.event?.typeEvent?.toLowerCase().trim()
@@ -99,14 +100,19 @@ const SelectPage = () => {
     const isCategoryMatch =
       selectedCategories.length === 0 || selectedCategories.includes(eventCategory)
 
-    return dateMatch && isTypeMatch && isPriceMatch && isCategoryMatch
+    let titleMatch = true
+    if (filterTitle) {
+      titleMatch = event.event.title?.toLowerCase().includes(filterTitle.toLowerCase())
+    }
+
+    return dateMatch && isTypeMatch && isPriceMatch && isCategoryMatch && titleMatch
   })
 
   filteredEvents.sort((a, b) => parseISO(a.event.date) - parseISO(b.event.date))
 
   return (
     <>
-      <div className='bg-white rounded-lg shadow-lg p-6 mb-6 z-40 '>
+      <div className='bg-white rounded-lg shadow-lg p-4 mb-4 z-40 '>
         <div className='flex z-10 flex-col'>
           <div className='p-4 grid-cols-1 sm:grid-cols-2 gap-4 flex justify-center align-center'>
             <div className='flex flex-col justify-end'>
@@ -163,27 +169,26 @@ const SelectPage = () => {
                   <p className='font-bold'>Zakres daty:</p>
                   <div className='flex gap-2'>
                     <input
-                      type='datetime-local'
+                      type='date'
                       className='btn p-2'
                       placeholder='Od'
                       value={selectedStartDate || ''}
-                      min={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
+                      min={format(new Date(), "yyyy-MM-dd'T")}
                       onChange={(e) => {
                         const newStartDate = e.target.value
                         setSelectedStartDate(newStartDate)
                         if (selectedEndDate && newStartDate > selectedEndDate) {
                           setSelectedEndDate('')
                         }
-
                         setSelectedDate(null)
                       }}
                     />
                     <input
-                      type='datetime-local'
+                      type='date'
                       className='btn p-2'
                       placeholder='Do'
                       value={selectedEndDate || ''}
-                      min={selectedStartDate || format(new Date(), "yyyy-MM-dd'T'HH:mm")}
+                      min={selectedStartDate || format(new Date(), "yyyy-MM-dd'T")}
                       onChange={(e) => {
                         setSelectedEndDate(e.target.value)
                         setSelectedDate(null)
@@ -215,7 +220,7 @@ const SelectPage = () => {
                   className={`btn ${typeEvent === 'cinema' ? 'active' : ''}`}
                   onClick={() => handleFiltertypeEvent('cinema')}
                 >
-                  PRZEDWIOŚNIE
+                  NOVEKINO
                 </button>
               </div>
             </div>
@@ -234,6 +239,15 @@ const SelectPage = () => {
                 </button>
               ))}
             </div>
+          </div>
+          <div className='p-4'>
+            <input
+              type='text'
+              className='w-full p-2 border border-gray-300 rounded'
+              placeholder='Wpisz tytuł wydarzenia...'
+              value={filterTitle}
+              onChange={(e) => setFilterTitle(e.target.value)}
+            />
           </div>
         </div>
       </div>

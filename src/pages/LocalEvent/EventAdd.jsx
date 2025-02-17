@@ -138,6 +138,13 @@ const EventAdd = () => {
               <div className='form-control'>
                 <label htmlFor='priceMin' className='label'>
                   Minimalna cena (opcjonalna)
+                  <div className='relative group cursor-pointer'>
+                    <span className='text-bg-secondary text-lg'>ℹ️</span>
+                    <div className='absolute left-0 bottom-full mb-1 hidden w-64 p-2 bg-secondary text-white text-sm rounded-md group-hover:block'>
+                      Cena minimalna uwzględnia rabaty i promocje. Jeśli cena wynosi 0, wydarzenie
+                      jest darmowe.
+                    </div>
+                  </div>
                 </label>
                 <Field
                   type='number'
