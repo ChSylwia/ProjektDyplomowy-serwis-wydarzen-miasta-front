@@ -18,6 +18,13 @@ const EventEdit = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const [preview, setPreview] = useState(null)
+  useEffect(() => {
+    if (initialData && initialData.image) {
+      setPreview(initialData.image)
+    }
+  }, [initialData])
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -25,7 +32,7 @@ const EventEdit = () => {
         if (response.ok) {
           const event = response[0] || {}
           setInitialData({
-            image: '',
+            image: event.image || '',
             title: event.title || '',
             description: event.description || '',
             date: event.date ? event.date.substring(0, 16) : '',
@@ -38,7 +45,7 @@ const EventEdit = () => {
                 ? event.priceMax.toString()
                 : '',
             link: event.link || '',
-            category: event.category || ''
+            category: event.category || []
           })
         } else {
           throw new Error('Nie udało się pobrać wydarzenia')
@@ -52,6 +59,14 @@ const EventEdit = () => {
     }
     fetchEvent()
   }, [])
+
+  useEffect(() => {
+    return () => {
+      if (preview && preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview)
+      }
+    }
+  }, [preview])
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Tytuł jest wymagany'),
@@ -73,16 +88,16 @@ const EventEdit = () => {
           : schema
       }),
     link: Yup.string().url('Podaj poprawny URL').nullable(),
-    category: Yup.string()
-      .oneOf(categories, 'Wybierz poprawną kategorię')
-      .required('Kategoria jest wymagana'),
+    category: Yup.array()
+      .of(Yup.string().oneOf(categories, 'Wybierz poprawną kategorię'))
+      .min(1, 'Kategoria jest wymagana'),
     image: Yup.mixed()
       .test('fileType', 'Niepoprawny format pliku. Dozwolone: JPG, PNG, GIF.', (value) => {
-        if (!value) return true
+        if (!value || typeof value === 'string') return true
         return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
       })
       .test('fileSize', 'Plik jest za duży. Maksymalny rozmiar: 2MB.', (value) => {
-        if (!value) return true
+        if (!value || typeof value === 'string') return true
         return value.size <= 2 * 1024 * 1024
       })
   })
@@ -97,8 +112,8 @@ const EventEdit = () => {
       formDataToSend.append('priceMin', values.priceMin !== '' ? values.priceMin : '0')
       formDataToSend.append('priceMax', values.priceMax !== '' ? values.priceMax : '0')
       formDataToSend.append('link', values.link || '')
-      formDataToSend.append('category', values.category || '')
-      if (values.image) {
+      formDataToSend.append('category', values.category.join(','))
+      if (values.image && values.image !== initialData.image) {
         formDataToSend.append('image', values.image)
       }
 
@@ -143,19 +158,6 @@ const EventEdit = () => {
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form className='space-y-4'>
-              <div className='form-control'>
-                <label className='label'>Zdjęcie</label>
-                <input
-                  type='file'
-                  name='image'
-                  accept='image/*'
-                  className='file-input file-input-ghost w-full bg-tertiary'
-                  onChange={(e) => {
-                    setFieldValue('image', e.currentTarget.files[0])
-                  }}
-                />
-                <ErrorMessage name='image' component='div' className='text-red-500 text-sm mt-1' />
-              </div>
               <div className='form-control'>
                 <label className='label'>Tytuł</label>
                 <Field
@@ -239,12 +241,9 @@ const EventEdit = () => {
                 <Field
                   as='select'
                   name='category'
+                  multiple
                   className='select select-bordered w-full bg-tertiary'
-                  required
                 >
-                  <option value='' disabled>
-                    Wybierz kategorię
-                  </option>
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
@@ -256,6 +255,39 @@ const EventEdit = () => {
                   component='div'
                   className='text-red-500 text-sm mt-1'
                 />
+              </div>
+              <div className='form-control'>
+                <label className='label'>Zdjęcie</label>
+                <div className='relative'>
+                  <input
+                    type='file'
+                    name='image'
+                    accept='image/*'
+                    className='file-input file-input-ghost w-full bg-tertiary opacity-0 absolute inset-0'
+                    onChange={(e) => {
+                      const selectedFile = e.currentTarget.files[0]
+                      if (selectedFile) {
+                        setFieldValue('image', selectedFile)
+                        setPreview(URL.createObjectURL(selectedFile))
+                      }
+                    }}
+                  />
+                  {preview ? (
+                    <div className='flex items-center space-x-2'>
+                      <img
+                        src={preview}
+                        alt='Image preview'
+                        className='w-16 h-16 object-cover rounded-md'
+                      />
+                      <span className='text-sm text-gray-500 truncate'>
+                        Kliknij, aby zmienić obraz
+                      </span>
+                    </div>
+                  ) : (
+                    <span className='text-sm text-gray-500'>Brak wybranego obrazu</span>
+                  )}
+                </div>
+                <ErrorMessage name='image' component='div' className='text-red-500 text-sm mt-1' />
               </div>
               <div className='flex justify-end space-x-4'>
                 <button

@@ -96,9 +96,13 @@ const SelectPage = () => {
       event.event.priceMin === '0'
     const isPriceMatch = isFreeOnly ? isFree : true
 
-    const eventCategory = event.event.category?.toLowerCase()
+    // Ensure eventCategories is an array of lowercase strings
+    const eventCategories = Array.isArray(event.event.category)
+      ? event.event.category.map((cat) => cat.toLowerCase())
+      : []
     const isCategoryMatch =
-      selectedCategories.length === 0 || selectedCategories.includes(eventCategory)
+      selectedCategories.length === 0 ||
+      selectedCategories.some((selectedCat) => eventCategories.includes(selectedCat.toLowerCase()))
 
     let titleMatch = true
     if (filterTitle) {
@@ -114,9 +118,9 @@ const SelectPage = () => {
     <>
       <div className='bg-white rounded-lg shadow-lg p-4 mb-4 z-40 '>
         <div className='flex z-10 flex-col'>
-          <div className='p-4 grid-cols-1 sm:grid-cols-2 gap-4 flex justify-center align-center'>
+          <div className='p-4  sm:grid-cols-2 gap-12 flex justify-center align-center'>
             <div className='flex flex-col justify-end'>
-              <div className='flex flex-row items-end gap-4'>
+              <div className='flex flex-row items-end gap-12'>
                 <div>
                   <p className='font-bold'>Filtruj po dacie:</p>
                   <div className='flex gap-2'>
@@ -202,7 +206,7 @@ const SelectPage = () => {
               <p className='font-bold'>Filtruj po typie:</p>
               <div className='flex flex-wrap gap-2'>
                 <button className={`btn ${isFreeOnly ? 'active' : ''}`} onClick={handlePriceFilter}>
-                  DARMOWE
+                  BEZPŁATNE
                 </button>
                 <button
                   className={`btn ${typeEvent === 'local-event' ? 'active' : ''}`}

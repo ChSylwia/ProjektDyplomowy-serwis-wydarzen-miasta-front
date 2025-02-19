@@ -18,7 +18,7 @@ const EventAdd = () => {
     date: '',
     priceMin: '',
     priceMax: '',
-    category: '',
+    category: [],
     link: '',
     image: null
   }
@@ -42,9 +42,9 @@ const EventAdd = () => {
           ? schema.min(priceMin, 'Maksymalna cena musi być większa lub równa minimalnej cenie')
           : schema
       ),
-    category: Yup.string()
-      .oneOf(categories, 'Wybierz poprawną kategorię')
-      .required('Kategoria jest wymagana'),
+    category: Yup.array()
+      .of(Yup.string().oneOf(categories, 'Wybierz poprawną kategorię'))
+      .min(1, 'Kategoria jest wymagana'),
     link: Yup.string().url('Podaj poprawny URL').nullable(),
     image: Yup.mixed()
       .required('Zdjęcie jest wymagane')
@@ -65,7 +65,12 @@ const EventAdd = () => {
     const formDataToSend = new FormData()
     for (const key in values) {
       if (values[key] !== null && values[key] !== undefined) {
-        formDataToSend.append(key, values[key])
+        // For category, convert the array to a comma-separated string
+        if (key === 'category' && Array.isArray(values.category)) {
+          formDataToSend.append(key, values.category.join(','))
+        } else {
+          formDataToSend.append(key, values[key])
+        }
       }
     }
 
@@ -182,9 +187,9 @@ const EventAdd = () => {
                   as='select'
                   id='category'
                   name='category'
+                  multiple
                   className='select select-bordered w-full bg-tertiary'
                 >
-                  <option value=''>Wybierz kategorię</option>
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
