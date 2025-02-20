@@ -115,12 +115,12 @@ const HomePage = () => {
           </button>
         </div>
       </div>
-      <div className='wapper-for-carousel w-full max-w-screen-xl mx-auto center '>
+      <div className='wapper-for-carousel gap-4 w-full max-w-screen-xl mx-auto center '>
         <div class='flex items-center justify-center bg-white rounded-lg shadow-lg p-6 z-10'>
           <p class='text-lg font-semibold'> Lista wydarzeń lokalnych miasta Płock</p>
         </div>
         <Carousel>
-          <CarouselContent className='p-3 items-normal'>{cardsEventUser}</CarouselContent>
+          <CarouselContent className='p-3 items-normal '>{cardsEventUser}</CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>

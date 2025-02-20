@@ -11,11 +11,11 @@ function CardCinema({ movie }) {
     return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : text
   }
   return (
-    <div className='card card-side shadow-xl bg-tertiary bg-white z-10 min-h-80 h-full'>
+    <div className='card card-side shadow-xl  bg-white z-10 min-h-80 h-full'>
       <figure className='h-full w-full min-h-48'>
         <img src={movie.image} alt={movie.title} className='w-full h-full object-cover' />
       </figure>
-      <div className='card-body bg-tertiary bg-white'>
+      <div className='card-body  bg-white'>
         <h2 className='card-title'>{movie.title}</h2>
         <p>{truncateText(movie.description, 10)}</p>
         <div className='card-actions justify-end'>

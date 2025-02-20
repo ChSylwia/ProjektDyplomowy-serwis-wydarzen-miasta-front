@@ -68,11 +68,15 @@ const EventEdit = () => {
     }
   }, [preview])
 
+  const tomorrow = new Date()
+  tomorrow.setHours(0, 0, 0, 0)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+
   const validationSchema = Yup.object({
     title: Yup.string().required('Tytuł jest wymagany'),
     description: Yup.string().required('Opis jest wymagany'),
     date: Yup.date()
-      .min(new Date(), 'Data wydarzenia musi być w przyszłości')
+      .min(tomorrow, 'Data wydarzenia musi być w przyszłości (od jutra)')
       .required('Data wydarzenia jest wymagana'),
     priceMin: Yup.number()
       .typeError('Cena musi być liczbą')
@@ -183,7 +187,15 @@ const EventEdit = () => {
                 />
               </div>
               <div className='form-control'>
-                <label className='label'>Data</label>
+                <label className='label'>
+                  Data
+                  <div className='relative group cursor-pointer'>
+                    <span className='text-bg-secondary text-lg'>ℹ️</span>
+                    <div className='absolute left-0 bottom-full mb-1 hidden w-64 p-2 bg-secondary text-white text-sm rounded-md group-hover:block'>
+                      Można dodać datę wyłącznie w przyszłości, rozpoczynając od dnia jutrzejszego.
+                    </div>
+                  </div>
+                </label>
                 <Field
                   type='datetime-local'
                   name='date'
@@ -227,6 +239,36 @@ const EventEdit = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
+
+              <div className='form-control'>
+                <label className='label'>
+                  Kategoria
+                  <div className='relative group cursor-pointer'>
+                    <span className='text-bg-secondary text-lg'>ℹ️</span>
+                    <div className='absolute left-0 bottom-full mb-1 hidden w-64 p-2 bg-secondary text-white text-sm rounded-md group-hover:block'>
+                      Można wybrać więcej niż jedną kategorię.
+                    </div>
+                  </div>
+                </label>
+                <div className='grid grid-cols-2 gap-2'>
+                  {categories.map((cat) => (
+                    <label key={cat} className='flex items-center gap-2 cursor-pointer'>
+                      <Field
+                        type='checkbox'
+                        name='category'
+                        value={cat}
+                        className=' checkbox:bg-secondary  checked:bg-secondary checked:border-secondary checked:text-white'
+                      />
+                      {cat}
+                    </label>
+                  ))}
+                </div>
+                <ErrorMessage
+                  name='category'
+                  component='div'
+                  className='text-red-500 text-sm mt-1'
+                />
+              </div>
               <div className='form-control'>
                 <label className='label'>Link (opcjonalny)</label>
                 <Field
@@ -235,26 +277,6 @@ const EventEdit = () => {
                   className='input input-bordered w-full bg-tertiary'
                 />
                 <ErrorMessage name='link' component='div' className='text-red-500 text-sm mt-1' />
-              </div>
-              <div className='form-control'>
-                <label className='label'>Kategoria</label>
-                <Field
-                  as='select'
-                  name='category'
-                  multiple
-                  className='select select-bordered w-full bg-tertiary'
-                >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage
-                  name='category'
-                  component='div'
-                  className='text-red-500 text-sm mt-1'
-                />
               </div>
               <div className='form-control'>
                 <label className='label'>Zdjęcie</label>
@@ -311,7 +333,7 @@ const EventEdit = () => {
       </div>
 
       <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
         style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
       <ToastContainer

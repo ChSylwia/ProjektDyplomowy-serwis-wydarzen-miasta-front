@@ -12,7 +12,6 @@ const RegisterPage = () => {
     lastName: '',
     email: '',
     city: '',
-    postalCode: '',
     password: '',
     confirmPassword: '',
     userType: '',
@@ -24,9 +23,6 @@ const RegisterPage = () => {
     lastName: Yup.string().required('Nazwisko jest wymagane'),
     email: Yup.string().email('Nieprawidłowy email').required('Email jest wymagany'),
     city: Yup.string().required('Miasto jest wymagane'),
-    postalCode: Yup.string()
-      .matches(/^\d{2}-\d{3}$/, 'Kod pocztowy musi być w formacie 00-000')
-      .required('Kod pocztowy jest wymagany'),
     password: Yup.string()
       .min(8, 'Hasło musi mieć co najmniej 8 znaków')
       .required('Hasło jest wymagane'),
@@ -48,7 +44,6 @@ const RegisterPage = () => {
       email: values.email,
       username: values.email,
       city: values.city,
-      postalCode: values.postalCode,
       userType: values.userType,
       termsAccepted: values.termsAccepted,
       password: values.password
@@ -132,37 +127,19 @@ const RegisterPage = () => {
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
-
-              <div className='form-control'>
-                <label htmlFor='city' className='label'>
-                  <span className='label-text'>Miasto</span>
-                </label>
-                <Field
-                  type='text'
-                  id='city'
-                  name='city'
-                  className='input input-bordered w-full bg-tertiary'
-                  placeholder='Wpisz miasto'
-                />
-                <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
-              </div>
-              <div className='form-control'>
-                <label htmlFor='postalCode' className='label'>
-                  <span className='label-text'>Kod pocztowy</span>
-                </label>
-                <Field
-                  type='text'
-                  id='postalCode'
-                  name='postalCode'
-                  className='input input-bordered w-full bg-tertiary'
-                  placeholder='00-000'
-                />
-                <ErrorMessage
-                  name='postalCode'
-                  component='div'
-                  className='text-red-500 text-sm mt-1'
-                />
-              </div>
+            </div>
+            <div className='form-control'>
+              <label htmlFor='city' className='label'>
+                <span className='label-text'>Miasto</span>
+              </label>
+              <Field
+                type='text'
+                id='city'
+                name='city'
+                className='input input-bordered w-full bg-tertiary'
+                placeholder='Wpisz miasto'
+              />
+              <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
             </div>
             <div className='form-control'>
               <label htmlFor='email' className='label'>
@@ -259,7 +236,7 @@ const RegisterPage = () => {
         </Formik>
       </div>
       <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
         style={{
           backgroundImage: `url(${imageAddEvent})`
         }}

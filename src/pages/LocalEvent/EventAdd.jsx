@@ -22,12 +22,15 @@ const EventAdd = () => {
     link: '',
     image: null
   }
+  const tomorrow = new Date()
+  tomorrow.setHours(0, 0, 0, 0)
+  tomorrow.setDate(tomorrow.getDate() + 1)
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Tytuł wydarzenia jest wymagany'),
     description: Yup.string().required('Opis wydarzenia jest wymagany'),
     date: Yup.date()
-      .min(new Date(), 'Data wydarzenia musi być w przyszłości')
+      .min(tomorrow, 'Data wydarzenia musi być w przyszłości (od jutra)')
       .required('Data wydarzenia jest wymagana'),
     priceMin: Yup.number()
       .typeError('Minimalna cena musi być liczbą')
@@ -131,6 +134,12 @@ const EventAdd = () => {
               <div className='form-control'>
                 <label htmlFor='date' className='label'>
                   Data wydarzenia
+                  <div className='relative group cursor-pointer'>
+                    <span className='text-bg-secondary text-lg'>ℹ️</span>
+                    <div className='absolute left-0 bottom-full mb-1 hidden w-64 p-2 bg-secondary text-white text-sm rounded-md group-hover:block'>
+                      Można dodać datę wyłącznie w przyszłości, rozpoczynając od dnia jutrzejszego.
+                    </div>
+                  </div>
                 </label>
                 <Field
                   type='datetime-local'
@@ -180,28 +189,35 @@ const EventAdd = () => {
                 />
               </div>
               <div className='form-control'>
-                <label htmlFor='category' className='label'>
+                <label className='label'>
                   Kategoria
+                  <div className='relative group cursor-pointer'>
+                    <span className='text-bg-secondary text-lg'>ℹ️</span>
+                    <div className='absolute left-0 bottom-full mb-1 hidden w-64 p-2 bg-secondary text-white text-sm rounded-md group-hover:block'>
+                      Można wybrać więcej niż jedną kategorię.
+                    </div>
+                  </div>
                 </label>
-                <Field
-                  as='select'
-                  id='category'
-                  name='category'
-                  multiple
-                  className='select select-bordered w-full bg-tertiary'
-                >
+                <div className='grid grid-cols-2 gap-2'>
                   {categories.map((cat) => (
-                    <option key={cat} value={cat}>
+                    <label key={cat} className='flex items-center gap-2 cursor-pointer'>
+                      <Field
+                        type='checkbox'
+                        name='category'
+                        value={cat}
+                        className=' checkbox:bg-secondary  checked:bg-secondary checked:border-secondary checked:text-white'
+                      />
                       {cat}
-                    </option>
+                    </label>
                   ))}
-                </Field>
+                </div>
                 <ErrorMessage
                   name='category'
                   component='div'
                   className='text-red-500 text-sm mt-1'
                 />
               </div>
+
               <div className='form-control'>
                 <label htmlFor='link' className='label'>
                   Link do wydarzenia (opcjonalny)
@@ -251,7 +267,7 @@ const EventAdd = () => {
         </Formik>
       </div>
       <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
         style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
       <ToastContainer

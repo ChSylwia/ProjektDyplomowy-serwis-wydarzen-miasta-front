@@ -131,7 +131,7 @@ const EditProfilePasswdPage = () => {
         </Formik>
       </div>
       <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
         style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
       <ToastContainer

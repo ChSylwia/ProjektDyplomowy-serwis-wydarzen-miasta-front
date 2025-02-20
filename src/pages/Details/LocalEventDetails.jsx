@@ -10,6 +10,7 @@ const LocalEventsDetails = () => {
   const { getToken, getUserDetails, post } = useApiClient()
   const [userType, setUserType] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [showSaveOptions, setShowSaveOptions] = useState(false)
 
   useEffect(() => {
     const token = getToken()
@@ -157,21 +158,38 @@ END:VCALENDAR`
             </a>
           )}
 
-          <button
-            disabled={loading}
-            onClick={handleGoogleCalendar}
-            className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500'
-          >
-            <img src={iconGoogle} alt='Google Icon' className='w-5 h-5' />
-            {loading ? 'Ładowanie...' : 'Zapisz w Google Calendar'}
-          </button>
-
-          <button
-            onClick={generateICS}
-            className='w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500'
-          >
-            Pobierz plik .ICS
-          </button>
+          <div className='relative inline-block w-full'>
+            <button
+              onClick={() => setShowSaveOptions((prev) => !prev)}
+              disabled={loading}
+              className='flex items-center w-full justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500'
+            >
+              <img src={iconGoogle} alt='Google Icon' className='w-5 h-5' />
+              {loading ? 'Ładowanie...' : 'Zapisz wydarzenie'}
+            </button>
+            {showSaveOptions && (
+              <div className='absolute right-0 mt-2 w-full bg-gray-100 rounded-md shadow-lg z-20'>
+                <button
+                  onClick={() => {
+                    handleGoogleCalendar()
+                    setShowSaveOptions(false)
+                  }}
+                  className='block w-full text-left px-4 py-2 text-sm text-black hover:bg-tertiary'
+                >
+                  Zapisz do Google Calendar
+                </button>
+                <button
+                  onClick={() => {
+                    generateICS()
+                    setShowSaveOptions(false)
+                  }}
+                  className='block w-full text-left px-4 py-2 text-sm text-black hover:bg-tertiary'
+                >
+                  Pobierz plik .ICS
+                </button>
+              </div>
+            )}
+          </div>
 
           {/*<button
             onClick={sendICSByEmail}

@@ -17,10 +17,7 @@ const EditProfilePage = () => {
     firstName: Yup.string().required('Imię jest wymagane'),
     lastName: Yup.string().required('Nazwisko jest wymagane'),
     email: Yup.string().email('Nieprawidłowy email').required('Email jest wymagany'),
-    city: Yup.string().required('Miasto jest wymagane'),
-    postalCode: Yup.string()
-      .matches(/^\d{2}-\d{3}$/, 'Kod pocztowy musi być w formacie 00-000')
-      .required('Kod pocztowy jest wymagany')
+    city: Yup.string().required('Miasto jest wymagane')
   })
 
   useEffect(() => {
@@ -74,8 +71,7 @@ const EditProfilePage = () => {
     firstName: userData.firstName || '',
     lastName: userData.lastName || '',
     email: userData.email || '',
-    city: userData.city || '',
-    postalCode: userData.postalCode || ''
+    city: userData.city || ''
   }
 
   return (
@@ -150,23 +146,6 @@ const EditProfilePage = () => {
                 <ErrorMessage name='city' component='div' className='text-red-500 text-sm mt-1' />
               </div>
 
-              <div>
-                <label htmlFor='postalCode' className='block text-sm font-semibold'>
-                  Kod pocztowy
-                </label>
-                <Field
-                  type='text'
-                  id='postalCode'
-                  name='postalCode'
-                  className='w-full p-2 border bg-tertiary rounded'
-                />
-                <ErrorMessage
-                  name='postalCode'
-                  component='div'
-                  className='text-red-500 text-sm mt-1'
-                />
-              </div>
-
               <div className='flex justify-end space-x-4'>
                 <button
                   type='submit'
@@ -188,7 +167,7 @@ const EditProfilePage = () => {
         </Formik>
       </div>
       <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms'
+        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
         style={{ backgroundImage: `url(${imageAddEvent})` }}
       ></div>
       <ToastContainer

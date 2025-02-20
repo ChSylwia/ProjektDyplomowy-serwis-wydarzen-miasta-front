@@ -14,7 +14,6 @@ const UsersManagement = () => {
     roles: '',
     username: '',
     city: '',
-    postalCode: '',
     userType: '',
     termsAccepted: false
   })
@@ -49,7 +48,6 @@ const UsersManagement = () => {
       roles: user.roles.join(', '),
       username: user.username,
       city: user.city,
-      postalCode: user.postalCode,
       userType: user.userType,
       termsAccepted: user.termsAccepted
     })
@@ -72,7 +70,6 @@ const UsersManagement = () => {
         roles: rolesArray,
         username: editForm.username,
         city: editForm.city,
-        postalCode: editForm.postalCode,
         userType: editForm.userType,
         termsAccepted: editForm.termsAccepted
       })
@@ -138,7 +135,6 @@ const UsersManagement = () => {
               <th className='border px-4 py-2'>Nazwisko</th>
               {/*<th className='border px-4 py-2'>Username</th>*/}
               <th className='border px-4 py-2'>Miasto</th>
-              <th className='border px-4 py-2'>Kod Pocztowy</th>
               <th className='border px-4 py-2'>Typ</th>
               <th className='border px-4 py-2'>Role</th>
               <th className='border px-4 py-2'>Zarządzaj</th>
@@ -197,18 +193,7 @@ const UsersManagement = () => {
                     user.city
                   )}
                 </td>
-                <td className='border px-4 py-2'>
-                  {editingUserId === user.id ? (
-                    <input
-                      name='postalCode'
-                      value={editForm.postalCode}
-                      onChange={handleInputChange}
-                      className='border p-1 w-full'
-                    />
-                  ) : (
-                    user.postalCode
-                  )}
-                </td>
+
                 <td className='border px-4 py-2'>
                   {editingUserId === user.id ? (
                     <input

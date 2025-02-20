@@ -55,7 +55,7 @@ const ProfilePage = () => {
   if (!userData) {
     return <p>Dane użytkownika nie są dostępne</p>
   }
-  const { firstName, lastName, email, city, postalCode } = userData
+  const { firstName, lastName, email, city } = userData
 
   return (
     <div className='min-h-full w-full flex items-center justify-center z-10'>
@@ -72,9 +72,6 @@ const ProfilePage = () => {
           <div className='mt-4'>
             <p className='text-gray-700'>
               <span className='font-semibold'>Miasto:</span> {city}
-            </p>
-            <p className='text-gray-700'>
-              <span className='font-semibold'>Kod pocztowy:</span> {postalCode}
             </p>
           </div>
           <div className='flex flex-col space-y-2 p-2'>
