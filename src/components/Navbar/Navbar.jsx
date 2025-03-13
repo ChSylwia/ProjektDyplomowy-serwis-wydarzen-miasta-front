@@ -49,7 +49,7 @@ const Navbar = () => {
           )}
         </div>
         <Link to={NavbarRouteName.HOME} className='btn btn-ghost p-0'>
-          <img src='src/assets/Logo.svg' alt='Logo' className='h-12' />
+          <img src='.../assets/Logo.svg' alt='Logo' className='h-12' />
         </Link>
       </div>
 
