@@ -56,7 +56,7 @@ const LoginPage = () => {
         if (result.token) {
           toast.success('Zalogowano pomyślnie!')
           setTimeout(() => {
-            window.location.href = `http://localhost:5173/success?token=${result.token}`
+            window.location.href = `https://www.chwileplocka.tech/success?token=${result.token}`
           }, 1000)
         } else {
           toast.error('Token not found in response.')
