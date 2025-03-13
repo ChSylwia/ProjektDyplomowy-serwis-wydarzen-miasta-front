@@ -38,7 +38,10 @@ const LoginPage = () => {
       redirect: 'follow'
     }
 
-    fetch('http://127.0.0.1:8000/api/v1/auth/login_check', requestOptions)
+    fetch(
+      'https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/auth/login_check',
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           return response.json().then((error) => {

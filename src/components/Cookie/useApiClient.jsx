@@ -34,7 +34,10 @@ const useApiClient = () => {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/v1${endpoint}`, requestOptions)
+      const response = await fetch(
+        `https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1${endpoint}`,
+        requestOptions
+      )
       if (response.status === 401) {
         const errorResponse = await response.json()
         if (errorResponse.code === 401 && errorResponse.message === 'Expired JWT Token') {

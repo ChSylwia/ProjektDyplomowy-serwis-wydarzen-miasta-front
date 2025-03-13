@@ -56,7 +56,10 @@ const RegisterPage = () => {
       redirect: 'follow'
     }
 
-    fetch('http://127.0.0.1:8000/api/v1/user/create', requestOptions)
+    fetch(
+      'https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/user/create',
+      requestOptions
+    )
       .then((response) => {
         setLoading(false)
         return response.text().then((text) => {

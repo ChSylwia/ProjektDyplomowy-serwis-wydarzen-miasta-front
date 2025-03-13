@@ -34,7 +34,7 @@ const LocalEventsDetails = () => {
     const token = getToken()
 
     if (!token || userType !== 'google') {
-      window.location.href = 'http://127.0.0.1:8000/auth/google'
+      window.location.href = 'https://chwileplocka-backend-72c2516b9445.herokuapp.com/auth/google'
       setLoading(false)
 
       return

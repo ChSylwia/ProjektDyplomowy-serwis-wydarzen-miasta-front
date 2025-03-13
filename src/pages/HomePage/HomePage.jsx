@@ -22,7 +22,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resEvents = await fetch('http://127.0.0.1:8000/api/v1/all-local-events')
+        const resEvents = await fetch(
+          'https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/all-local-events'
+        )
 
         if (!resEvents.ok) {
           throw new Error('Nie udało się pobrać danych')

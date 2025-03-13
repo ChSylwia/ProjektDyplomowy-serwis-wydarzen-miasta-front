@@ -4,7 +4,7 @@ const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false)
   const handleGoogleLogin = () => {
     setLoading(true)
-    window.location.href = 'http://127.0.0.1:8000/auth/google'
+    window.location.href = 'https://chwileplocka-backend-72c2516b9445.herokuapp.com/auth/google'
   }
 
   return (
