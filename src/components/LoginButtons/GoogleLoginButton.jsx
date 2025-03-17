@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import iconGoogle from '@/assets/google-icon-logo.svg'
+import iconGoogle from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/google-icon-logo.svg-logo.svg'
 const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false)
   const handleGoogleLogin = () => {

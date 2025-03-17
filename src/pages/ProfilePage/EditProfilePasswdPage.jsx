@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import useApiClient from '../../components/Cookie/useApiClient'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import imageAddEvent from '@/assets/add-event.svg'
+import imageAddEvent from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg.svg'
 
 const EditProfilePasswdPage = () => {
   const navigate = useNavigate()

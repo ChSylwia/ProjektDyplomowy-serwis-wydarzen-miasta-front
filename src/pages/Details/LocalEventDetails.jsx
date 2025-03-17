@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import iconGoogle from '@/assets/google-icon-logo.svg'
+import iconGoogle from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/google-icon-logo.svg-logo.svg'
 import useApiClient from '../../components/Cookie/useApiClient'
 import { toast, ToastContainer } from 'react-toastify'
 

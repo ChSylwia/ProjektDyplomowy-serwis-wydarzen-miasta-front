@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import useApiClient from '../../components/Cookie/useApiClient'
-import imageAddEvent from '@/assets/add-event.svg'
+import imageAddEvent from 'https://chwile-plocka.s3.eu-north-1.amazonaws.com/https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg.svg'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 

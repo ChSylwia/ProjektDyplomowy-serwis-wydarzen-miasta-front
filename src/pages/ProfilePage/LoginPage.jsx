@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import GoogleLoginButton from '../../components/LoginButtons/GoogleLoginButton'
 import { Navigate, redirect } from 'react-router-dom'
-import imageAddEvent from '@/assets/add-event.svg'
+import imageAddEvent from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg.svg'
 import { useNavigate } from 'react-router-dom'
 
 import { toast, ToastContainer } from 'react-toastify'

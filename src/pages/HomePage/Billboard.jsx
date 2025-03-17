@@ -5,9 +5,21 @@ import { RouteName } from '../../constants/RouteName'
 const Billboard = () => {
   // Definicja slajdów
   const slides = [
-    { id: 1, src: '/assets/Most-Plock.webp', alt: 'Most w Płocku' },
-    { id: 2, src: '/assets/Teatr_w_Plocku.webp', alt: 'Teatr w Płocku' },
-    { id: 3, src: '/assets/Ratusz-Plock.webp', alt: 'Ratusz w Płocku' }
+    {
+      id: 1,
+      src: 'https://chwile-plocka.s3.eu-north-1.amazonaws.com/Most-Plock.webp',
+      alt: 'Most w Płocku'
+    },
+    {
+      id: 2,
+      src: 'https://chwile-plocka.s3.eu-north-1.amazonaws.com/Teatr_w_Plocku.webp',
+      alt: 'Teatr w Płocku'
+    },
+    {
+      id: 3,
+      src: 'https://chwile-plocka.s3.eu-north-1.amazonaws.com/Ratusz-Plock.webp',
+      alt: 'Ratusz w Płocku'
+    }
   ]
   const navigate = useNavigate()
   const [currentSlide, setCurrentSlide] = useState(0)
