@@ -49,7 +49,11 @@ const Navbar = () => {
           )}
         </div>
         <Link to={NavbarRouteName.HOME} className='btn btn-ghost p-0'>
-          <img src='/assets/Logo.svg' alt='Logo' className='h-12' />
+          <img
+            src='https://chwile-plocka.s3.eu-north-1.amazonaws.com/Logo.svg'
+            alt='Logo'
+            className='h-12'
+          />
         </Link>
       </div>
 
