@@ -85,7 +85,7 @@ END:VCALENDAR`
     URL.revokeObjectURL(url)
     toast.success('Plik .ics został pobrany!')
   }
-  /*const sendICSByEmail = async () => {
+  const sendICSByEmail = async () => {
     try {
       const response = await post('/sendEventEmail', {
         title: event.title,
@@ -104,7 +104,7 @@ END:VCALENDAR`
       toast.error('Wykryto błąd podczas wysyłania e-maila.')
     }
   }
-*/
+
   const getPriceText = (min, max) => {
     if (min == null && max == null) {
       return 'Odwiedź stronę wydarzenia, aby dowiedzieć się więcej'
@@ -194,12 +194,12 @@ END:VCALENDAR`
             )}
           </div>
 
-          {/*<button
+          <button
             onClick={sendICSByEmail}
             className='w-full px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-500'
           >
             Wyślij wydarzenie na e-mail
-          </button>*/}
+          </button>
         </div>
       </div>
       <ToastContainer
