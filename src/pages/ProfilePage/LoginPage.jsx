@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import GoogleLoginButton from '../../components/LoginButtons/GoogleLoginButton'
 import { Navigate, redirect } from 'react-router-dom'
-import imageAddEvent from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg.svg'
 import { useNavigate } from 'react-router-dom'
 
 import { toast, ToastContainer } from 'react-toastify'
@@ -150,7 +149,7 @@ const LoginPage = () => {
         <div
           className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
           style={{
-            backgroundImage: `url(${imageAddEvent})`
+            backgroundImage: `https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg`
           }}
         ></div>
         <ToastContainer

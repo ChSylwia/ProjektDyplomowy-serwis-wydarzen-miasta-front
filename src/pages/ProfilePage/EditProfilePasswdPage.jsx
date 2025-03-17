@@ -5,8 +5,6 @@ import * as Yup from 'yup'
 import useApiClient from '../../components/Cookie/useApiClient'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import imageAddEvent from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg.svg'
-
 const EditProfilePasswdPage = () => {
   const navigate = useNavigate()
 
@@ -132,7 +130,9 @@ const EditProfilePasswdPage = () => {
       </div>
       <div
         className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
-        style={{ backgroundImage: `url(${imageAddEvent})` }}
+        style={{
+          backgroundImage: `https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg`
+        }}
       ></div>
       <ToastContainer
         position='top-right'

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { toast, ToastContainer } from 'react-toastify'
 import * as Yup from 'yup'
-import imageAddEvent from '@/assets/https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg.svg'
 import { useNavigate } from 'react-router-dom'
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false)
@@ -241,7 +240,7 @@ const RegisterPage = () => {
       <div
         className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
         style={{
-          backgroundImage: `url(${imageAddEvent})`
+          backgroundImage: `https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg`
         }}
       ></div>
       <ToastContainer
