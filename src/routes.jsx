@@ -14,6 +14,7 @@ import EditProfilePage from './pages/ProfilePage/EditProfilePage'
 import EditProfilePasswdPage from './pages/ProfilePage/EditProfilePasswdPage'
 import AdminProfilePage from './pages/Admin/AdminProfilePage'
 import ForgotPasswordPage from './pages/ProfilePage/ForgotPasswordPage'
+import PrivacyPolicy from './pages/Other/PrivacyPolicy'
 
 export const routes = [
   {
@@ -73,7 +74,8 @@ export const routes = [
         path: `/profile/edit/passwd`,
         element: <EditProfilePasswdPage />
       },
-      { path: '/admin', element: <AdminProfilePage /> }
+      { path: '/admin', element: <AdminProfilePage /> },
+      { path: '/privacypolicy', element: <PrivacyPolicy /> }
     ]
   }
 ]

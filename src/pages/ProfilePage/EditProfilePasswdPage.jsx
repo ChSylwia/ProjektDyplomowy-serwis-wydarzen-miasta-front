@@ -128,12 +128,9 @@ const EditProfilePasswdPage = () => {
           )}
         </Formik>
       </div>
-      <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
-        style={{
-          backgroundImage: `https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg`
-        }}
-      ></div>
+      <div className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'>
+        <img src='https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg' />
+      </div>
       <ToastContainer
         position='top-right'
         autoClose={1000}

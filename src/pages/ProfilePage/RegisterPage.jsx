@@ -206,8 +206,8 @@ const RegisterPage = () => {
               <label className='cursor-pointer flex items-center'>
                 <Field type='checkbox' name='termsAccepted' className='checkbox' />
                 <span className='ml-2'>
-                  Akceptuję regulamin (
-                  <a href='#' className='hover:text-primary/90'>
+                  Akceptuję politykę prywatności (
+                  <a href='/privacypolicy' className='hover:text-primary/90'>
                     link
                   </a>
                   )
@@ -237,12 +237,9 @@ const RegisterPage = () => {
           </Form>
         </Formik>
       </div>
-      <div
-        className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'
-        style={{
-          backgroundImage: `https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg`
-        }}
-      ></div>
+      <div className='flex items-center justify-center bg-tertiary rounded-lg p-6 image-for-forms min-h-96'>
+        <img src='https://chwile-plocka.s3.eu-north-1.amazonaws.com/add-event.svg' />
+      </div>
       <ToastContainer
         position='top-right'
         autoClose={1000}

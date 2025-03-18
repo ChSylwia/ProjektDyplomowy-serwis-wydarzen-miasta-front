@@ -17,7 +17,7 @@ const Root = () => {
       <Outlet />
 
       <footer className='w-full bg-base-200 text-center py-4 shadow-inner z-50 mt-32'>
-        <p className='text-gray-600'>&copy; 2025 Projekt dyplomowy.</p>
+        <p className='text-gray-600'>&copy; 2025 Projekt dyplomowy - Sylwia Chędkowska.</p>
         <div className='mt-2 space-x-4'>
           <a href='/' className='text-primary hover:underline'>
             Strona główna
@@ -27,6 +27,9 @@ const Root = () => {
           </a>
           <a href='/profile' className='text-primary hover:underline'>
             Profil
+          </a>
+          <a href='/privacypolicy' className='text-primary hover:underline'>
+            Polityka Prywatności
           </a>
         </div>
       </footer>
