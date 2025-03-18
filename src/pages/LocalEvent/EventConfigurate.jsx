@@ -13,7 +13,7 @@ const EventConfigurate = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const data = await get('/local-events')
+        const data = await get('/local-events/')
         console.log('Raw response:', data)
         if (data.ok) {
           console.log('jest')
