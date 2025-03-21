@@ -194,12 +194,12 @@ END:VCALENDAR`
             )}
           </div>
 
-          <button
+          {/*<button
             onClick={sendICSByEmail}
             className='w-full px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-500'
           >
             Wyślij wydarzenie na e-mail
-          </button>
+          </button>*/}
         </div>
       </div>
       <ToastContainer
