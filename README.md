@@ -6,7 +6,7 @@ Aplikacja frontendowa napisana w **JavaScript** z użyciem **React**, służąca
 - **React** (z wykorzystaniem hooków i komponentów funkcyjnych)
 - **React Router** – obsługa routingu
 - **Tailwind CSS** – szybkie i responsywne stylowanie komponentów
-- **DaisyUI** (opcjonalnie) – gotowe komponenty UI
+- **DaisyUI** – gotowe komponenty UI
 - **Fetch API** – komunikacja z backendem Symfony przez REST API
 
 ## Funkcjonalności
