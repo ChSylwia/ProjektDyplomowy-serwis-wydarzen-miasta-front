@@ -42,7 +42,7 @@ const SelectPage = () => {
     const fetchEventDetails = async () => {
       try {
         const response = await fetch(
-          `https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/all-local-events/`
+          `https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/api/v1/all-local-events/`
         )
         if (!response.ok) throw new Error('Failed to fetch event details')
         const data = await response.json()

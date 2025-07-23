@@ -33,7 +33,8 @@ const LocalEventsDetails = () => {
     const token = getToken()
 
     if (!token || userType !== 'google') {
-      window.location.href = 'https://chwileplocka-backend-72c2516b9445.herokuapp.com/auth/google'
+      window.location.href =
+        'https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/auth/google'
       setLoading(false)
 
       return

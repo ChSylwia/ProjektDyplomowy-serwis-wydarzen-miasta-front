@@ -38,7 +38,7 @@ const LoginPage = () => {
     }
 
     fetch(
-      'https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/auth/login_check',
+      'https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/api/v1/auth/login_check',
       requestOptions
     )
       .then((response) => {

@@ -56,7 +56,7 @@ const RegisterPage = () => {
     }
 
     fetch(
-      'https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/user/create',
+      'https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/api/v1/user/create',
       requestOptions
     )
       .then((response) => {

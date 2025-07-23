@@ -35,7 +35,7 @@ const useApiClient = () => {
 
     try {
       const response = await fetch(
-        `https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1${endpoint}`,
+        `https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/api/v1${endpoint}`,
         requestOptions
       )
       if (response.status === 401) {

@@ -3,7 +3,8 @@ const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false)
   const handleGoogleLogin = () => {
     setLoading(true)
-    window.location.href = 'https://chwileplocka-backend-72c2516b9445.herokuapp.com/auth/google'
+    window.location.href =
+      'https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/auth/google'
   }
 
   return (

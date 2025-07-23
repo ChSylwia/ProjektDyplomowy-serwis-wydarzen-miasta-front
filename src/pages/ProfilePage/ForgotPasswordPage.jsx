@@ -19,13 +19,16 @@ const ForgotPasswordPage = () => {
   const handleSubmit = (values) => {
     setLoading(true)
 
-    fetch('https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/auth/forgot-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: values.email })
-    })
+    fetch(
+      'https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/api/v1/auth/forgot-password',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: values.email })
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           return response.json().then((error) => {

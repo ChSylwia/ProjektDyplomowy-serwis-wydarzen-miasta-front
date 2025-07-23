@@ -23,7 +23,7 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const resEvents = await fetch(
-          'https://chwileplocka-backend-72c2516b9445.herokuapp.com/api/v1/all-local-events/'
+          'https://projektdyplomowy-serwis-wydarzen-miasta.onrender.com/api/v1/all-local-events/'
         )
 
         if (!resEvents.ok) {
